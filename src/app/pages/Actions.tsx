@@ -44,7 +44,7 @@ export function Actions() {
               onClick={() => setInput('Convert this manual PDF scan purchase order into an PO ERP entry')}
               className="block w-full text-left px-3 py-2 text-sm text-gray-700 bg-white border border-gray-200 rounded hover:bg-gray-50 transition-colors"
             >
-              convert this manual pdf scan purchase order into an PO ERP entry
+              Convert this manual PDF scan purchase order into an PO ERP entry
             </button>
             <button
               onClick={() => setInput('Update vendor master record for Supplier C with new payment terms Net 45')}

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createHashRouter } from 'react-router';
 import { Actions } from './pages/Actions';
 import { OrderErrors } from './pages/OrderErrors';
 import { Forecasting } from './pages/Forecasting';
@@ -19,7 +19,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: (
