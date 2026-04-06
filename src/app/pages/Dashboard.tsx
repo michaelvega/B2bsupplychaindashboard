@@ -35,7 +35,7 @@ export function Dashboard() {
     <div className="flex h-full gap-6 p-8 max-w-[1400px] mx-auto overflow-hidden">
       
       {/* Left Column: Action Queue */}
-      <div className="w-1/3 flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-[320px]">
+      <div className="w-2/5 flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-[350px]">
         <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">Action Queue</h2>
           <p className="text-xs text-gray-600 mt-0.5">High priority tasks</p>
@@ -52,7 +52,7 @@ export function Dashboard() {
       </div>
 
       {/* Right Column */}
-      <div className="w-2/3 flex flex-col gap-6 h-full overflow-hidden">
+      <div className="w-3/5 flex flex-col gap-6 h-full overflow-hidden">
         
         {/* Top Right: Affected Orders Table */}
         <div className="flex-1 flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-h-[250px]">

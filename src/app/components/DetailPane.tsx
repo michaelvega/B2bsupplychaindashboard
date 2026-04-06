@@ -12,8 +12,18 @@ export function DetailPane({ item, onClose }: DetailPaneProps) {
   if (!item) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-[600px] bg-white border-l border-gray-200 shadow-2xl overflow-y-auto z-50">
-      <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <>
+      <style>{`
+        @keyframes slideInRight {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+      `}</style>
+      <div 
+        className="fixed inset-y-0 right-0 w-[600px] bg-white border-l border-gray-200 shadow-2xl overflow-y-auto z-50"
+        style={{ animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+      >
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <h2 className="font-semibold text-lg">{item.title}</h2>
         <button
           onClick={onClose}
@@ -139,5 +149,6 @@ export function DetailPane({ item, onClose }: DetailPaneProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }
