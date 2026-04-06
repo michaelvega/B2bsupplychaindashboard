@@ -13,7 +13,15 @@ const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecont
 
 export function Actions() {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    try {
+      const saved = localStorage.getItem('agent_messages');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to load messages', e);
+    }
+    return [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +32,10 @@ export function Actions() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    localStorage.setItem('agent_messages', JSON.stringify(messages));
+  }, [messages]);
 
   const handleSend = async (messageText: string = input) => {
     if (!messageText.trim() || isLoading) return;
@@ -95,38 +107,52 @@ export function Actions() {
                     <Bot className="w-5 h-5 text-blue-600" />
                   </div>
                 )}
-                <div className={`max-w-[80%] rounded-2xl px-5 py-3 ${
-                  msg.role === 'user' 
-                    ? 'bg-blue-600 text-white rounded-tr-none' 
-                    : 'bg-gray-100 text-gray-900 rounded-tl-none break-words'
-                }`}>
-                  {msg.role === 'user' ? (
-                    <div className="whitespace-pre-wrap">{msg.content}</div>
-                  ) : (
-                    <div className="text-sm space-y-3">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          table: ({ node, ...props }) => <div className="overflow-x-auto my-4 rounded-lg border border-gray-200"><table className="w-full text-sm text-left" {...props} /></div>,
-                          thead: ({ node, ...props }) => <thead className="text-xs text-gray-700 uppercase bg-gray-50" {...props} />,
-                          tbody: ({ node, ...props }) => <tbody className="divide-y divide-gray-200" {...props} />,
-                          tr: ({ node, ...props }) => <tr className="bg-white" {...props} />,
-                          th: ({ node, ...props }) => <th className="px-4 py-3 font-semibold text-gray-900" {...props} />,
-                          td: ({ node, ...props }) => <td className="px-4 py-3 text-gray-700" {...props} />,
-                          p: ({ node, ...props }) => <p className="leading-relaxed" {...props} />,
-                          ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-1" {...props} />,
-                          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
-                          li: ({ node, ...props }) => <li {...props} />,
-                          strong: ({ node, ...props }) => <strong className="font-semibold text-gray-900" {...props} />,
-                          a: ({ node, ...props }) => <a className="text-blue-600 hover:underline" {...props} />,
-                          h1: ({node, ...props}) => <h1 className="text-lg font-bold mt-4 mb-2" {...props} />,
-                          h2: ({node, ...props}) => <h2 className="text-md font-bold mt-3 mb-2" {...props} />,
-                          h3: ({node, ...props}) => <h3 className="text-sm font-bold mt-2 mb-1" {...props} />,
-                          code: ({node, ...props}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-sm font-mono text-pink-600" {...props} />,
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
+                <div className="flex flex-col gap-2 max-w-[80%]">
+                  <div className={`rounded-2xl px-5 py-3 ${
+                    msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-tr-none' 
+                      : 'bg-gray-100 text-gray-900 rounded-tl-none break-words'
+                  }`}>
+                    {msg.role === 'user' ? (
+                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                    ) : (
+                      <div className="text-sm space-y-3">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            table: ({ node, ...props }) => <div className="overflow-x-auto my-4 rounded-lg border border-gray-200"><table className="w-full text-sm text-left" {...props} /></div>,
+                            thead: ({ node, ...props }) => <thead className="text-xs text-gray-700 uppercase bg-gray-50" {...props} />,
+                            tbody: ({ node, ...props }) => <tbody className="divide-y divide-gray-200" {...props} />,
+                            tr: ({ node, ...props }) => <tr className="bg-white" {...props} />,
+                            th: ({ node, ...props }) => <th className="px-4 py-3 font-semibold text-gray-900" {...props} />,
+                            td: ({ node, ...props }) => <td className="px-4 py-3 text-gray-700" {...props} />,
+                            p: ({ node, ...props }) => <p className="leading-relaxed" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-1" {...props} />,
+                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
+                            li: ({ node, ...props }) => <li {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-semibold text-gray-900" {...props} />,
+                            a: ({ node, ...props }) => <a className="text-blue-600 hover:underline" {...props} />,
+                            h1: ({node, ...props}) => <h1 className="text-lg font-bold mt-4 mb-2" {...props} />,
+                            h2: ({node, ...props}) => <h2 className="text-md font-bold mt-3 mb-2" {...props} />,
+                            h3: ({node, ...props}) => <h3 className="text-sm font-bold mt-2 mb-1" {...props} />,
+                            code: ({node, ...props}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-sm font-mono text-pink-600" {...props} />,
+                          }}
+                        >
+                          {msg.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Approve/Deny Action Buttons */}
+                  {index === messages.length - 1 && msg.role === 'agent' && msg.content.includes('Approve/Deny') && (
+                    <div className="flex gap-2">
+                      <Button onClick={() => handleSend('Approve.')} className="bg-green-600 hover:bg-green-700 text-white shadow hover:shadow-md transition-all self-start h-8 px-4" size="sm">
+                        Approve
+                      </Button>
+                      <Button onClick={() => handleSend('Deny.')} className="bg-red-600 hover:bg-red-700 text-white shadow hover:shadow-md transition-all self-start h-8 px-4" size="sm">
+                        Deny
+                      </Button>
                     </div>
                   )}
                 </div>
