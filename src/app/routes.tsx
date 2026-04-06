@@ -1,5 +1,6 @@
 import { createHashRouter } from 'react-router';
 import { Actions } from './pages/Actions';
+import { Dashboard } from './pages/Dashboard';
 import { OrderErrors } from './pages/OrderErrors';
 import { Forecasting } from './pages/Forecasting';
 import { VendorOnboarding } from './pages/VendorOnboarding';
@@ -22,6 +23,14 @@ function Layout({ children }: { children: React.ReactNode }) {
 export const router = createHashRouter([
   {
     path: '/',
+    element: (
+      <Layout>
+        <Dashboard />
+      </Layout>
+    ),
+  },
+  {
+    path: '/command-center',
     element: (
       <Layout>
         <Actions />

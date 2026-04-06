@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText } from 'lucide-react';
+import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal } from 'lucide-react';
 import { cn } from './ui/utils';
 
 export function Sidebar() {
   const location = useLocation();
 
   const mainNavItems = [
-    { path: '/', label: 'Command Center', icon: Home },
+    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/command-center', label: 'Command Center', icon: Terminal },
   ];
 
   const queueNavItems = [
