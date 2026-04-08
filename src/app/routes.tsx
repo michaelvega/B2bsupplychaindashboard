@@ -1,5 +1,6 @@
 import { createHashRouter } from 'react-router';
 import { Actions } from './pages/Actions';
+import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
 import { OrderErrors } from './pages/OrderErrors';
 import { Forecasting } from './pages/Forecasting';
@@ -34,6 +35,14 @@ export const router = createHashRouter([
     element: (
       <Layout>
         <Actions />
+      </Layout>
+    ),
+  },
+  {
+    path: '/agent-files',
+    element: (
+      <Layout>
+        <AgentFiles />
       </Layout>
     ),
   },
