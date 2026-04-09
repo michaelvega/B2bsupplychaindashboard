@@ -82,7 +82,7 @@ export function Actions() {
   };
 
   return (
-    <div className="p-8 max-w-4xl h-full flex flex-col">
+    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col w-full">
       <div className="mb-6 flex-shrink-0">
         <h1 className="text-2xl font-semibold text-gray-900">Command Center</h1>
         <p className="text-gray-600 mt-1">
@@ -101,78 +101,60 @@ export function Actions() {
             </div>
           ) : (
             messages.map((msg, index) => (
-              <div key={index} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.role === 'agent' && (
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-5 h-5 text-blue-600" />
+              <div key={index} className={`flex w-full mb-10 last:mb-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {msg.role === 'user' ? (
+                  <div className="max-w-[80%] bg-gray-100 text-gray-800 px-5 py-3 rounded-2xl">
+                    <div className="whitespace-pre-wrap leading-relaxed">{msg.content}</div>
                   </div>
-                )}
-                <div className="flex flex-col gap-2 max-w-[80%]">
-                  <div className={`rounded-2xl px-5 py-3 ${
-                    msg.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-tr-none' 
-                      : 'bg-gray-100 text-gray-900 rounded-tl-none break-words'
-                  }`}>
-                    {msg.role === 'user' ? (
-                      <div className="whitespace-pre-wrap">{msg.content}</div>
-                    ) : (
-                      <div className="text-sm space-y-3">
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            table: ({ node, ...props }) => <div className="overflow-x-auto my-4 rounded-lg border border-gray-200"><table className="w-full text-sm text-left" {...props} /></div>,
-                            thead: ({ node, ...props }) => <thead className="text-xs text-gray-700 uppercase bg-gray-50" {...props} />,
-                            tbody: ({ node, ...props }) => <tbody className="divide-y divide-gray-200" {...props} />,
-                            tr: ({ node, ...props }) => <tr className="bg-white" {...props} />,
-                            th: ({ node, ...props }) => <th className="px-4 py-3 font-semibold text-gray-900" {...props} />,
-                            td: ({ node, ...props }) => <td className="px-4 py-3 text-gray-700" {...props} />,
-                            p: ({ node, ...props }) => <p className="leading-relaxed" {...props} />,
-                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-1" {...props} />,
-                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
-                            li: ({ node, ...props }) => <li {...props} />,
-                            strong: ({ node, ...props }) => <strong className="font-semibold text-gray-900" {...props} />,
-                            a: ({ node, ...props }) => <a className="text-blue-600 hover:underline" {...props} />,
-                            h1: ({node, ...props}) => <h1 className="text-lg font-bold mt-4 mb-2" {...props} />,
-                            h2: ({node, ...props}) => <h2 className="text-md font-bold mt-3 mb-2" {...props} />,
-                            h3: ({node, ...props}) => <h3 className="text-sm font-bold mt-2 mb-1" {...props} />,
-                            code: ({node, ...props}) => <code className="bg-gray-200 px-1 py-0.5 rounded text-sm font-mono text-pink-600" {...props} />,
-                          }}
-                        >
-                          {msg.content}
-                        </ReactMarkdown>
+                ) : (
+                  <div className="flex flex-col w-full text-base leading-relaxed text-gray-800">
+                    <div className="prose prose-slate max-w-none">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          table: ({ node, ...props }) => <div className="overflow-x-auto my-6 rounded-lg border border-gray-200"><table className="w-full text-sm text-left" {...props} /></div>,
+                          thead: ({ node, ...props }) => <thead className="text-xs text-gray-700 uppercase bg-gray-50" {...props} />,
+                          tbody: ({ node, ...props }) => <tbody className="divide-y divide-gray-200" {...props} />,
+                          tr: ({ node, ...props }) => <tr className="bg-white" {...props} />,
+                          th: ({ node, ...props }) => <th className="px-4 py-3 font-semibold text-gray-900" {...props} />,
+                          td: ({ node, ...props }) => <td className="px-4 py-3 text-gray-700" {...props} />,
+                          p: ({ node, ...props }) => <p className="mb-4 last:mb-0" {...props} />,
+                          ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2 mb-4" {...props} />,
+                          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2 mb-4" {...props} />,
+                          li: ({ node, ...props }) => <li {...props} />,
+                          strong: ({ node, ...props }) => <strong className="font-semibold text-gray-900" {...props} />,
+                          a: ({ node, ...props }) => <a className="text-blue-600 hover:underline" {...props} />,
+                          h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-8 mb-4 border-b border-gray-200 pb-2" {...props} />,
+                          h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-6 mb-4" {...props} />,
+                          h3: ({node, ...props}) => <h3 className="text-lg font-bold mt-5 mb-3" {...props} />,
+                          code: ({node, ...props}) => <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono text-pink-600 break-words" {...props} />,
+                          pre: ({node, ...props}) => <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono text-sm overflow-x-auto mb-4" {...props} />,
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
+                    </div>
+                    
+                    {/* Approve/Deny Action Buttons */}
+                    {index === messages.length - 1 && msg.role === 'agent' && msg.content.includes('Approve/Deny') && (
+                      <div className="flex gap-3 mt-6">
+                        <Button onClick={() => handleSend('Approve.')} className="bg-green-600 hover:bg-green-700 text-white shadow hover:shadow-md transition-all h-10 px-6 font-medium">
+                          Approve
+                        </Button>
+                        <Button onClick={() => handleSend('Deny.')} className="bg-red-600 hover:bg-red-700 text-white shadow hover:shadow-md transition-all h-10 px-6 font-medium">
+                          Deny
+                        </Button>
                       </div>
                     )}
-                  </div>
-                  
-                  {/* Approve/Deny Action Buttons */}
-                  {index === messages.length - 1 && msg.role === 'agent' && msg.content.includes('Approve/Deny') && (
-                    <div className="flex gap-2">
-                      <Button onClick={() => handleSend('Approve.')} className="bg-green-600 hover:bg-green-700 text-white shadow hover:shadow-md transition-all self-start h-8 px-4" size="sm">
-                        Approve
-                      </Button>
-                      <Button onClick={() => handleSend('Deny.')} className="bg-red-600 hover:bg-red-700 text-white shadow hover:shadow-md transition-all self-start h-8 px-4" size="sm">
-                        Deny
-                      </Button>
-                    </div>
-                  )}
-                </div>
-                {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                    <User className="w-5 h-5 text-gray-600" />
                   </div>
                 )}
               </div>
             ))
           )}
           {isLoading && (
-            <div className="flex gap-4 justify-start">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="bg-gray-100 rounded-2xl rounded-tl-none px-5 py-3 flex items-center">
-                <Loader2 className="w-5 h-5 animate-spin text-gray-500" />
-                <span className="ml-2 text-gray-500 text-sm">Agent is thinking...</span>
-              </div>
+            <div className="flex gap-3 justify-start items-center mb-8">
+              <Loader2 className="w-5 h-5 animate-spin text-gray-500" />
+              <span className="text-gray-500 text-base font-medium">Generating response...</span>
             </div>
           )}
           <div ref={messagesEndRef} />
