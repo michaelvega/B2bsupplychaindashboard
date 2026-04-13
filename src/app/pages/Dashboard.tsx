@@ -31,6 +31,16 @@ export function Dashboard() {
     return product.riskLevel === 'high' ? '#ef4444' : product.riskLevel === 'medium' ? '#f59e0b' : '#10b981';
   };
 
+  const getValueAtRisk = (itemId: string) => {
+    switch (itemId) {
+      case 'oe-1': return <><span className="text-red-600 font-semibold">$12,500</span> <span className="text-gray-400 text-xs ml-1">in 4 days</span></>;
+      case 'oe-2': return <><span className="text-orange-600 font-semibold">$4,200</span> <span className="text-gray-400 text-xs ml-1">in 48 hrs</span></>;
+      case 'oe-4': return <><span className="text-red-700 font-semibold">$2,500</span> <span className="text-gray-400 text-xs ml-1">due Friday</span></>;
+      case 'fc-1': return <><span className="text-red-600 font-semibold">$45,000</span> <span className="text-gray-400 text-xs ml-1">in 6 days</span></>;
+      default: return <span className="text-gray-400 font-medium text-xs">Awaiting Calculation</span>;
+    }
+  };
+
   return (
     <div className="flex h-full gap-6 p-8 max-w-[1400px] mx-auto overflow-hidden">
       
@@ -66,6 +76,7 @@ export function Dashboard() {
                   <th className="px-4 py-3 font-medium">Issue ID</th>
                   <th className="px-4 py-3 font-medium">Type</th>
                   <th className="px-4 py-3 font-medium">Title</th>
+                  <th className="px-4 py-3 font-medium">Value at Risk</th>
                   <th className="px-4 py-3 font-medium">Status</th>
                 </tr>
               </thead>
@@ -79,6 +90,9 @@ export function Dashboard() {
                         <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></span>
                         <span className="line-clamp-1 truncate" title={item.title}>{item.title}</span>
                       </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {getValueAtRisk(item.id)}
                     </td>
                     <td className="px-4 py-3 capitalize whitespace-nowrap">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
