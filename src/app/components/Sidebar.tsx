@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal } from 'lucide-react';
+import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users } from 'lucide-react';
 import { cn } from './ui/utils';
 
 export function Sidebar() {
@@ -12,9 +12,9 @@ export function Sidebar() {
   ];
 
   const queueNavItems = [
-    { path: '/queues/order-errors', label: 'Order errors', icon: null },
-    { path: '/queues/forecasting', label: 'Forecasting', icon: null },
-    { path: '/queues/vendor-onboarding', label: 'Vendor onboarding and analytics', icon: null },
+    { path: '/queues/order-errors', label: 'Order errors', icon: AlertCircle },
+    { path: '/queues/forecasting', label: 'Forecasting', icon: TrendingUp },
+    { path: '/queues/vendor-onboarding', label: 'Vendor onboarding and analytics', icon: Users },
   ];
 
   const otherNavItems = [
@@ -61,6 +61,7 @@ export function Sidebar() {
           </div>
           <div className="space-y-1">
             {queueNavItems.map((item) => {
+              const Icon = item.icon;
               const isActive = location.pathname === item.path;
               return (
                 <Link
@@ -73,7 +74,7 @@ export function Sidebar() {
                       : 'text-gray-700 hover:bg-gray-50'
                   )}
                 >
-                  <Clock className="w-4 h-4" />
+                  <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                 </Link>
               );

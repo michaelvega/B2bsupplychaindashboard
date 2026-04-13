@@ -61,7 +61,7 @@ export function WorkCard({ item, onClick }: WorkCardProps) {
 
         {/* Preview Box */}
         {item.preview && (
-          <div className="bg-white border border-gray-300 rounded-lg p-3 mt-3">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-3 shadow-inner">
             <div className="flex items-center gap-2 mb-2">
               <FileEdit className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-semibold text-gray-900">Preview of Changes</span>
