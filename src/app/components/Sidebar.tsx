@@ -6,7 +6,7 @@ export function Sidebar() {
   const location = useLocation();
 
   const mainNavItems = [
-    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/demo', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/command-center', label: 'Command Center', icon: Terminal },
     { path: '/agent-files', label: 'Agent Workspace', icon: FileText },
   ];

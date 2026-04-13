@@ -1,4 +1,5 @@
 import { createHashRouter } from 'react-router';
+import { LandingPage } from './pages/LandingPage';
 import { Actions } from './pages/Actions';
 import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
@@ -24,6 +25,10 @@ function Layout({ children }: { children: React.ReactNode }) {
 export const router = createHashRouter([
   {
     path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/demo',
     element: (
       <Layout>
         <Dashboard />
