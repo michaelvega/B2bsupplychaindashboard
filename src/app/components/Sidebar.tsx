@@ -11,8 +11,11 @@ export function Sidebar() {
     { path: '/agent-files', label: 'Agent Workspace', icon: FileText },
   ];
 
-  const queueNavItems = [
+  const backlogNavItems = [
     { path: '/queues/order-errors', label: 'Order errors', icon: AlertCircle },
+  ];
+
+  const synthesisNavItems = [
     { path: '/queues/forecasting', label: 'Forecasting', icon: TrendingUp },
     { path: '/queues/vendor-onboarding', label: 'Vendor onboarding and analytics', icon: Users },
   ];
@@ -56,11 +59,40 @@ export function Sidebar() {
         <div className="mt-6">
           <div className="px-3 mb-2">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Action Queues
+              Action Backlog
             </h2>
           </div>
           <div className="space-y-1">
-            {queueNavItems.map((item) => {
+            {backlogNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={cn(
+                    'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm',
+                    isActive
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  )}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="px-3 mb-2">
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Data Synthesis
+            </h2>
+          </div>
+          <div className="space-y-1">
+            {synthesisNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               return (
