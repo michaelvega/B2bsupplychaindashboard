@@ -166,16 +166,24 @@ All state changes have been safely committed to the ERP. This thread is now clos
   return (
     <>
       <style>{`
-        @keyframes slideInRight {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleUp {
+          from { transform: scale(0.98); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
         }
       `}</style>
       <div 
-        className="fixed inset-y-0 right-0 w-[600px] bg-white border-l border-gray-200 shadow-2xl overflow-y-auto z-50"
-        style={{ animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8"
+        style={{ animation: 'fadeIn 0.2s ease-out' }}
       >
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div 
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto flex flex-col relative"
+          style={{ animation: 'scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        >
+          <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
         <h2 className="font-semibold text-lg">{item.title}</h2>
         <button
           onClick={onClose}
@@ -308,16 +316,18 @@ All state changes have been safely committed to the ERP. This thread is now clos
                               </ReactMarkdown>
                             </div>
                             {/* Edit Button overlay */}
-                            <button
-                              onClick={() => {
-                                setEditingIndex(index);
-                                setEditContent(msg.content);
-                              }}
-                              className="absolute -right-2 -top-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-gray-200 shadow-sm rounded-md p-1.5 hover:bg-gray-50 flex items-center gap-1 text-xs text-gray-600 z-10"
-                            >
-                              <Edit className="w-3.5 h-3.5" />
-                              Edit Plan
-                            </button>
+                            {index === messages.length - 1 && (
+                              <button
+                                onClick={() => {
+                                  setEditingIndex(index);
+                                  setEditContent(msg.content);
+                                }}
+                                className="absolute -right-2 -top-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-gray-200 shadow-sm rounded-md p-1.5 hover:bg-gray-50 flex items-center gap-1 text-xs text-gray-600 z-10"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                                Edit Plan
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
@@ -361,8 +371,9 @@ All state changes have been safely committed to the ERP. This thread is now clos
               </div>
            </div>
         </div>
+        </div>
       </div>
-    </div>
+      </div>
     </>
   );
 }
