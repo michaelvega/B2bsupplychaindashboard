@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router';
 import { ArrowRight, Bot, Target, Zap, Link, ShieldCheck, LineChart } from 'lucide-react';
 
-const MembrainLogo = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 100 100" className={className} fill="currentColor">
-    <circle cx="52" cy="23" r="10" />
-    <circle cx="75" cy="42" r="10" />
-    <circle cx="58" cy="72" r="10" />
-    <circle cx="25" cy="46" r="10" />
-    <path d="M52 23 C63 28 68 35 75 42 C68 54 62 64 58 72 C44 63 32 54 25 46 C34 35 43 28 52 23" fill="none" stroke="currentColor" strokeWidth="6" strokeLinejoin="round" />
+const ProceptLogo = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="43" cy="50" r="28" />
+    <path d="M 4 50 L 96 50 M 78 36 L 96 50 L 78 64" />
   </svg>
 );
 
@@ -29,11 +26,11 @@ export function LandingPage() {
 
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="flex items-center gap-3 mb-6">
-            <MembrainLogo className="w-9 h-9 text-white" />
-            <span className="text-2xl font-bold tracking-tight text-white">Membrain AI</span>
+            <ProceptLogo className="w-9 h-9 text-white" />
+            <span className="text-2xl font-bold tracking-tight text-white">Procept AI</span>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 tracking-tight max-w-4xl text-white drop-shadow-md">
-            Membrain: The Hollistic Action Center for your AI-Powered Supply Chain
+            Procept: The Hollistic Action Center for your AI-Powered Supply Chain
           </h1>
           <p className="text-xl text-gray-200 max-w-2xl mb-10 drop-shadow">
             Fix Broken Data. Automate Procure-to-Pay. Traceable at Every Single Step.
@@ -115,7 +112,7 @@ export function LandingPage() {
             Our Solution: Autonomous Agents Curing Administrative Misery
           </h2>
           <p className="text-gray-700 leading-relaxed mb-10 text-lg">
-            <span className="text-blue-600 font-semibold">Membrain AI</span> deploys specialized, autonomous agents that continuously monitor your ERP, WMS, and unstructured communications to proactively identify and resolve your most expensive administrative bottlenecks. By bridging disconnected data silos into a central action command, we empower your team to approve complex workflow corrections with a single click, transforming reactive manual data wrangling into a unified, zero-error supply chain operation.
+            <span className="text-blue-600 font-semibold">Procept AI</span> deploys specialized, autonomous agents that continuously monitor your ERP, WMS, and unstructured communications to proactively identify and resolve your most expensive administrative bottlenecks. By bridging disconnected data silos into a central action command, we empower your team to approve complex workflow corrections with a single click, transforming reactive manual data wrangling into a unified, zero-error supply chain operation.
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
@@ -179,17 +176,17 @@ export function LandingPage() {
             <div className="text-center md:text-left relative z-10">
               <h3 className="text-xl font-bold text-amber-900 mb-2">Ultimate Governability and Traceability</h3>
               <p className="text-amber-800 md:text-lg font-medium leading-relaxed">
-                Every action Membrain takes must be approved by a team member and is rigorously confirmed with your own rules-based ERP change logs, immediately.
+                Every action Procept takes must be approved by a team member and is rigorously confirmed with your own rules-based ERP change logs, immediately.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Can Membrain Resolve This? / FAQ Section */}
+        {/* Can Procept Resolve This? / FAQ Section */}
         <section className="pt-8 border-t border-gray-200">
           <h2 className="text-3xl font-light mb-8 text-gray-900 flex items-center gap-3">
             <Target className="text-blue-600 w-8 h-8" />
-            Can Membrain Really Resolve That?
+            Can Procept Really Resolve That?
           </h2>
 
           <div className="space-y-6">
@@ -198,12 +195,12 @@ export function LandingPage() {
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
               <h3 className="font-medium text-xl text-gray-900 flex gap-3 mb-4 leading-snug">
                 <span className="text-blue-600 font-bold shrink-0">Q:</span>
-                <span>"Can Membrain catch 'Phantom Lead Times' where SAP perfectly says 30 days, but the vendor actually takes 45 days in reality?"</span>
+                <span>"Can Procept catch 'Phantom Lead Times' where SAP perfectly says 30 days, but the vendor actually takes 45 days in reality?"</span>
               </h3>
               <div className="flex gap-3 text-gray-700">
                 <span className="text-indigo-600 font-bold text-xl shrink-0">A:</span>
                 <div>
-                  <p className="mb-3"><strong>Yes, it can.</strong> Membrain conducts background analysis on your last 10 email threads and receiving receipts to mathematically prove the supplier is delivering in 45 days. It intervenes and flags the stale data <i>before</i> the next MRP run generates bad purchasing schedules.</p>
+                  <p className="mb-3"><strong>Yes, it can.</strong> Procept conducts background analysis on your last 10 email threads and receiving receipts to mathematically prove the supplier is delivering in 45 days. It intervenes and flags the stale data <i>before</i> the next MRP run generates bad purchasing schedules.</p>
                   <p className="text-sm bg-gray-50 inline-block px-3 py-1.5 rounded-md border border-gray-100"><strong>Result:</strong> Buyers order on the correct timeline, avoiding massive expedited freight costs and preventing stockouts.</p>
                 </div>
               </div>
@@ -218,7 +215,7 @@ export function LandingPage() {
               <div className="flex gap-3 text-gray-700">
                 <span className="text-indigo-600 font-bold text-xl shrink-0">A:</span>
                 <div>
-                  <p className="mb-3"><strong>Yes, Membrain catches it.</strong> It constantly cross-checks the ERP with your 3PL. If there's a mismatch on cuts, cancels, or addresses, it holds fulfillment immediately, routes a structured update task to the warehouse contact, and releases the hold only when they explicitly acknowledge the change.</p>
+                  <p className="mb-3"><strong>Yes, Procept catches it.</strong> It constantly cross-checks the ERP with your 3PL. If there's a mismatch on cuts, cancels, or addresses, it holds fulfillment immediately, routes a structured update task to the warehouse contact, and releases the hold only when they explicitly acknowledge the change.</p>
                   <p className="text-sm bg-gray-50 inline-block px-3 py-1.5 rounded-md border border-gray-100"><strong>Result:</strong> Zero wrong-ship/reship costs caused by the standard 'our side vs your side' data gap.</p>
                 </div>
               </div>
@@ -248,7 +245,7 @@ export function LandingPage() {
 
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:border-blue-300 transition-colors">
                 <h4 className="font-medium text-gray-900 mb-2 leading-tight">Q: Does it catch Rogue Invoice Pricing?</h4>
-                <p className="text-sm text-gray-600"><strong>A: Yes.</strong> If an invoice arrives at $12.50 vs the PO's $10.00, Membrain catches it from the email, blocks AP processing, and drafts a structured dispute to the vendor before you ever pay it.</p>
+                <p className="text-sm text-gray-600"><strong>A: Yes.</strong> If an invoice arrives at $12.50 vs the PO's $10.00, Procept catches it from the email, blocks AP processing, and drafts a structured dispute to the vendor before you ever pay it.</p>
               </div>
 
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:border-blue-300 transition-colors">
@@ -258,7 +255,7 @@ export function LandingPage() {
 
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:border-blue-300 transition-colors">
                 <h4 className="font-medium text-gray-900 mb-2 leading-tight">Q: Can it predict Sudden SKU Stockouts?</h4>
-                <p className="text-sm text-gray-600"><strong>A: Yes.</strong> Membrain's background telemetry detects burn-rate anomalies, predicting a stockout ahead of time, and instantly generates an expedited Air Freight PO request.</p>
+                <p className="text-sm text-gray-600"><strong>A: Yes.</strong> Procept's background telemetry detects burn-rate anomalies, predicting a stockout ahead of time, and instantly generates an expedited Air Freight PO request.</p>
               </div>
             </div>
 

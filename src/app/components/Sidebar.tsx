@@ -29,7 +29,7 @@ export function Sidebar() {
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-screen">
       <div className="p-6 border-b border-gray-200">
-        <h1 className="font-semibold text-lg">Membrain Supply Chain Agent</h1>
+        <h1 className="font-semibold text-lg">Procept Supply Chain Agent</h1>
         <p className="text-sm text-gray-500 mt-1">Supply Chain Automation</p>
       </div>
 
