@@ -20,8 +20,8 @@
     "stat1Desc": "of buyer time wasted on manual purchase order and invoice reconciliation.",
     "stat2Desc": "average industry PPV margin leakage due to delayed master data pricing updates.",
     "stat3Desc": "lag time attempting to resolve \"black hole\" shipping damage and shortage claims.",
-    "solutionTitle": "Our Solution: Autonomous Agents Curing Administrative Misery",
-    "solutionDesc1": "Procept AI",
+    "solutionTitle": "Our Solution: Autonomous Agents Catching Catastrophies Before They Reach the Customer",
+    "solutionDesc1": "Procept Technologies",
     "solutionDesc2": " deploys specialized, autonomous agents that continuously monitor your ERP, WMS, and unstructured communications to proactively identify and resolve your most expensive administrative bottlenecks. By bridging disconnected data silos into a central action command, we empower your team to approve complex workflow corrections with a single click, transforming reactive manual data wrangling into a unified, zero-error supply chain operation.",
     "scenario1Title": "1. The Autonomous Procurement Co-Pilot",
     "scenario1Bul1": "Universal Connectivity:",
@@ -86,6 +86,9 @@
     "longTermIssue1Label": "Blind Demand Forecasting:",
     "longTermIssue2Label": "Vendor Qualification & Onboarding:",
     "longTermIssue3Label": "Tariff Calculation & Reconciliation:",
-    "longTermIssue4Label": "Integration \"Nightmares\":"
+    "longTermIssue4Label": "Integration \"Nightmares\":",
+    "quoteMainPoint": "Data Fragmentation Problems Stop Procurement and Operations Teams in their Tracks",
+    "quoteText": "When procurement data doesn't align with inventory systems, or when transportation information lives separately from demand planning, AI tools can't deliver the connected intelligence that supply chain leaders need.",
+    "quoteSource": "TraxTech - Why AI Fails in Supply Chain"
   }
 }

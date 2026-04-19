@@ -20,8 +20,8 @@
     "stat1Desc": "del tiempo del comprador desperdiciado en \u00f3rdenes de compra y conciliaci\u00f3n.",
     "stat2Desc": "de fuga promedio de m\u00e1rgenes debido a actualizaciones retrasadas en la fijaci\u00f3n de precios de datos maestros.",
     "stat3Desc": "de tiempo de retraso intentando resolver resoluciones de reclamos de env\u00edos.",
-    "solutionTitle": "Nuestra Soluci\u00f3n: Agentes Aut\u00f3nomos Curando la Miseria Administrativa",
-    "solutionDesc1": "Procept AI",
+    "solutionTitle": "Nuestra Soluci\u00f3n: Agentes Aut\u00f3nomos que Previenen Cat\u00e1strofes Antes de que Lleguen al Cliente",
+    "solutionDesc1": "Procept Technologies",
     "solutionDesc2": " despliega agentes especialistas y aut\u00f3nomos que monitorean constantemente su ERP, WMS y comunicaciones no estructuradas para detectar de manera proactiva cuellos de botella administrativos. Al unir bases de datos desconectadas, permitimos a su equipo aprobar correcciones de procesos de manera automatizada.",
     "scenario1Title": "1. El Copiloto Autom\u00e1tico de Adquisiciones",
     "scenario1Bul1": "Conectividad Universal:",
@@ -86,6 +86,9 @@
     "longTermIssue1Label": "Pron\u00f3stico de Demanda a Ciegas:",
     "longTermIssue2Label": "Calificaci\u00f3n y Alta de Proveedores:",
     "longTermIssue3Label": "C\u00e1lculo y Conciliaci\u00f3n de Aranceles:",
-    "longTermIssue4Label": "\"Pesadillas\" de Integraci\u00f3n:"
+    "longTermIssue4Label": "\"Pesadillas\" de Integraci\u00f3n:",
+    "quoteMainPoint": "Los Problemas de Fragmentaci\u00f3n de Datos Frenan en Seco a los Equipos de Operaciones y Adquisiciones",
+    "quoteText": "Cuando los datos de compras no se alinean con los sistemas de inventario, o cuando la informaci\u00f3n de transporte vive separada de la planificaci\u00f3n de la demanda, las herramientas de IA no pueden ofrecer la inteligencia conectada que necesitan los l\u00edderes de la cadena de suministro.",
+    "quoteSource": "TraxTech - Por Qu\u00e9 Falla la IA en la Cadena de Suministro"
   }
 }
