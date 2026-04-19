@@ -3,8 +3,8 @@
     "title": "Procept: El Centro Hol\u00edstico de Acci\u00f3n para su Cadena de Suministro Potenciada por IA",
     "subtitle": "Repare Datos Rotos. Automatice de Compra a Pago. Rastreable en Cada Paso.",
     "enterDemo": "Ingresar a la Prueba Interactiva",
-    "problemTitle": "Problema: Sus Equipos de Obtencion y Operaciones son Reactivos, no Proactivos",
-    "problemDesc1": "Para los equipos de Obtencion y operaciones, cada discrepancia entre el ERP, el correo electr\u00f3nico y los socios de log\u00edstica o manufactura es completamente manual. Alguien tiene que detectar estos errores y realizar acciones para mantener el negocio en marcha.",
+    "problemTitle": "Problema: Sus Equipos de Compras y Operaciones son Reactivos, no Proactivos",
+    "problemDesc1": "Para los equipos de Compras y operaciones, cada discrepancia entre el ERP, el correo electr\u00f3nico y los socios de log\u00edstica o manufactura es completamente manual. Alguien tiene que detectar estos errores y realizar acciones para mantener el negocio en marcha.",
     "problemDesc2": "Los cuellos de botella administrativos m\u00e1s comunes que agotan sus m\u00e1rgenes:",
     "immediateTermsTitle": "Problemas de Corto Plazo",
     "immediateIssue1": "Actualizaciones cr\u00edticas perdidas en guerras de correos que involucran a 30 personas.",
@@ -88,7 +88,7 @@
     "longTermIssue3Label": "C\u00e1lculo y Conciliaci\u00f3n de Aranceles:",
     "longTermIssue4Label": "\"Pesadillas\" de Integraci\u00f3n:",
     "quoteMainPoint": "Los Problemas de Fragmentaci\u00f3n de Datos Frenan en Seco a los Equipos de Operaciones y Adquisiciones",
-    "quoteText": "Cuando los datos de obtencion no se alinean con los sistemas de inventario, o cuando la informaci\u00f3n de transporte vive separada de la planificaci\u00f3n de la demanda, las herramientas de IA no pueden ofrecer la inteligencia conectada que necesitan los l\u00edderes de la cadena de suministro.",
+    "quoteText": "Cuando los datos de compras no se alinean con los sistemas de inventario, o cuando la informaci\u00f3n de transporte vive separada de la planificaci\u00f3n de la demanda, las herramientas de IA no pueden ofrecer la inteligencia conectada que necesitan los l\u00edderes de la cadena de suministro.",
     "quoteSource": "TraxTech - Por Qu\u00e9 Falla la IA en la Cadena de Suministro"
   }
 }
