@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { ArrowRight, Bot, Target, Zap, Link, ShieldCheck, LineChart } from 'lucide-react';
+import { ArrowRight, Bot, Target, Zap, Link, ShieldCheck, LineChart, Factory, Store, Settings, Brain } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 
 const ProceptLogo = ({ className }: { className?: string }) => (
@@ -8,6 +8,82 @@ const ProceptLogo = ({ className }: { className?: string }) => (
     <path d="M 4 50 L 96 50 M 78 36 L 96 50 L 78 64" />
   </svg>
 );
+
+const DataFlowDiagram = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="mt-12 overflow-x-auto pb-4">
+      <div className="min-w-[900px] mx-auto w-[900px] h-[600px] relative bg-white border border-slate-200 rounded-2xl shadow-sm font-sans flex items-center justify-center">
+      <style>
+        {`
+          @keyframes flow-forward {
+            from { stroke-dashoffset: 40; }
+            to { stroke-dashoffset: 0; }
+          }
+          @keyframes flow-reverse {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: 40; }
+          }
+          @keyframes hub-pulse {
+            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1); }
+            50% { transform: scale(1.03); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); }
+            100% { transform: scale(1); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1); }
+          }
+          .animate-flow-forward { animation: flow-forward 3s linear infinite; }
+          .animate-flow-forward-fast { animation: flow-forward 1.5s linear infinite; }
+          .animate-flow-reverse { animation: flow-reverse 1s linear infinite; }
+          .animate-hub-pulse { animation: hub-pulse 2.5s infinite; }
+        `}
+      </style>
+
+      {/* Nodes */}
+      <div className="absolute p-5 py-4 rounded-xl flex flex-col items-center justify-center z-10 font-semibold shadow-sm bg-white border border-slate-200 text-slate-700 text-center" style={{ top: '340px', left: '65px', width: '150px' }}>
+        <Factory className="w-6 h-6 mb-1 text-slate-400" />
+        {t('landing.diagram.suppliers')}
+        <span className="block text-sm font-normal mt-0.5 text-slate-500 leading-tight">{t('landing.diagram.rawMaterials')}</span>
+      </div>
+
+      <div className="absolute p-5 py-4 rounded-xl flex flex-col items-center justify-center z-10 font-semibold shadow-sm bg-white border border-slate-200 text-slate-800 text-center" style={{ top: '340px', left: '375px', width: '150px' }}>
+        <Settings className="w-6 h-6 mb-1 text-indigo-500" />
+        {t('landing.diagram.manufacturer')}
+        <span className="block text-sm font-normal mt-0.5 text-slate-500 leading-tight">{t('landing.diagram.erp')}</span>
+      </div>
+
+      <div className="absolute p-5 py-4 rounded-xl flex flex-col items-center justify-center z-10 font-semibold shadow-sm bg-white border border-slate-200 text-slate-700 text-center" style={{ top: '340px', left: '685px', width: '150px' }}>
+        <Store className="w-6 h-6 mb-1 text-slate-400" />
+        {t('landing.diagram.retailers')}
+        <span className="block text-sm font-normal mt-0.5 text-slate-500 leading-tight">{t('landing.diagram.wholesale')}</span>
+      </div>
+
+      <div className="absolute p-5 py-4 rounded-xl flex flex-col items-center justify-center z-10 font-semibold shadow-md bg-slate-900 border border-slate-700 text-white animate-hub-pulse text-center" style={{ top: '80px', left: '335px', width: '230px' }}>
+        <Brain className="w-7 h-7 mb-1 text-blue-400" />
+        {t('landing.diagram.procept')}
+        <span className="block text-sm font-normal mt-0.5 text-slate-400 leading-tight">{t('landing.diagram.validation')}</span>
+      </div>
+
+      {/* Labels */}
+      <div className="absolute text-sm font-medium text-slate-500 z-[5]" style={{ top: '385px', left: '240px' }}>{t('landing.diagram.labelMaterials')}</div>
+      <div className="absolute text-sm font-medium text-slate-500 z-[5]" style={{ top: '385px', left: '580px' }}>{t('landing.diagram.labelShipments')}</div>
+      <div className="absolute text-sm font-medium text-slate-500 z-[5]" style={{ top: '240px', left: '230px' }}>{t('landing.diagram.labelSupplierReports')}</div>
+      <div className="absolute text-sm font-medium text-indigo-600 z-[5]" style={{ top: '220px', left: '460px' }}>{t('landing.diagram.labelCleanData')}</div>
+      <div className="absolute text-sm font-medium text-red-500 z-[5]" style={{ top: '220px', left: '630px' }}>{t('landing.diagram.labelRawEDI')}</div>
+
+      {/* Curved Lines */}
+      <svg className="absolute top-0 left-0 w-full h-full z-[1]">
+        <path d="M 170 380 L 380 380" className="fill-none stroke-slate-300 stroke-[4px] [stroke-dasharray:15,15] animate-flow-forward" strokeLinecap="round" />
+        <path d="M 520 380 L 700 380" className="fill-none stroke-slate-300 stroke-[4px] [stroke-dasharray:15,15] animate-flow-forward" strokeLinecap="round" />
+
+        <path d="M 140 340 C 140 200, 300 130, 335 130" className="fill-none stroke-cyan-500 stroke-[3px] [stroke-dasharray:8,8] animate-flow-forward-fast opacity-80" strokeLinecap="round" />
+        
+        <path d="M 760 340 C 760 200, 600 130, 565 130" className="fill-none stroke-red-500 stroke-[3px] [stroke-dasharray:8,8] animate-flow-reverse opacity-80" strokeLinecap="round" />
+        
+        <path d="M 450 160 L 450 340" className="fill-none stroke-indigo-400 stroke-[4px] [stroke-dasharray:8,8] animate-flow-forward-fast opacity-80" strokeLinecap="round" />
+      </svg>
+    </div>
+  </div>
+  );
+};
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -127,17 +203,17 @@ export function LandingPage() {
             {t('landing.statsIntro')}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            <div className="pt-6 md:pt-0">
+            <div className="pt-6 md:pt-0 flex flex-col items-center py-2 md:px-4">
               <div className="text-5xl font-light text-blue-700 mb-3">60%</div>
-              <p className="text-slate-700">{t('landing.stat1Desc')}</p>
+              <p className="text-slate-700 text-center max-w-[250px] mx-auto">{t('landing.stat1Desc')}</p>
             </div>
-            <div className="pt-6 md:pt-0">
+            <div className="pt-6 md:pt-0 flex flex-col items-center py-2 md:px-4">
               <div className="text-5xl font-light text-blue-700 mb-3">$1.2B</div>
-              <p className="text-slate-700">{t('landing.stat2Desc')}</p>
+              <p className="text-slate-700 text-center max-w-[250px] mx-auto">{t('landing.stat2Desc')}</p>
             </div>
-            <div className="pt-6 md:pt-0">
+            <div className="pt-6 md:pt-0 flex flex-col items-center py-2 md:px-4">
               <div className="text-5xl font-light text-blue-700 mb-3">{t('landing.days')}</div>
-              <p className="text-slate-700">{t('landing.stat3Desc')}</p>
+              <p className="text-slate-700 text-center max-w-[250px] mx-auto">{t('landing.stat3Desc')}</p>
             </div>
           </div>
         </section>
@@ -239,6 +315,8 @@ export function LandingPage() {
               </p>
             </div>
           </div>
+
+          <DataFlowDiagram />
         </section>
 
         {/* Can Procept Resolve This? / FAQ Section */}

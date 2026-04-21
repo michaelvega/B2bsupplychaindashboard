@@ -89,6 +89,21 @@
     "longTermIssue4Label": "\"Pesadillas\" de Integraci\u00f3n:",
     "quoteMainPoint": "Los Problemas de Fragmentaci\u00f3n de Datos Frenan en Seco a los Equipos de Operaciones y Adquisiciones",
     "quoteText": "Cuando los datos de compras no se alinean con los sistemas de inventario, o cuando la informaci\u00f3n de transporte vive separada de la planificaci\u00f3n de la demanda, las herramientas de IA no pueden ofrecer la inteligencia conectada que necesitan los l\u00edderes de la cadena de suministro.",
-    "quoteSource": "TraxTech - Por Qu\u00e9 Falla la IA en la Cadena de Suministro"
+    "quoteSource": "TraxTech - Por Qu\u00e9 Falla la IA en la Cadena de Suministro",
+    "diagram": {
+      "suppliers": "Proveedores",
+      "rawMaterials": "(Materias Primas)",
+      "manufacturer": "Fabricante",
+      "erp": "(ERP)",
+      "retailers": "Minoristas",
+      "wholesale": "(Mayoristas, Distribuidores)",
+      "procept": "Procept Technologies",
+      "validation": "Validación y Síntesis de Datos",
+      "labelMaterials": "Materiales",
+      "labelShipments": "Envíos",
+      "labelSupplierReports": "Informes de Proveedores",
+      "labelCleanData": "Datos Limpios al ERP",
+      "labelRawEDI": "PDFs / Órdenes de Compra EDI Crudas"
+    }
   }
 }

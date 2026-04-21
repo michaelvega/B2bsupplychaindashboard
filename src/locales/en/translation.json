@@ -89,6 +89,21 @@
     "longTermIssue4Label": "Integration \"Nightmares\":",
     "quoteMainPoint": "Data Fragmentation Problems Stop Procurement and Operations Teams in their Tracks",
     "quoteText": "When procurement data doesn't align with inventory systems, or when transportation information lives separately from demand planning, AI tools can't deliver the connected intelligence that supply chain leaders need.",
-    "quoteSource": "TraxTech - Why AI Fails in Supply Chain"
+    "quoteSource": "TraxTech - Why AI Fails in Supply Chain",
+    "diagram": {
+      "suppliers": "Suppliers",
+      "rawMaterials": "(Raw Materials)",
+      "manufacturer": "Manufacturer",
+      "erp": "(ERP)",
+      "retailers": "Retailers",
+      "wholesale": "(Wholesale, Distributors)",
+      "procept": "Procept Technologies",
+      "validation": "Validation & Data Synthesis",
+      "labelMaterials": "Materials",
+      "labelShipments": "Shipments",
+      "labelSupplierReports": "Supplier Reports",
+      "labelCleanData": "Clean Data to ERP",
+      "labelRawEDI": "Raw EDI POs / PDFs"
+    }
   }
 }
