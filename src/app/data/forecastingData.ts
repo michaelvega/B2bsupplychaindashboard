@@ -93,3 +93,18 @@ export const monthlyStockData: MonthlyStockData[] = [
     'SKU #7734-predicted': 200,
   },
 ];
+
+export interface MacroMetric {
+  id: string;
+  name: string;
+  value: string;
+  trend: 'up' | 'down' | 'stable';
+  impact: string;
+}
+
+export const macroMetrics: MacroMetric[] = [
+  { id: 'm1', name: 'Global Steel Prices', value: '+$124/MT', trend: 'up', impact: 'Increases Cost of Goods for Steel Fasteners' },
+  { id: 'm2', name: 'Shipping Container Rates', value: '+$400/FEU', trend: 'up', impact: 'Delayed lead times across imported goods' },
+  { id: 'm3', name: 'Copper Futures', value: '-2.4%', trend: 'down', impact: 'Favorable conditions for electrical components' },
+  { id: 'm4', name: 'Energy Costs (Oil)', value: '+$3.50/BBL', trend: 'up', impact: 'Higher logistics and transport costs expected' },
+];

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { forecastingItems } from '../data/mockData';
-import { forecastingProducts, monthlyStockData } from '../data/forecastingData';
+import { forecastingProducts, monthlyStockData, macroMetrics } from '../data/forecastingData';
 import { WorkCard } from '../components/WorkCard';
 import { DetailPane } from '../components/DetailPane';
 import { WorkItem } from '../data/mockData';
 import { BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, ReferenceLine } from 'recharts';
-import { AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
+import { AlertTriangle, TrendingDown, TrendingUp, UploadCloud, Database, Globe, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
 export function Forecasting() {
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
@@ -36,6 +36,20 @@ export function Forecasting() {
         <p className="text-gray-600 mt-1">
           Operational forecasting alerts and stockout risk detection
         </p>
+      </div>
+
+      {/* Data Integration Section */}
+      <div className="grid grid-cols-2 gap-6 mb-6">
+        <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 hover:border-indigo-400 transition-colors">
+          <UploadCloud className="w-8 h-8 text-indigo-500 mb-3" />
+          <h3 className="font-semibold text-gray-900">Upload Data (CSV)</h3>
+          <p className="text-sm text-gray-500 mt-1 text-center">Drag and drop your historical sales or inventory CSV files here</p>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col items-center justify-center cursor-pointer hover:shadow-md hover:border-sky-400 transition-all">
+          <Database className="w-8 h-8 text-sky-500 mb-3" />
+          <h3 className="font-semibold text-gray-900">Connect Live Source</h3>
+          <p className="text-sm text-gray-500 mt-1 text-center">Configure API endpoints for real-time ERP or WMS synchronization</p>
+        </div>
       </div>
 
       {/* ML Forecasting Chart */}
@@ -133,6 +147,28 @@ export function Forecasting() {
             <AlertTriangle className="w-4 h-4 text-red-600" />
             <span>Red zone = Stockout risk detected</span>
           </div>
+        </div>
+      </div>
+
+      {/* Macroeconomics Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Globe className="w-5 h-5 text-gray-600" />
+          <h2 className="font-semibold text-gray-900">Global Macroeconomic Market Factors</h2>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {macroMetrics.map((metric) => (
+            <div key={metric.id} className="p-4 rounded-lg border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-sm transition-all">
+              <div className="flex justify-between items-start mb-2">
+                <span className="text-sm font-medium text-gray-600">{metric.name}</span>
+                {metric.trend === 'up' && <ArrowUpRight className="w-4 h-4 text-red-500" />}
+                {metric.trend === 'down' && <ArrowDownRight className="w-4 h-4 text-green-500" />}
+                {metric.trend === 'stable' && <Minus className="w-4 h-4 text-gray-500" />}
+              </div>
+              <div className="text-xl font-bold text-gray-900 mb-2">{metric.value}</div>
+              <p className="text-xs text-gray-500 leading-snug">{metric.impact}</p>
+            </div>
+          ))}
         </div>
       </div>
 
