@@ -107,4 +107,70 @@ export const macroMetrics: MacroMetric[] = [
   { id: 'm2', name: 'Shipping Container Rates', value: '+$400/FEU', trend: 'up', impact: 'Delayed lead times across imported goods' },
   { id: 'm3', name: 'Copper Futures', value: '-2.4%', trend: 'down', impact: 'Favorable conditions for electrical components' },
   { id: 'm4', name: 'Energy Costs (Oil)', value: '+$3.50/BBL', trend: 'up', impact: 'Higher logistics and transport costs expected' },
+  { id: 'w1', name: 'Typhoon Season (APAC)', value: 'Severe', trend: 'up', impact: 'Potential 10-15 day delays on Pacific routes' },
+  { id: 'w2', name: 'European Winter Freeze', value: 'Mild', trend: 'stable', impact: 'No expected impact on continental transit' }
 ];
+
+export interface ForecastScenario {
+  id: string;
+  name: string;
+  description: string;
+  status: 'Complete' | 'Running' | 'Failed';
+  type: 'Auto' | 'Supervised';
+  accuracy?: string;
+  timeAgo: string;
+  metrics: { label: string; value: string }[];
+}
+
+export const forecastScenarios: ForecastScenario[] = [
+  {
+    id: 'scen-1',
+    name: 'Base Case (Stable Demand)',
+    description: 'Standard LSTM model forecasting assuming no supply chain disruptions.',
+    status: 'Complete',
+    type: 'Auto',
+    accuracy: '0.0421 RMSE',
+    timeAgo: '12h ago',
+    metrics: [{ label: 'Val RMSE', value: '0.0421' }, { label: 'MAE', value: '1.2%' }]
+  },
+  {
+    id: 'scen-2',
+    name: 'Supplier 2 Delay (15 Days)',
+    description: 'Simulates a 15-day delay for Supplier 2 due to foreign government port restrictions.',
+    status: 'Complete',
+    type: 'Supervised',
+    accuracy: '0.0511 RMSE',
+    timeAgo: '2h ago',
+    metrics: [{ label: 'Impact', value: 'High' }, { label: 'Shortage Risk', value: '3 SKUs' }]
+  },
+  {
+    id: 'scen-3',
+    name: 'Q3 Demand Spike (+20%)',
+    description: 'Transformer encoder modeling a sudden 20% surge in global demand.',
+    status: 'Running',
+    type: 'Auto',
+    timeAgo: 'Started 10m ago',
+    metrics: [{ label: 'Progress', value: '45%' }]
+  }
+];
+
+export interface HistoricalDataRow {
+  date: string;
+  sku: string;
+  unitsSold: number;
+  revenue: string;
+  inventoryLevel: number;
+  leadTime: number;
+}
+
+export const historicalDataRows: HistoricalDataRow[] = [
+  { date: '2025-11-01', sku: '#8842', unitsSold: 120, revenue: '$14,400', inventoryLevel: 500, leadTime: 12 },
+  { date: '2025-11-15', sku: '#2201', unitsSold: 340, revenue: '$8,500', inventoryLevel: 800, leadTime: 14 },
+  { date: '2025-12-01', sku: '#8842', unitsSold: 180, revenue: '$21,600', inventoryLevel: 320, leadTime: 13 },
+  { date: '2025-12-15', sku: '#5512', unitsSold: 410, revenue: '$32,800', inventoryLevel: 950, leadTime: 8 },
+  { date: '2026-01-01', sku: '#7734', unitsSold: 200, revenue: '$18,000', inventoryLevel: 410, leadTime: 18 },
+  { date: '2026-01-15', sku: '#2201', unitsSold: 280, revenue: '$7,000', inventoryLevel: 520, leadTime: 15 },
+  { date: '2026-02-01', sku: '#8842', unitsSold: 210, revenue: '$25,200', inventoryLevel: 110, leadTime: 14 },
+  { date: '2026-02-15', sku: '#5512', unitsSold: 390, revenue: '$31,200', inventoryLevel: 560, leadTime: 9 },
+];
+
