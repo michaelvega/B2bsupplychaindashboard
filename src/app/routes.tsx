@@ -44,6 +44,14 @@ export const router = createHashRouter([
     ),
   },
   {
+    path: '/command-center/:chatId',
+    element: (
+      <Layout>
+        <Actions />
+      </Layout>
+    ),
+  },
+  {
     path: '/agent-files',
     element: (
       <Layout>
