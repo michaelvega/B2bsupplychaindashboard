@@ -301,9 +301,9 @@ export function Actions() {
             {!currentChat || messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-500">
                 <Bot className="w-16 h-16 mb-6 text-gray-300" />
-                <h1 className="text-2xl font-semibold text-gray-800 mb-2">How can I help you today?</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 mb-2">Agent Command Center</h1>
                 <p className="text-gray-500 max-w-md">
-                  Instruct the SAP agent to perform CRUD operations on your ERP system.
+                  Build an agent.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10 w-full max-w-2xl">
