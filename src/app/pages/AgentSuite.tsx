@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { cn } from '../components/ui/utils';
 import ReactMarkdown from 'react-markdown';
@@ -116,6 +116,14 @@ export function AgentSuite() {
     handleDrop(taskId, 'done');
   };
 
+  const handleDeleteTask = (taskId: string) => {
+    if (confirm("Are you sure you want to delete this task?")) {
+      const newTasks = tasks.filter(t => t.id !== taskId);
+      saveTasks(newTasks);
+      setSelectedTaskId(null);
+    }
+  };
+
   const openAddModal = (status: Task['status']) => {
     setAddModalStatus(status);
     setShowAddModal(true);
@@ -204,6 +212,7 @@ export function AgentSuite() {
           onUpdate={(updated) => {
             saveTasks(tasks.map(t => t.id === updated.id ? updated : t));
           }}
+          onDelete={() => handleDeleteTask(selectedTaskId)}
           onChatSend={async (msg) => {
             const task = tasks.find(t => t.id === selectedTaskId)!;
             const updatedTask = { ...task, chatHistory: [...task.chatHistory, { role: 'user' as const, content: msg }] };
@@ -423,7 +432,7 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
   );
 }
 
-function TaskDetailModal({ task, onClose, onUpdate, onChatSend }: { task: Task, onClose: () => void, onUpdate: (t: Task) => void, onChatSend: (m: string) => void }) {
+function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { task: Task, onClose: () => void, onUpdate: (t: Task) => void, onDelete: () => void, onChatSend: (m: string) => void }) {
   const [chatInput, setChatInput] = useState('');
   const [commentInput, setCommentInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -446,15 +455,20 @@ function TaskDetailModal({ task, onClose, onUpdate, onChatSend }: { task: Task, 
         {/* Left Side: Details & Comments */}
         <div className="w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col h-full shrink-0">
           <div className="p-6 overflow-y-auto flex-1 border-b border-gray-200">
-            <div className="flex items-center gap-2 mb-4">
-              <span className={cn(
-                "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                task.status === 'scheduled' ? "bg-purple-100 text-purple-800" :
-                task.status === 'done' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
-              )}>
-                {task.status}
-              </span>
-              {task.interval && <span className="text-xs font-medium text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {task.interval}</span>}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
+                  task.status === 'scheduled' ? "bg-purple-100 text-purple-800" :
+                  task.status === 'done' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                )}>
+                  {task.status}
+                </span>
+                {task.interval && <span className="text-xs font-medium text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {task.interval}</span>}
+              </div>
+              <button onClick={onDelete} className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-red-200" title="Delete Task">
+                <Trash2 className="w-3.5 h-3.5" /> Delete
+              </button>
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">{task.title}</h2>
             <p className="text-sm text-gray-600 whitespace-pre-wrap mb-6">{task.description}</p>
