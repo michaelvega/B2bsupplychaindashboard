@@ -288,7 +288,7 @@ export function AgentFiles() {
                   placeholder="Type your file content here..."
                 />
               ) : selectedFile.endsWith('.md') ? (
-                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm min-h-[200px]">
+                <div className="shrink-0 bg-white border border-gray-200 rounded-lg p-6 shadow-sm min-h-[200px]">
                   <div className="prose prose-sm max-w-none text-gray-800">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
@@ -317,7 +317,7 @@ export function AgentFiles() {
                   </div>
                 </div>
               ) : (
-                <pre className="flex-1 text-sm font-mono text-gray-800 whitespace-pre-wrap break-words bg-white border border-gray-200 rounded-lg p-4 shadow-sm min-h-[200px]">
+                <pre className="shrink-0 min-h-full text-sm font-mono text-gray-800 whitespace-pre-wrap break-words bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                   {fileContent || "Empty file."}
                 </pre>
               )}

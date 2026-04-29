@@ -1,417 +1,560 @@
-import { useState, useRef, useEffect } from 'react';
-import { Bot, Plus, X, Play, Clock, Pencil, Send, Loader2, Minus, Square } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import { Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { cn } from '../components/ui/utils';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-interface CustomAgent {
-  id: string;
-  name: string;
-  masterPrompt: string;
-  schedule: string;
-}
-
-interface Message {
-  role: 'user' | 'agent';
-  content: string;
-}
-
+const ITEM_TYPE = 'TASK_CARD';
+const AZURE_FILE = 'agent-tasks.json';
 const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
 
-export function AgentSuite() {
-  const [agents, setAgents] = useState<CustomAgent[]>(() => {
-    try {
-      const saved = localStorage.getItem('custom_agents');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  image?: string;
+  status: 'scheduled' | 'todo' | 'done';
+  interval?: string;
+  comments: { text: string; timestamp: number }[];
+  chatHistory: { role: 'user' | 'agent'; content: string }[];
+  hasBotResponded: boolean;
+  timestamp: number;
+}
 
-  const [openWindows, setOpenWindows] = useState<string[]>([]);
-  const [focusedWindow, setFocusedWindow] = useState<string | null>(null);
-  
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newAgentName, setNewAgentName] = useState('');
-  const [newAgentPrompt, setNewAgentPrompt] = useState('');
-  const [newAgentSchedule, setNewAgentSchedule] = useState('1h');
-  
-  const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
+export function AgentSuite() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addModalStatus, setAddModalStatus] = useState<Task['status']>('todo');
 
   useEffect(() => {
-    localStorage.setItem('custom_agents', JSON.stringify(agents));
-  }, [agents]);
-
-  const openWindow = (id: string) => {
-    if (!openWindows.includes(id)) {
-      setOpenWindows([...openWindows, id]);
-    }
-    setFocusedWindow(id);
-  };
-
-  const closeWindow = (id: string) => {
-    setOpenWindows(openWindows.filter(w => w !== id));
-    if (focusedWindow === id) {
-      setFocusedWindow(openWindows[openWindows.length - 2] || null);
-    }
-  };
-
-  const handleCreateAgent = () => {
-    if (!newAgentName.trim() || !newAgentPrompt.trim()) return;
-    const newAgent: CustomAgent = {
-      id: crypto.randomUUID(),
-      name: newAgentName.trim(),
-      masterPrompt: newAgentPrompt.trim(),
-      schedule: newAgentSchedule
+    const loadTasks = async () => {
+      try {
+        const res = await fetch(`/api/azure/${AZURE_FILE}`);
+        if (res.ok) {
+          const text = await res.text();
+          if (text) {
+            setTasks(JSON.parse(text));
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load tasks', err);
+      } finally {
+        setLoading(false);
+      }
     };
-    setAgents([...agents, newAgent]);
-    setShowCreateModal(false);
-    setNewAgentName('');
-    setNewAgentPrompt('');
-    setNewAgentSchedule('1h');
-    openWindow(newAgent.id);
+    loadTasks();
+  }, []);
+
+  const saveTasks = async (newTasks: Task[]) => {
+    setTasks(newTasks);
+    try {
+      await fetch(`/api/azure/${AZURE_FILE}`, {
+        method: 'PUT',
+        body: JSON.stringify(newTasks, null, 2)
+      });
+    } catch (err) {
+      console.error('Failed to save tasks', err);
+    }
   };
 
-  const handleSaveEdit = () => {
-    if (editingAgentId && newAgentPrompt.trim()) {
-      setAgents(agents.map(a => a.id === editingAgentId ? { ...a, masterPrompt: newAgentPrompt.trim(), schedule: newAgentSchedule } : a));
-    }
-    setEditingAgentId(null);
-    setNewAgentPrompt('');
+  const handleDrop = (taskId: string, newStatus: Task['status']) => {
+    const newTasks = tasks.map(t => (t.id === taskId ? { ...t, status: newStatus } : t));
+    saveTasks(newTasks);
   };
+
+  const handleStartConversation = async (task: Task) => {
+    const userMessage = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
+    
+    // 1. Optimistic update
+    const updatedTasks = tasks.map(t => {
+      if (t.id === task.id) {
+        return { ...t, chatHistory: [...t.chatHistory, { role: 'user' as const, content: userMessage }] };
+      }
+      return t;
+    });
+    setTasks(updatedTasks);
+
+    // 2. Network call
+    try {
+      const res = await fetch(TARGET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      });
+      const data = await res.json();
+      let responseText = data.response || 'No response from agent.';
+      const lobsterIndex = responseText.indexOf('🦞');
+      if (lobsterIndex !== -1) responseText = responseText.split('🦞').slice(1).join('🦞').trim();
+
+      const finalTasks = updatedTasks.map(t => {
+        if (t.id === task.id) {
+          return { 
+            ...t, 
+            chatHistory: [...t.chatHistory, { role: 'agent' as const, content: responseText }],
+            hasBotResponded: true
+          };
+        }
+        return t;
+      });
+      saveTasks(finalTasks);
+    } catch (err) {
+      const errorTasks = updatedTasks.map(t => {
+        if (t.id === task.id) {
+          return { ...t, chatHistory: [...t.chatHistory, { role: 'agent' as const, content: 'Connection error.' }] };
+        }
+        return t;
+      });
+      setTasks(errorTasks);
+    }
+  };
+
+  const handleMoveToDone = (taskId: string) => {
+    handleDrop(taskId, 'done');
+  };
+
+  const openAddModal = (status: Task['status']) => {
+    setAddModalStatus(status);
+    setShowAddModal(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
+  const scheduledTasks = tasks.filter(t => t.status === 'scheduled');
+  const todoTasks = tasks.filter(t => t.status === 'todo');
+  const doneTasks = tasks.filter(t => t.status === 'done');
 
   return (
-    <div className="h-full w-full bg-slate-900 relative overflow-hidden flex flex-col font-sans">
-      {/* Desktop Background & Icons */}
-      <div className="flex-1 p-6 relative z-0">
-        <div className="flex flex-col gap-6 flex-wrap content-start h-full">
-          
-          {/* General Agent Icon */}
-          <div 
-            className="flex flex-col items-center gap-2 w-24 group cursor-pointer"
-            onClick={() => openWindow('general')}
-          >
-            <div className="w-16 h-16 rounded-2xl bg-blue-600/80 backdrop-blur border border-white/20 flex items-center justify-center shadow-lg group-hover:bg-blue-500/90 transition-all">
-              <Bot className="w-8 h-8 text-white" />
-            </div>
-            <span className="text-white text-xs font-medium text-center drop-shadow-md">General Agent</span>
-          </div>
-
-          {/* Custom Agents Icons */}
-          {agents.map(agent => (
-            <div 
-              key={agent.id} 
-              className="flex flex-col items-center gap-2 w-24 group cursor-pointer relative"
-              onClick={() => openWindow(agent.id)}
-            >
-              <div className="w-16 h-16 rounded-2xl bg-emerald-600/80 backdrop-blur border border-white/20 flex items-center justify-center shadow-lg group-hover:bg-emerald-500/90 transition-all">
-                <Bot className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-white text-xs font-medium text-center drop-shadow-md px-1 truncate w-full">{agent.name}</span>
-              
-              {/* Edit overlay */}
-              <div 
-                className="absolute -top-2 -right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setNewAgentPrompt(agent.masterPrompt);
-                  setNewAgentSchedule(agent.schedule);
-                  setEditingAgentId(agent.id);
-                }}
-              >
-                <Pencil className="w-3.5 h-3.5 text-gray-700" />
-              </div>
-            </div>
-          ))}
-
-          {/* Create New Agent Icon */}
-          <div 
-            className="flex flex-col items-center gap-2 w-24 group cursor-pointer"
-            onClick={() => setShowCreateModal(true)}
-          >
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center border-dashed shadow-lg group-hover:bg-white/20 transition-all">
-              <Plus className="w-8 h-8 text-white/80" />
-            </div>
-            <span className="text-white/80 text-xs font-medium text-center drop-shadow-md">Create New</span>
-          </div>
-
+    <div className="h-full flex flex-col bg-white">
+      {/* Header */}
+      <div className="px-8 py-6 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <Bot className="w-6 h-6 text-blue-600" />
+            Agent Suite
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">Manage, schedule, and execute autonomous agent workflows.</p>
         </div>
+        <Button onClick={() => openAddModal('todo')} className="bg-blue-600 hover:bg-blue-700">
+          <Plus className="w-4 h-4 mr-2" />
+          New Task
+        </Button>
       </div>
 
-      {/* Render Open Windows */}
-      {openWindows.map(id => {
-        const isGeneral = id === 'general';
-        const agent = isGeneral ? null : agents.find(a => a.id === id);
-        if (!isGeneral && !agent) return null;
-        
-        return (
-          <AgentWindow 
-            key={id}
-            id={id}
-            title={isGeneral ? 'General Agent' : agent!.name}
-            masterPrompt={isGeneral ? null : agent!.masterPrompt}
-            isActive={focusedWindow === id}
-            onFocus={() => setFocusedWindow(id)}
-            onClose={() => closeWindow(id)}
+      {/* Kanban Board */}
+      <div className="flex-1 overflow-x-auto p-8">
+        <div className="flex gap-6 h-full min-w-[1000px]">
+          <KanbanColumn 
+            title="Scheduled" 
+            status="scheduled" 
+            tasks={scheduledTasks} 
+            onDrop={handleDrop} 
+            onCardClick={t => setSelectedTaskId(t.id)} 
+            onStart={handleStartConversation} 
+            onDone={handleMoveToDone} 
+            onAddClick={() => openAddModal('scheduled')}
           />
-        );
-      })}
-
-      {/* Taskbar */}
-      <div className="h-12 bg-slate-950/80 backdrop-blur-md border-t border-white/10 flex items-center px-4 gap-2 z-50">
-        {openWindows.map(id => {
-          const isGeneral = id === 'general';
-          const agent = isGeneral ? null : agents.find(a => a.id === id);
-          if (!isGeneral && !agent) return null;
-          
-          return (
-            <button
-              key={id}
-              onClick={() => setFocusedWindow(id)}
-              className={`h-9 px-4 rounded-md flex items-center gap-2 text-sm font-medium transition-all ${
-                focusedWindow === id 
-                  ? 'bg-white/20 text-white shadow-inner' 
-                  : 'bg-white/5 text-gray-300 hover:bg-white/10'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              <span className="truncate max-w-[120px]">{isGeneral ? 'General Agent' : agent!.name}</span>
-            </button>
-          );
-        })}
+          <KanbanColumn 
+            title="To Do" 
+            status="todo" 
+            tasks={todoTasks} 
+            onDrop={handleDrop} 
+            onCardClick={t => setSelectedTaskId(t.id)} 
+            onStart={handleStartConversation} 
+            onDone={handleMoveToDone}
+            onAddClick={() => openAddModal('todo')} 
+          />
+          <KanbanColumn 
+            title="Done" 
+            status="done" 
+            tasks={doneTasks} 
+            onDrop={handleDrop} 
+            onCardClick={t => setSelectedTaskId(t.id)} 
+            onStart={handleStartConversation} 
+            onDone={handleMoveToDone} 
+            onAddClick={() => openAddModal('done')}
+          />
+        </div>
       </div>
 
-      {/* Create / Edit Modal */}
-      {(showCreateModal || editingAgentId) && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100]">
-          <div className="bg-white rounded-xl shadow-2xl w-[500px] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {editingAgentId ? 'Edit Agent' : 'Create New Agent'}
-              </h2>
-              <button 
-                onClick={() => { setShowCreateModal(false); setEditingAgentId(null); }}
-                className="p-1 hover:bg-gray-200 rounded-full transition-colors text-gray-500"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      {/* Modals */}
+      {showAddModal && (
+        <AddTaskModal 
+          defaultStatus={addModalStatus}
+          onClose={() => setShowAddModal(false)} 
+          onAdd={(newTask) => {
+            saveTasks([...tasks, newTask]);
+            setShowAddModal(false);
+          }} 
+        />
+      )}
+      {selectedTaskId && (
+        <TaskDetailModal 
+          task={tasks.find(t => t.id === selectedTaskId)!} 
+          onClose={() => setSelectedTaskId(null)} 
+          onUpdate={(updated) => {
+            saveTasks(tasks.map(t => t.id === updated.id ? updated : t));
+          }}
+          onChatSend={async (msg) => {
+            const task = tasks.find(t => t.id === selectedTaskId)!;
+            const updatedTask = { ...task, chatHistory: [...task.chatHistory, { role: 'user' as const, content: msg }] };
+            setTasks(tasks.map(t => t.id === task.id ? updatedTask : t));
             
-            <div className="p-6 flex flex-col gap-5">
-              {!editingAgentId && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Agent Name</label>
-                  <input 
-                    type="text" 
-                    value={newAgentName}
-                    onChange={e => setNewAgentName(e.target.value)}
-                    placeholder="e.g. Invoice Processor"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              )}
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Master Prompt</label>
-                <textarea 
-                  value={newAgentPrompt}
-                  onChange={e => setNewAgentPrompt(e.target.value)}
-                  placeholder="Enter the task instructions for the agent to repeat..."
-                  rows={5}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                />
-              </div>
+            try {
+              const res = await fetch(TARGET_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+              });
+              const data = await res.json();
+              let responseText = data.response || 'No response.';
+              const lobsterIndex = responseText.indexOf('🦞');
+              if (lobsterIndex !== -1) responseText = responseText.split('🦞').slice(1).join('🦞').trim();
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-gray-500" />
-                  Schedule Interval
-                </label>
-                <select 
-                  value={newAgentSchedule}
-                  onChange={e => setNewAgentSchedule(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="5m">Every 5 minutes</option>
-                  <option value="15m">Every 15 minutes</option>
-                  <option value="30m">Every 30 minutes</option>
-                  <option value="1h">Every 1 hour</option>
-                  <option value="1d">Every 1 day</option>
-                  <option value="1w">Every 1 week</option>
-                  <option value="1mo">Every 1 month</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => { setShowCreateModal(false); setEditingAgentId(null); }}>
-                Cancel
-              </Button>
-              <Button onClick={editingAgentId ? handleSaveEdit : handleCreateAgent} className="bg-blue-600 hover:bg-blue-700 text-white">
-                {editingAgentId ? 'Save Changes' : 'Create Agent'}
-              </Button>
-            </div>
-          </div>
-        </div>
+              const finalTask = { ...updatedTask, chatHistory: [...updatedTask.chatHistory, { role: 'agent' as const, content: responseText }], hasBotResponded: true };
+              saveTasks(tasks.map(t => t.id === task.id ? finalTask : t));
+            } catch (err) {
+               // Ignore
+            }
+          }}
+        />
       )}
     </div>
   );
 }
 
-function AgentWindow({ id, title, masterPrompt, isActive, onFocus, onClose }: { id: string, title: string, masterPrompt: string | null, isActive: boolean, onFocus: () => void, onClose: () => void }) {
-  const [messages, setMessages] = useState<Message[]>(() => {
-    try {
-      const saved = localStorage.getItem(`agent_history_${id}`);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+// ----------------------------------------------------
+// Kanban Components
+// ----------------------------------------------------
+function KanbanColumn({ title, status, tasks, onDrop, onCardClick, onStart, onDone, onAddClick }: { 
+  title: string, 
+  status: Task['status'], 
+  tasks: Task[], 
+  onDrop: (id: string, status: Task['status']) => void,
+  onCardClick: (t: Task) => void,
+  onStart: (t: Task) => void,
+  onDone: (id: string) => void,
+  onAddClick: () => void
+}) {
+  const [{ isOver }, dropRef] = useDrop({
+    accept: ITEM_TYPE,
+    drop: (item: { id: string }) => onDrop(item.id, status),
+    collect: monitor => ({ isOver: !!monitor.isOver() })
   });
-  
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    localStorage.setItem(`agent_history_${id}`, JSON.stringify(messages));
-  }, [messages, id]);
+  return (
+    <div ref={dropRef as any} className={cn("flex flex-col flex-1 bg-gray-50/80 rounded-xl p-4 border border-gray-200 transition-colors", isOver && "bg-blue-50 border-blue-200")}>
+       <h2 className="font-semibold text-gray-700 mb-4 flex items-center justify-between">
+         {title}
+         <span className="bg-white border border-gray-200 text-gray-600 text-xs px-2.5 py-0.5 rounded-full font-medium">{tasks.length}</span>
+       </h2>
+       <div className="flex flex-col gap-3 overflow-y-auto pb-4 h-full">
+         {tasks.map(task => (
+           <TaskCard 
+             key={task.id} 
+             task={task} 
+             onClick={() => onCardClick(task)} 
+             onStart={(e) => { e.stopPropagation(); onStart(task); }} 
+             onDone={(e) => { e.stopPropagation(); onDone(task.id); }} 
+           />
+         ))}
+         
+         {/* Always show Add Card button instead of "Drop here" box */}
+         <button 
+           onClick={onAddClick}
+           className="w-full mt-1 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-sm text-gray-500 py-3 hover:text-blue-600 hover:border-blue-300 transition-colors bg-white hover:bg-blue-50/50"
+         >
+           <Plus className="w-4 h-4 mr-2" /> Add Card
+         </button>
+       </div>
+    </div>
+  );
+}
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
-
-  // Run master prompt on very first open for custom agents
-  useEffect(() => {
-    if (masterPrompt && messages.length === 0) {
-      handleSend(`[System Init: Executing Master Prompt]\n\n${masterPrompt}`);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleSend = async (messageText: string = input) => {
-    if (!messageText.trim() || isLoading) return;
-    const userMessage = messageText.trim();
-    setInput('');
-    setIsLoading(true);
-
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-
-    try {
-      const response = await fetch(TARGET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage }),
-      });
-
-      if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-      
-      const data = await response.json();
-      let responseText = data.response || 'No response from agent.';
-
-      const lobsterIndex = responseText.indexOf('🦞');
-      if (lobsterIndex !== -1) {
-        responseText = responseText.split('🦞').slice(1).join('🦞').trim();
-      }
-
-      setMessages(prev => [...prev, { role: 'agent', content: responseText }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'agent', content: `Error: ${error instanceof Error ? error.message : 'Unknown'}` }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+function TaskCard({ task, onClick, onStart, onDone }: { task: Task, onClick: () => void, onStart: (e: React.MouseEvent) => void, onDone: (e: React.MouseEvent) => void }) {
+  const [{ isDragging }, dragRef] = useDrag({
+    type: ITEM_TYPE,
+    item: { id: task.id },
+    collect: monitor => ({ isDragging: !!monitor.isDragging() })
+  });
 
   return (
     <div 
-      className={`absolute inset-4 sm:inset-10 md:inset-20 bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-opacity duration-200 ${isActive ? 'z-40 opacity-100 scale-100' : 'z-30 opacity-0 scale-95 pointer-events-none'}`}
-      onMouseDown={onFocus}
+      ref={dragRef as any} 
+      onClick={onClick} 
+      className={cn("bg-white border border-gray-200 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md hover:border-blue-300 flex flex-col", isDragging && "opacity-50")}
     >
-      {/* Window Header */}
-      <div className="h-12 bg-gray-100 border-b border-gray-300 flex items-center justify-between px-4 select-none shrink-0 cursor-default">
-        <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-gray-600" />
-          <span className="font-semibold text-gray-800 text-sm">{title}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="p-1.5 hover:bg-gray-200 rounded text-gray-500"><Minus className="w-4 h-4" /></button>
-          <button className="p-1.5 hover:bg-gray-200 rounded text-gray-500"><Square className="w-3.5 h-3.5" /></button>
-          <button onClick={onClose} className="p-1.5 hover:bg-red-500 hover:text-white rounded text-gray-500 transition-colors"><X className="w-4 h-4" /></button>
-        </div>
-      </div>
+       <div className="flex items-start justify-between mb-2">
+         <h3 className="font-semibold text-gray-900 leading-tight flex-1">{task.title}</h3>
+         {task.status === 'scheduled' && task.interval && (
+           <span className="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ml-2 flex items-center gap-1 shrink-0">
+             <Clock className="w-3 h-3" /> {task.interval}
+           </span>
+         )}
+       </div>
+       
+       <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">{task.description}</p>
+       
+       {task.image && (
+         <div className="w-full h-24 mb-3 rounded-md overflow-hidden border border-gray-100">
+           <img src={task.image} alt="Task attachment" className="w-full h-full object-cover" />
+         </div>
+       )}
+       
+       <div className="flex items-center gap-4 text-xs text-gray-500 mb-3 font-medium mt-auto">
+         <div className="flex items-center gap-1.5" title="Comments">
+           <MessageSquare className="w-3.5 h-3.5" />
+           {task.comments.length}
+         </div>
+         <div className="flex items-center gap-1.5" title="Chat Messages">
+           <Bot className="w-3.5 h-3.5" />
+           {task.chatHistory.length}
+         </div>
+       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto bg-white p-6">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-400">
-              <Bot className="w-12 h-12 mb-4 text-gray-200" />
-              <p>Ready to assist.</p>
+       <div className="flex flex-col gap-2 mt-2 border-t border-gray-100 pt-3">
+         {task.status !== 'done' && (
+           <Button size="sm" variant="outline" className="w-full flex items-center justify-center gap-1.5 h-8 text-xs bg-gray-50 hover:bg-gray-100 shrink-0" onClick={onStart}>
+             <Play className="w-3 h-3 text-blue-600" /> Start Bot
+           </Button>
+         )}
+         {task.status === 'todo' && task.hasBotResponded && (
+           <Button size="sm" className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-1.5 h-8 text-xs text-white shrink-0" onClick={onDone}>
+             <CheckCircle className="w-3 h-3" /> Move to Done
+           </Button>
+         )}
+       </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Modals
+// ----------------------------------------------------
+function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, onAdd: (t: Task) => void, defaultStatus: Task['status'] }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState('');
+  const [status, setStatus] = useState<Task['status']>(defaultStatus);
+  const [intervalOption, setIntervalOption] = useState('Daily');
+  const [customInterval, setCustomInterval] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title) return;
+    const interval = status === 'scheduled' ? (intervalOption === 'Custom' ? customInterval : intervalOption) : undefined;
+    onAdd({
+      id: Math.random().toString(36).substring(7),
+      title,
+      description,
+      image,
+      status,
+      interval,
+      comments: [],
+      chatHistory: [],
+      hasBotResponded: false,
+      timestamp: Date.now()
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col">
+        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-900">Create New Task</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="e.g. Analyze Q3 Financials" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none" placeholder="Details about what the agent should do..." />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
+            <div className="relative">
+              <ImageIcon className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
+              <input type="text" value={image} onChange={e => setImage(e.target.value)} className="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="https://..." />
             </div>
-          ) : (
-            messages.map((msg, idx) => (
-              <div key={idx} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.role === 'user' ? (
-                  <div className="max-w-[80%] bg-blue-600 text-white px-5 py-3 rounded-2xl rounded-tr-sm">
-                    <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
-                  </div>
-                ) : (
-                  <div className="flex w-full text-sm leading-relaxed text-gray-800 gap-4">
-                    <div className="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center shrink-0">
-                      <Bot className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="prose prose-sm max-w-none prose-slate">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
-                      </div>
-                    </div>
-                  </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select value={status} onChange={e => setStatus(e.target.value as any)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                <option value="todo">To Do</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            {status === 'scheduled' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Interval</label>
+                <select value={intervalOption} onChange={e => setIntervalOption(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white mb-2">
+                  <option value="5 Min">Every 5 Min</option>
+                  <option value="Hourly">Hourly</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Custom">Custom...</option>
+                </select>
+                {intervalOption === 'Custom' && (
+                  <input required type="text" value={customInterval} onChange={e => setCustomInterval(e.target.value)} placeholder="e.g. Every Tuesday" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 )}
               </div>
-            ))
-          )}
-          {isLoading && (
-            <div className="flex w-full gap-4 justify-start">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                <Bot className="w-5 h-5 text-emerald-600" />
-              </div>
-              <div className="flex items-center gap-2 text-gray-500">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">Processing...</span>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            )}
+          </div>
+          <div className="mt-4 flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">Create Task</Button>
+          </div>
+        </form>
       </div>
+    </div>
+  );
+}
 
-      {/* Input Area */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50 shrink-0">
-        <div className="max-w-4xl mx-auto relative bg-white border border-gray-300 rounded-xl shadow-sm focus-within:ring-1 focus-within:ring-gray-400">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="Talk to the agent..."
-            disabled={isLoading}
-            rows={1}
-            className="w-full resize-none bg-transparent py-3 pl-4 pr-12 focus:outline-none disabled:opacity-50 min-h-[48px] max-h-32 overflow-y-auto text-sm"
-          />
-          <button 
-            onClick={() => handleSend()} 
-            disabled={!input.trim() || isLoading}
-            className="absolute right-2 bottom-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded-lg w-8 h-8 flex items-center justify-center transition-colors"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+function TaskDetailModal({ task, onClose, onUpdate, onChatSend }: { task: Task, onClose: () => void, onUpdate: (t: Task) => void, onChatSend: (m: string) => void }) {
+  const [chatInput, setChatInput] = useState('');
+  const [commentInput, setCommentInput] = useState('');
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [task.chatHistory]);
+
+  const handleSendChat = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!chatInput.trim()) return;
+    onChatSend(chatInput);
+    setChatInput('');
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[85vh] overflow-hidden flex">
+        
+        {/* Left Side: Details & Comments */}
+        <div className="w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col h-full shrink-0">
+          <div className="p-6 overflow-y-auto flex-1 border-b border-gray-200">
+            <div className="flex items-center gap-2 mb-4">
+              <span className={cn(
+                "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
+                task.status === 'scheduled' ? "bg-purple-100 text-purple-800" :
+                task.status === 'done' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+              )}>
+                {task.status}
+              </span>
+              {task.interval && <span className="text-xs font-medium text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {task.interval}</span>}
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">{task.title}</h2>
+            <p className="text-sm text-gray-600 whitespace-pre-wrap mb-6">{task.description}</p>
+            {task.image && (
+              <img src={task.image} alt="Attachment" className="w-full rounded-lg border border-gray-200 shadow-sm mb-6" />
+            )}
+          </div>
+          
+          <div className="h-1/2 flex flex-col bg-white">
+            <div className="p-4 border-b border-gray-100 font-semibold text-gray-900 flex items-center gap-2 shrink-0">
+              <MessageSquare className="w-4 h-4 text-gray-500" />
+              Comments
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+              {task.comments.length === 0 ? (
+                <div className="text-sm text-gray-400 text-center py-4">No comments yet.</div>
+              ) : (
+                task.comments.map((c, i) => (
+                  <div key={i} className="bg-gray-50 rounded-lg p-3 text-sm border border-gray-100">
+                    <p className="text-gray-800">{c.text}</p>
+                    <p className="text-[10px] text-gray-400 mt-1">{new Date(c.timestamp).toLocaleString()}</p>
+                  </div>
+                ))
+              )}
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (!commentInput.trim()) return;
+              onUpdate({
+                ...task,
+                comments: [...task.comments, { text: commentInput, timestamp: Date.now() }]
+              });
+              setCommentInput('');
+            }} className="p-3 border-t border-gray-200 bg-gray-50 flex gap-2 shrink-0">
+              <input type="text" value={commentInput} onChange={e => setCommentInput(e.target.value)} placeholder="Add a comment..." className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+              <Button type="submit" size="sm">Post</Button>
+            </form>
+          </div>
         </div>
+
+        {/* Right Side: Agent Chat History */}
+        <div className="flex-1 flex flex-col h-full bg-white relative">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white z-10 shadow-sm shrink-0">
+            <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+              <Bot className="w-5 h-5 text-blue-600" />
+              Agent Thread
+            </h3>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50">
+            {task.chatHistory.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
+                <Bot className="w-12 h-12 text-gray-300" />
+                <p>No conversation yet. Send a message to start.</p>
+                <Button onClick={() => {
+                  const initialMsg = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
+                  onChatSend(initialMsg);
+                }} className="bg-blue-600 hover:bg-blue-700">
+                  <Play className="w-4 h-4 mr-2" />
+                  Start Bot with Task Details
+                </Button>
+              </div>
+            ) : (
+              task.chatHistory.map((msg, i) => (
+                <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
+                  <div className={cn(
+                    "max-w-[80%] rounded-2xl px-5 py-3 text-sm shadow-sm",
+                    msg.role === 'user' ? "bg-blue-600 text-white rounded-br-none" : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
+                  )}>
+                    {msg.role === 'user' ? (
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                    ) : (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+            <div ref={chatEndRef} />
+          </div>
+          
+          <form onSubmit={handleSendChat} className="p-4 border-t border-gray-200 bg-white flex gap-3 shrink-0">
+            <input 
+              type="text" 
+              value={chatInput} 
+              onChange={e => setChatInput(e.target.value)} 
+              placeholder="Send message to agent..." 
+              className="flex-1 border border-gray-300 rounded-full px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner" 
+            />
+            <Button type="submit" className="rounded-full w-10 h-10 p-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-md">
+              <Send className="w-4 h-4" />
+            </Button>
+          </form>
+        </div>
+        
       </div>
     </div>
   );
