@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { ThinkingTimer } from './ThinkingTimer';
 import remarkGfm from 'remark-gfm';
 
 interface Message {
@@ -357,7 +358,7 @@ All state changes have been safely committed to the ERP. This thread is now clos
                   <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                   </div>
-                 <span className="text-gray-500 text-sm font-medium">Generating proposal...</span>
+                 <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>
                </div>
              )}
              <div ref={messagesEndRef} />

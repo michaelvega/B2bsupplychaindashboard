@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { forecastScenarios, historicalDataRows, macroMetrics, monthlyStockData } from '../data/forecastingData';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { ThinkingTimer } from '../components/ThinkingTimer';
 import {
   Factory,
   Building2,
@@ -25,13 +26,13 @@ export function Forecasting() {
   
   // Forecast Chat State
   const [chatInput, setChatInput] = useState('');
-  const [forecastChat, setForecastChat] = useState([
+  const [forecastChat, setForecastChat] = useState<any[]>([
     { role: 'assistant', content: 'I am synced with the current Digital Twin graph. How would you like to adjust the scenario parameters?' }
   ]);
 
   // Telemetry Chat State
   const [telemetryInput, setTelemetryInput] = useState('');
-  const [telemetryChat, setTelemetryChat] = useState([
+  const [telemetryChat, setTelemetryChat] = useState<any[]>([
     { role: 'assistant', content: 'You can use the agent to build your API connections. Please insert API endpoint or documentation here to begin.' }
   ]);
 
@@ -41,7 +42,7 @@ export function Forecasting() {
     setForecastChat([
       ...forecastChat, 
       { role: 'user', content: chatInput }, 
-      { role: 'assistant', content: 'Updating digital twin parameters and generating new scenario simulation...' }
+      { role: 'assistant', content: <ThinkingTimer /> }
     ]);
     setChatInput('');
   };
@@ -52,7 +53,7 @@ export function Forecasting() {
     setTelemetryChat([
       ...telemetryChat, 
       { role: 'user', content: telemetryInput }, 
-      { role: 'assistant', content: 'Analyzing API structure to build connection...' }
+      { role: 'assistant', content: <ThinkingTimer /> }
     ]);
     setTelemetryInput('');
   };

@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { cn } from '../components/ui/utils';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ThinkingTimer } from '../components/ThinkingTimer';
 
 const ITEM_TYPE = 'TASK_CARD';
 const AZURE_FILE = 'agent-tasks.json';
@@ -132,8 +133,9 @@ export function AgentSuite() {
 
   if (loading) {
     return (
-      <div className="h-full flex items-center justify-center bg-gray-50">
+      <div className="h-full flex items-center justify-center bg-gray-50 flex-col gap-2">
         <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+        <span className="text-gray-500 font-medium"><ThinkingTimer label="Loading tasks" /></span>
       </div>
     );
   }
@@ -557,9 +559,7 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
             {task.isGenerating && (
               <div className="flex w-full justify-start">
                 <div className="max-w-[80%] rounded-2xl px-4 py-3.5 shadow-sm bg-white border border-gray-200 rounded-bl-none flex items-center gap-1.5 h-[38px]">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                  <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>
                 </div>
               </div>
             )}

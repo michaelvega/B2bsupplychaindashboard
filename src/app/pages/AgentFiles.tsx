@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Folder, FileText, Loader2, ChevronLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ThinkingTimer } from '../components/ThinkingTimer';
 
 interface FileItem {
   kind: 'file' | 'directory';
@@ -112,7 +113,7 @@ export function AgentFiles() {
           {isLoadingList ? (
             <div className="flex items-center justify-center p-8 text-gray-500">
               <Loader2 className="w-6 h-6 animate-spin mr-2" />
-              Loading files...
+              <ThinkingTimer label="Loading files" />
             </div>
           ) : error ? (
             <div className="text-sm text-red-600 p-4 rounded bg-red-50">
@@ -165,8 +166,9 @@ export function AgentFiles() {
             </div>
             <div className="flex-1 overflow-y-auto bg-gray-50 relative p-6 flex flex-col">
               {isLoadingFile ? (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-white/50 z-10">
+                <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center text-gray-500 bg-white/50 z-10">
                   <Loader2 className="w-8 h-8 animate-spin" />
+                  <span className="font-medium"><ThinkingTimer label="Loading file" /></span>
                 </div>
               ) : selectedFile.endsWith('.md') ? (
                 <div className="shrink-0 bg-white border border-gray-200 rounded-lg p-6 shadow-sm min-h-[200px]">

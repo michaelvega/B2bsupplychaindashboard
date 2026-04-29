@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import { Send, Loader2, Bot, Plus, MessageSquare, MoreHorizontal, PenLine, Trash2, Share, Check } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useNavigate, useParams } from 'react-router';
+import { ThinkingTimer } from '../components/ThinkingTimer';
 
 interface Message {
   role: 'user' | 'agent';
@@ -387,7 +388,7 @@ export function Actions() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
-                  <span className="text-gray-500 text-sm font-medium">Generating...</span>
+                  <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>
                 </div>
               </div>
             )}
