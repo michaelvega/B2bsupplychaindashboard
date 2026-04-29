@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ShareClient } from "@azure/storage-file-share";
-import { Folder, FileText, Loader2, Download, ChevronLeft } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Folder, FileText, Loader2, Download, ChevronLeft, Plus, Trash2, Edit2, Save, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Button } from '../components/ui/button';
@@ -10,64 +9,78 @@ interface FileItem {
   name: string;
 }
 
-const SAS_URL = "https://membrainagent.file.core.windows.net/picoclaw-workspace?sp=rl&st=2026-04-08T21:58:33Z&se=2027-04-09T06:13:00Z&spr=https&sv=2025-11-05&sig=DuGd3wa3gmJYMdTjDy7Vmd5vhzOJQNqUFmwKa3GNbs8%3D&sr=s";
-
 export function AgentFiles() {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [currentPath, setCurrentPath] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [fileContent, setFileContent] = useState<string>('');
+  
+  // States for write/edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState<string>('');
+  
+  // Loading states
   const [isLoadingList, setIsLoadingList] = useState(true);
   const [isLoadingFile, setIsLoadingFile] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadFiles() {
-      setIsLoadingList(true);
-      setError(null);
-      try {
-        const shareClient = new ShareClient(SAS_URL);
-        const directoryClient = shareClient.getDirectoryClient(currentPath);
-        
-        const fileList: FileItem[] = [];
-        for await (const entity of directoryClient.listFilesAndDirectories()) {
-          fileList.push({
-            kind: entity.kind,
-            name: entity.name,
-          });
-        }
-        setFiles(fileList.sort((a, b) => {
-          if (a.kind === b.kind) return a.name.localeCompare(b.name);
-          return a.kind === 'directory' ? -1 : 1;
-        }));
-      } catch (err: any) {
-        console.error("Error loading files:", err);
-        setError("Failed to load files from Azure.");
-      } finally {
-        setIsLoadingList(false);
-      }
+  const loadFiles = useCallback(async () => {
+    setIsLoadingList(true);
+    setError(null);
+    try {
+      const pathSuffix = currentPath ? `${currentPath}?comp=list&restype=directory` : '?comp=list&restype=directory';
+      const response = await fetch(`/api/azure/${pathSuffix}`);
+      
+      if (!response.ok) throw new Error("Failed to fetch from proxy");
+      
+      const xmlText = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+      
+      const fileList: FileItem[] = [];
+      
+      const directories = xmlDoc.querySelectorAll("Entries > Directory > Name");
+      directories.forEach((dir) => {
+        if (dir.textContent) fileList.push({ kind: 'directory', name: dir.textContent });
+      });
+      
+      const filesNodes = xmlDoc.querySelectorAll("Entries > File > Name");
+      filesNodes.forEach((file) => {
+        if (file.textContent) fileList.push({ kind: 'file', name: file.textContent });
+      });
+
+      setFiles(fileList.sort((a, b) => {
+        if (a.kind === b.kind) return a.name.localeCompare(b.name);
+        return a.kind === 'directory' ? -1 : 1;
+      }));
+    } catch (err: any) {
+      console.error("Error loading files:", err);
+      setError("Failed to load files from Azure.");
+    } finally {
+      setIsLoadingList(false);
     }
-    
-    loadFiles();
   }, [currentPath]);
+
+  useEffect(() => {
+    loadFiles();
+  }, [loadFiles]);
 
   const handleFileClick = async (filename: string) => {
     setSelectedFile(filename);
+    setIsEditing(false);
     setIsLoadingFile(true);
     setError(null);
     try {
-      const shareClient = new ShareClient(SAS_URL);
-      const directoryClient = shareClient.getDirectoryClient(currentPath);
-      const fileClient = directoryClient.getFileClient(filename);
+      const filePath = currentPath ? `${currentPath}/${filename}` : filename;
+      const response = await fetch(`/api/azure/${filePath}`);
       
-      const downloadResponse = await fileClient.download();
-      const blob = await downloadResponse.blobBody;
-      if (blob) {
-        const text = await blob.text();
-        setFileContent(text);
-      } else {
-        setFileContent("Empty file.");
-      }
+      if (!response.ok) throw new Error("Failed to download file");
+      
+      const text = await response.text();
+      setFileContent(text || "");
     } catch (err: any) {
       console.error("Error downloading file:", err);
       setFileContent("Failed to read file.");
@@ -76,14 +89,97 @@ export function AgentFiles() {
     }
   };
 
+  const handleCreateFile = async () => {
+    const filename = prompt("Enter new file name (e.g. script.py or notes.txt):");
+    if (!filename) return;
+
+    try {
+      const filePath = currentPath ? `${currentPath}/${filename}` : filename;
+      const response = await fetch(`/api/azure/${filePath}`, {
+        method: 'PUT',
+        body: '' // create empty file
+      });
+      
+      if (!response.ok) {
+        alert("Failed to create file: " + await response.text());
+        return;
+      }
+      
+      await loadFiles();
+      handleFileClick(filename);
+      setIsEditing(true);
+      setEditContent("");
+    } catch (err) {
+      console.error("Failed to create:", err);
+      alert("Failed to create file.");
+    }
+  };
+
+  const handleSaveFile = async () => {
+    if (!selectedFile) return;
+    setIsSaving(true);
+    try {
+      const filePath = currentPath ? `${currentPath}/${selectedFile}` : selectedFile;
+      const response = await fetch(`/api/azure/${filePath}`, {
+        method: 'PUT',
+        body: editContent
+      });
+      
+      if (!response.ok) {
+        alert("Failed to save file: " + await response.text());
+        return;
+      }
+      
+      setFileContent(editContent);
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Failed to save:", err);
+      alert("Failed to save file.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteFile = async () => {
+    if (!selectedFile) return;
+    if (!confirm(`Are you sure you want to delete ${selectedFile}?`)) return;
+    
+    setIsDeleting(true);
+    try {
+      const filePath = currentPath ? `${currentPath}/${selectedFile}` : selectedFile;
+      const response = await fetch(`/api/azure/${filePath}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        alert("Failed to delete file: " + await response.text());
+        return;
+      }
+      
+      setSelectedFile(null);
+      setFileContent('');
+      await loadFiles();
+    } catch (err) {
+      console.error("Failed to delete:", err);
+      alert("Failed to delete file.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="flex h-full p-8 max-w-6xl mx-auto gap-6">
       
       {/* Sidebar: File List */}
       <div className="w-1/3 flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden h-full">
-        <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900">Agent Workspace</h2>
-          <p className="text-xs text-gray-600 mt-0.5">Read-only view</p>
+        <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Agent Workspace</h2>
+            <p className="text-xs text-gray-500 mt-0.5">Read/Write access</p>
+          </div>
+          <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleCreateFile} title="New File">
+            <Plus className="w-4 h-4" />
+          </Button>
         </div>
         
         <div className="flex-1 overflow-y-auto p-4 space-y-1">
@@ -93,6 +189,7 @@ export function AgentFiles() {
                 const parts = currentPath.split('/');
                 parts.pop();
                 setCurrentPath(parts.join('/'));
+                setSelectedFile(null);
               }}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors mb-2 text-left font-medium"
             >
@@ -124,6 +221,7 @@ export function AgentFiles() {
                   } else {
                     const newPath = currentPath ? `${currentPath}/${file.name}` : file.name;
                     setCurrentPath(newPath);
+                    setSelectedFile(null);
                   }
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left ${
@@ -144,7 +242,7 @@ export function AgentFiles() {
         </div>
       </div>
 
-      {/* Main Content: File Viewer */}
+      {/* Main Content: File Viewer/Editor */}
       <div className="w-2/3 flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm h-full overflow-hidden">
         {selectedFile ? (
           <>
@@ -153,12 +251,42 @@ export function AgentFiles() {
                 <FileText className="w-4 h-4 text-gray-500" />
                 {selectedFile}
               </h2>
+              <div className="flex items-center gap-2">
+                {isEditing ? (
+                  <>
+                    <Button variant="outline" size="sm" onClick={() => setIsEditing(false)}>
+                      <X className="w-4 h-4 mr-2" /> Cancel
+                    </Button>
+                    <Button size="sm" onClick={handleSaveFile} disabled={isSaving}>
+                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+                      Save
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" size="sm" onClick={() => { setEditContent(fileContent); setIsEditing(true); }}>
+                      <Edit2 className="w-4 h-4 mr-2" /> Edit
+                    </Button>
+                    <Button variant="destructive" size="sm" onClick={handleDeleteFile} disabled={isDeleting}>
+                      {isDeleting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Trash2 className="w-4 h-4 mr-2" />}
+                      Delete
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
-            <div className="flex-1 overflow-y-auto bg-gray-50 relative p-6">
+            <div className="flex-1 overflow-y-auto bg-gray-50 relative p-6 flex flex-col">
               {isLoadingFile ? (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-white/50">
+                <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-white/50 z-10">
                   <Loader2 className="w-8 h-8 animate-spin" />
                 </div>
+              ) : isEditing ? (
+                <textarea
+                  className="flex-1 w-full p-4 border border-gray-300 rounded-lg shadow-sm font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  placeholder="Type your file content here..."
+                />
               ) : selectedFile.endsWith('.md') ? (
                 <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm min-h-[200px]">
                   <div className="prose prose-sm max-w-none text-gray-800">
@@ -189,8 +317,8 @@ export function AgentFiles() {
                   </div>
                 </div>
               ) : (
-                <pre className="text-sm font-mono text-gray-800 whitespace-pre-wrap break-words bg-white border border-gray-200 rounded-lg p-4 shadow-sm min-h-[200px]">
-                  {fileContent}
+                <pre className="flex-1 text-sm font-mono text-gray-800 whitespace-pre-wrap break-words bg-white border border-gray-200 rounded-lg p-4 shadow-sm min-h-[200px]">
+                  {fileContent || "Empty file."}
                 </pre>
               )}
             </div>
@@ -198,7 +326,7 @@ export function AgentFiles() {
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-gray-500 bg-gray-50">
             <FileText className="w-12 h-12 text-gray-300 mb-4" />
-            <p>Select a file to view its contents</p>
+            <p>Select a file to view or edit</p>
           </div>
         )}
       </div>

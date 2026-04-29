@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users } from 'lucide-react';
+import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot } from 'lucide-react';
 import { cn } from './ui/utils';
 
 export function Sidebar() {
@@ -8,7 +8,7 @@ export function Sidebar() {
   const mainNavItems = [
     { path: '/demo', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/command-center', label: 'Command Center', icon: Terminal },
-    { path: '/agent-files', label: 'Agent Workspace', icon: FileText },
+    { path: '/agent-suite', label: 'Agent Suite', icon: Bot },
   ];
 
   const backlogNavItems = [
@@ -24,6 +24,7 @@ export function Sidebar() {
     { path: '/history', label: 'History', icon: History },
     { path: '/rules', label: 'Rules', icon: FileText },
     { path: '/settings', label: 'Settings', icon: Settings },
+    { path: '/agent-files', label: 'Under the Hood', icon: FileText },
   ];
 
   return (

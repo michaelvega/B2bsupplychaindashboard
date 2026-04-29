@@ -1,6 +1,7 @@
 import { createHashRouter } from 'react-router';
 import { LandingPage } from './pages/LandingPage';
 import { Actions } from './pages/Actions';
+import { AgentSuite } from './pages/AgentSuite';
 import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
 import { OrderErrors } from './pages/OrderErrors';
@@ -48,6 +49,14 @@ export const router = createHashRouter([
     element: (
       <Layout>
         <Actions />
+      </Layout>
+    ),
+  },
+  {
+    path: '/agent-suite',
+    element: (
+      <Layout>
+        <AgentSuite />
       </Layout>
     ),
   },
