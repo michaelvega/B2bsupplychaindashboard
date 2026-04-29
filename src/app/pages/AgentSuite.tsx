@@ -18,8 +18,8 @@ export interface Task {
   status: 'scheduled' | 'todo' | 'done';
   interval?: string;
   comments: { text: string; timestamp: number }[];
-  chatHistory: { role: 'user' | 'agent'; content: string }[];
   hasBotResponded: boolean;
+  isGenerating?: boolean;
   timestamp: number;
 }
 
@@ -72,7 +72,7 @@ export function AgentSuite() {
     // 1. Optimistic update
     const updatedTasks = tasks.map(t => {
       if (t.id === task.id) {
-        return { ...t, chatHistory: [...t.chatHistory, { role: 'user' as const, content: userMessage }] };
+        return { ...t, chatHistory: [...t.chatHistory, { role: 'user' as const, content: userMessage }], isGenerating: true };
       }
       return t;
     });
@@ -95,7 +95,8 @@ export function AgentSuite() {
           return { 
             ...t, 
             chatHistory: [...t.chatHistory, { role: 'agent' as const, content: responseText }],
-            hasBotResponded: true
+            hasBotResponded: true,
+            isGenerating: false
           };
         }
         return t;
@@ -104,7 +105,7 @@ export function AgentSuite() {
     } catch (err) {
       const errorTasks = updatedTasks.map(t => {
         if (t.id === task.id) {
-          return { ...t, chatHistory: [...t.chatHistory, { role: 'agent' as const, content: 'Connection error.' }] };
+          return { ...t, chatHistory: [...t.chatHistory, { role: 'agent' as const, content: 'Connection error.' }], isGenerating: false };
         }
         return t;
       });
@@ -215,7 +216,7 @@ export function AgentSuite() {
           onDelete={() => handleDeleteTask(selectedTaskId)}
           onChatSend={async (msg) => {
             const task = tasks.find(t => t.id === selectedTaskId)!;
-            const updatedTask = { ...task, chatHistory: [...task.chatHistory, { role: 'user' as const, content: msg }] };
+            const updatedTask = { ...task, chatHistory: [...task.chatHistory, { role: 'user' as const, content: msg }], isGenerating: true };
             setTasks(tasks.map(t => t.id === task.id ? updatedTask : t));
             
             try {
@@ -229,10 +230,11 @@ export function AgentSuite() {
               const lobsterIndex = responseText.indexOf('🦞');
               if (lobsterIndex !== -1) responseText = responseText.split('🦞').slice(1).join('🦞').trim();
 
-              const finalTask = { ...updatedTask, chatHistory: [...updatedTask.chatHistory, { role: 'agent' as const, content: responseText }], hasBotResponded: true };
+              const finalTask = { ...updatedTask, chatHistory: [...updatedTask.chatHistory, { role: 'agent' as const, content: responseText }], hasBotResponded: true, isGenerating: false };
               saveTasks(tasks.map(t => t.id === task.id ? finalTask : t));
             } catch (err) {
-               // Ignore
+               const errorTask = { ...updatedTask, chatHistory: [...updatedTask.chatHistory, { role: 'agent' as const, content: 'Connection error.' }], isGenerating: false };
+               setTasks(tasks.map(t => t.id === task.id ? errorTask : t));
             }
           }}
         />
@@ -551,6 +553,15 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
                   </div>
                 </div>
               ))
+            )}
+            {task.isGenerating && (
+              <div className="flex w-full justify-start">
+                <div className="max-w-[80%] rounded-2xl px-4 py-3.5 shadow-sm bg-white border border-gray-200 rounded-bl-none flex items-center gap-1.5 h-[38px]">
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                </div>
+              </div>
             )}
             <div ref={chatEndRef} />
           </div>
