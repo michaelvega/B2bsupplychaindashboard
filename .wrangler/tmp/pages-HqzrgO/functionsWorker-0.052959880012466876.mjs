@@ -85,7 +85,7 @@ async function onRequest(context) {
 }
 __name(onRequest, "onRequest");
 
-// ../.wrangler/tmp/pages-VpdScG/functionsRoutes-0.7290531943331517.mjs
+// ../.wrangler/tmp/pages-HqzrgO/functionsRoutes-0.9968306318231797.mjs
 var routes = [
   {
     routePath: "/api/azure/:path*",
@@ -583,7 +583,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-iC6XFb/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-QYUiix/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -615,7 +615,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-iC6XFb/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-QYUiix/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -715,4 +715,4 @@ export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
   middleware_loader_entry_default as default
 };
-//# sourceMappingURL=functionsWorker-0.23036848265548926.mjs.map
+//# sourceMappingURL=functionsWorker-0.052959880012466876.mjs.map
