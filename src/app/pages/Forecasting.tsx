@@ -111,12 +111,11 @@ export function Forecasting() {
   );
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto min-h-screen flex flex-col">
+    <div className="p-8 min-h-screen flex flex-col">
       {/* Header & Sub-menu */}
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Forecasting Command Center</h1>
-          <p className="text-gray-500 text-sm mt-1">Simulate supply chain scenarios and manage external data.</p>
+          <h1 className="text-xl font-semibold text-gray-900">Forecasting Command Center</h1>
         </div>
         
         {/* Sub Hamburger Menu / Tabs Selector */}

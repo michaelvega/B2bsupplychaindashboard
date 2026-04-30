@@ -110,9 +110,6 @@ export function LandingPage() {
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 tracking-tight max-w-4xl text-white drop-shadow-md">
             {t('landing.title')}
           </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mb-10 drop-shadow">
-            {t('landing.subtitle')}
-          </p>
           <button
             onClick={() => navigate('/demo')}
             className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4 px-8 rounded-lg flex items-center gap-2 transition-colors text-lg shadow-xl shadow-blue-900/20"

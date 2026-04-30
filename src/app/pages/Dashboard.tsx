@@ -48,7 +48,6 @@ export function Dashboard() {
       <div className="w-2/5 flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-[350px]">
         <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">Action Queue</h2>
-          <p className="text-xs text-gray-600 mt-0.5">High priority tasks</p>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {highPriorityItems.map((item) => (

@@ -83,14 +83,13 @@ export function AgentFiles() {
   };
 
   return (
-    <div className="flex h-full p-8 max-w-6xl mx-auto gap-6">
+    <div className="flex h-full p-8 gap-6">
       
       {/* Sidebar: File List */}
       <div className="w-1/3 flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden h-full">
         <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Agent Workspace</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Read-only access</p>
           </div>
         </div>
         
