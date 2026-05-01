@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot, ChevronLeft, ChevronRight, Brain } from 'lucide-react';
 import { cn } from './ui/utils';
 
 function ProceptLogo({ size = 22 }: { size?: number }) {
@@ -30,7 +30,8 @@ export function Sidebar() {
   const mainNavItems = [
     { path: '/demo', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/command-center', label: 'Command Center', icon: Terminal },
-    { path: '/agent-suite', label: 'Agent Suite', icon: Bot },
+    { path: '/agent-suite', label: 'Daily Tasks', icon: Bot },
+    { path: '/company-brain', label: 'Company Brain', icon: Brain },
   ];
 
   const backlogNavItems = [

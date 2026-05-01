@@ -10,6 +10,7 @@ import { VendorOnboarding } from './pages/VendorOnboarding';
 import { History } from './pages/History';
 import { Rules } from './pages/Rules';
 import { Settings } from './pages/Settings';
+import { CompanyBrain } from './pages/CompanyBrain';
 import { Sidebar } from './components/Sidebar';
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -116,4 +117,13 @@ export const router = createHashRouter([
       </Layout>
     ),
   },
+  {
+    path: '/company-brain',
+    element: (
+      <Layout>
+        <CompanyBrain />
+      </Layout>
+    ),
+  },
 ]);
+
