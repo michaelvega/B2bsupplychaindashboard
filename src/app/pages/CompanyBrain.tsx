@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Brain, RefreshCw, Database, Mail, FolderOpen, CheckCircle, XCircle, Clock, Paperclip, FileSpreadsheet, FileText, Folder, AlertTriangle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Brain, RefreshCw, Database, Mail, FolderOpen, CheckCircle, XCircle, Clock, Paperclip, FileSpreadsheet, FileText, Folder, AlertTriangle, MessageSquare, Send, Bot, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { ThinkingTimer } from '../components/ThinkingTimer';
 
 const ERP_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/erp-data-lake';
 const COMPOSIO_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/composio';
@@ -8,6 +11,8 @@ const COMPOSIO_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azureco
 const CACHE_ERP = '/api/azure/localdata/erp-data.json';
 const CACHE_EMAILS = '/api/azure/localdata/emails.json';
 const CACHE_ONEDRIVE = '/api/azure/localdata/onedrive.json';
+const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+const CHAT_STORAGE_KEY = 'company_brain_chat_history';
 
 type ScanStatus = 'idle' | 'scanning' | 'done' | 'error';
 
@@ -53,6 +58,13 @@ export function CompanyBrain() {
   const [isScanning, setIsScanning] = useState(false);
   const [lastScan, setLastScan] = useState<string | null>(null);
 
+  // Chat State
+  const [chatInput, setChatInput] = useState('');
+  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'agent', content: string }[]>([]);
+  const [isGeneratingChat, setIsGeneratingChat] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   // On mount, try to load cached data
   useEffect(() => {
     (async () => {
@@ -66,22 +78,89 @@ export function CompanyBrain() {
       if (o.ok) setOnedrive({ status: 'done', data: o.data.data, lastUpdated: o.data.cachedAt });
       if (e.ok || m.ok || o.ok) setLastScan(e.data?.cachedAt || m.data?.cachedAt || o.data?.cachedAt || null);
     })();
+
+    // Load chat history
+    const savedChat = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (savedChat) {
+      try {
+        setChatHistory(JSON.parse(savedChat));
+      } catch (e) {
+        console.error('Failed to parse chat history', e);
+      }
+    }
   }, []);
+
+  // Save chat history
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
+
+  // Scroll to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, isGeneratingChat]);
+
+  const handleSendChat = async (messageOverride?: string) => {
+    const messageToSend = messageOverride || chatInput;
+    if (!messageToSend.trim() || isGeneratingChat) return;
+
+    if (!messageOverride) setChatInput('');
+    setChatHistory(prev => [...prev, { role: 'user', content: messageToSend }]);
+    setIsGeneratingChat(true);
+
+    try {
+      const res = await fetch(TARGET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageToSend })
+      });
+      const data = await res.json();
+      let responseText = data.response || 'No response.';
+      const lobsterIndex = responseText.indexOf('🦞');
+      if (lobsterIndex !== -1) responseText = responseText.split('🦞').slice(1).join('🦞').trim();
+
+      setChatHistory(prev => [...prev, { role: 'agent', content: responseText }]);
+    } catch (err) {
+      setChatHistory(prev => [...prev, { role: 'agent', content: 'Connection error.' }]);
+    } finally {
+      setIsGeneratingChat(false);
+    }
+  };
+
+
+  const cancelScan = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      setIsScanning(false);
+      setErp(s => ({ ...s, status: s.status === 'scanning' ? 'idle' : s.status }));
+      setEmails(s => ({ ...s, status: s.status === 'scanning' ? 'idle' : s.status }));
+      setOnedrive(s => ({ ...s, status: s.status === 'scanning' ? 'idle' : s.status }));
+    }
+  };
 
   const scanAll = async () => {
     setIsScanning(true);
     const now = new Date().toISOString();
+    
+    // Setup AbortController
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
 
     // --- ERP ---
     setErp(s => ({ ...s, status: 'scanning' }));
     try {
-      const res = await fetch(ERP_URL, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+      const res = await fetch(ERP_URL, { 
+        headers: { 'ngrok-skip-browser-warning': 'true' },
+        signal
+      });
       if (!res.ok) throw new Error('ERP fetch failed');
       const data = await res.json();
       await saveToAzure(CACHE_ERP, { cachedAt: now, data });
       setErp({ status: 'done', data, lastUpdated: now });
-    } catch (e) {
-      setErp(s => ({ ...s, status: 'error' }));
+    } catch (e: any) {
+      if (e.name !== 'AbortError') setErp(s => ({ ...s, status: 'error' }));
     }
 
     // --- Emails ---
@@ -91,13 +170,14 @@ export function CompanyBrain() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify({ command: "execute OUTLOOK_QUERY_EMAILS --account proceptai@outlook.com -d '{\"top\":15,\"folder\":\"inbox\",\"orderby\":\"receivedDateTime desc\"}'" }),
+        signal
       });
       const json = await res.json();
       const emailList = json?.output ? JSON.parse(json.output)?.data?.value : json?.data?.value;
       await saveToAzure(CACHE_EMAILS, { cachedAt: now, data: emailList });
       setEmails({ status: 'done', data: emailList, lastUpdated: now });
-    } catch {
-      setEmails(s => ({ ...s, status: 'error' }));
+    } catch (e: any) {
+      if (e.name !== 'AbortError') setEmails(s => ({ ...s, status: 'error' }));
     }
 
     // --- OneDrive ---
@@ -107,17 +187,22 @@ export function CompanyBrain() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify({ command: "execute ONE_DRIVE_LIST_FOLDER_CHILDREN -d '{\"drive_id\":\"6631d2fa1dc0782d\",\"folder_path\":\"/\"}'" }),
+        signal
       });
       const json = await res.json();
       const items = json?.output ? JSON.parse(json.output)?.data?.value : json?.data?.value;
       await saveToAzure(CACHE_ONEDRIVE, { cachedAt: now, data: items });
       setOnedrive({ status: 'done', data: items, lastUpdated: now });
-    } catch {
-      setOnedrive(s => ({ ...s, status: 'error' }));
+    } catch (e: any) {
+      if (e.name !== 'AbortError') setOnedrive(s => ({ ...s, status: 'error' }));
     }
 
-    setLastScan(now);
-    setIsScanning(false);
+    if (!signal.aborted) {
+      setLastScan(now);
+      setIsScanning(false);
+      // Auto-send "TODO" after data is updated
+      handleSendChat("hello");
+    }
   };
 
   const statusIcon = (s: ScanStatus) => {
@@ -174,7 +259,106 @@ export function CompanyBrain() {
       </div>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-8">
+      <div className="flex-1 overflow-y-auto p-8 space-y-8 relative">
+
+        {/* ── CANCEL SCAN OVERLAY ── */}
+        {isScanning && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-[1px]">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-6 border border-indigo-100 animate-in fade-in zoom-in duration-300">
+              <div className="relative">
+                <RefreshCw className="w-16 h-16 text-indigo-600 animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-indigo-400" />
+                </div>
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-gray-900">Scanning Data Lake</h3>
+                <p className="text-gray-500 mt-1 text-sm">This may take a moment while we process your ERP and files.</p>
+              </div>
+              <Button 
+                onClick={cancelScan}
+                className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-8 py-6 rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+              >
+                <XCircle className="w-5 h-5" />
+                Cancel Scan
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* ── AGENT CHAT ── */}
+        <div className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-indigo-50/30">
+            <div className="flex items-center gap-2">
+              <Bot className="w-5 h-5 text-indigo-600" />
+              <h2 className="font-semibold text-gray-900">Agent Brain Hub</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-400">Connected to Main Agent</span>
+            </div>
+          </div>
+
+          <div className="flex-1 h-[400px] overflow-y-auto p-6 flex flex-col gap-4 bg-gray-50/30">
+            {chatHistory.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
+                <MessageSquare className="w-8 h-8 opacity-20" />
+                <p className="text-sm">Ask anything about your company data...</p>
+              </div>
+            ) : (
+              chatHistory.map((msg, i) => (
+                <div key={i} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${msg.role === 'user'
+                    ? 'bg-indigo-600 text-white rounded-br-none'
+                    : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'
+                    }`}>
+                    {msg.role === 'user' ? (
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                    ) : (
+                      <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-gray-800 prose-pre:text-gray-100">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+            {isGeneratingChat && (
+              <div className="flex w-full justify-start">
+                <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm bg-white border border-indigo-100 rounded-bl-none flex items-center gap-2 text-indigo-600 font-medium">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <ThinkingTimer label="Agent is thinking" />
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          <div className="p-4 border-t border-gray-100 bg-white">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSendChat();
+              }}
+              className="relative flex items-center gap-2"
+            >
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                disabled={isScanning || isGeneratingChat}
+                placeholder={isScanning ? "Waiting for scan to complete..." : "Message your agent..."}
+                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all disabled:opacity-50"
+              />
+              <Button
+                type="submit"
+                disabled={isScanning || isGeneratingChat || !chatInput.trim()}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-4 h-[44px]"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </form>
+          </div>
+        </div>
 
         {/* ── ERP DATA ── */}
         <Section icon={<Database className="w-5 h-5 text-blue-600" />} title="ERP Data Lake" color="blue" status={erp.status} lastUpdated={erp.lastUpdated}>
@@ -315,7 +499,7 @@ function Section({ icon, title, color, status, lastUpdated, children }: {
           <span className="text-xs text-gray-400">Updated {new Date(lastUpdated).toLocaleString()}</span>
         )}
       </div>
-      <div className="p-6">{children}</div>
+      <div className="p-6 max-h-[400px] overflow-y-auto">{children}</div>
     </div>
   );
 }
