@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, Image as ImageIcon, Trash2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, 
+  Image as ImageIcon, Trash2, Layout, Calendar, CheckCircle2, ListTodo, Activity,
+  ChevronRight, MoreHorizontal
+} from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { cn } from '../components/ui/utils';
 import ReactMarkdown from 'react-markdown';
@@ -151,91 +156,130 @@ export function AgentSuite() {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-slate-50 relative overflow-hidden">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
       {/* Header */}
-      <div className="px-8 py-6 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-6">
-          <h1 className="text-xl font-semibold text-gray-900">
-            Agent Suite
-          </h1>
+      <div className="relative z-10 px-8 py-5 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between shrink-0 shadow-sm">
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-3">
+            <div className="bg-indigo-600 p-2 rounded-lg shadow-indigo-200 shadow-lg">
+              <Layout className="w-5 h-5 text-white" />
+            </div>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+              Daily Tasks
+            </h1>
+          </div>
           
           {/* View Toggle Slider */}
-          <div className="bg-gray-100 p-1 rounded-xl flex items-center shadow-inner">
+          <div className="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200 shadow-inner">
             <button
               onClick={() => setView('daily')}
               className={cn(
-                "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
-                view === 'daily' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2",
+                view === 'daily' 
+                  ? "bg-white text-indigo-600 shadow-md ring-1 ring-slate-200" 
+                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
               )}
             >
-              Daily Tasks
+              <Clock className="w-4 h-4" />
+              Daily View
             </button>
             <button
               onClick={() => setView('weekly')}
               className={cn(
-                "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
-                view === 'weekly' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2",
+                view === 'weekly' 
+                  ? "bg-white text-indigo-600 shadow-md ring-1 ring-slate-200" 
+                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
               )}
             >
-              Weekly Tasks
+              <Calendar className="w-4 h-4" />
+              Weekly View
             </button>
           </div>
+        </div>
+
+        <div className="flex items-center gap-3 text-slate-400 text-sm font-medium">
+          <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+            Main Agent Connected
+          </span>
         </div>
       </div>
 
       {/* Kanban Board */}
-      <div className="flex-1 overflow-x-auto p-8 bg-gradient-to-br from-slate-50 to-gray-200">
-        <div className="flex gap-6 min-w-full items-start h-full">
-          {view === 'daily' ? (
-            <>
-              <KanbanColumn
-                title="To Do"
-                status="todo"
-                tasks={tasks.filter(t => t.status === 'todo')}
-                onDrop={handleDrop}
-                onCardClick={t => setSelectedTaskId(t.id)}
-                onStart={handleStartConversation}
-                onDone={handleMoveToDone}
-                onAddClick={() => openAddModal('todo')}
-              />
-              <KanbanColumn
-                title="Doing"
-                status="doing"
-                tasks={tasks.filter(t => t.status === 'doing')}
-                onDrop={handleDrop}
-                onCardClick={t => setSelectedTaskId(t.id)}
-                onStart={handleStartConversation}
-                onDone={handleMoveToDone}
-                onAddClick={() => openAddModal('doing')}
-              />
-              <KanbanColumn
-                title="Done"
-                status="done"
-                tasks={tasks.filter(t => t.status === 'done')}
-                onDrop={handleDrop}
-                onCardClick={t => setSelectedTaskId(t.id)}
-                onStart={handleStartConversation}
-                onDone={handleMoveToDone}
-                onAddClick={() => openAddModal('done')}
-              />
-            </>
-          ) : (
-            <>
-              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].map((day) => (
+      <div className="relative z-10 flex-1 overflow-x-auto p-8 custom-scrollbar">
+        <div className="flex gap-8 min-w-full items-start h-full">
+          <AnimatePresence mode="wait">
+            {view === 'daily' ? (
+              <motion.div 
+                key="daily"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="flex gap-8"
+              >
                 <KanbanColumn
-                  key={day}
-                  title={day.charAt(0).toUpperCase() + day.slice(1)}
-                  status={day as any}
-                  tasks={tasks.filter(t => t.status === day)}
+                  title="To Do"
+                  icon={<ListTodo className="w-4 h-4" />}
+                  status="todo"
+                  tasks={tasks.filter(t => t.status === 'todo')}
                   onDrop={handleDrop}
                   onCardClick={t => setSelectedTaskId(t.id)}
                   onStart={handleStartConversation}
                   onDone={handleMoveToDone}
-                  onAddClick={() => openAddModal(day as any)}
+                  onAddClick={() => openAddModal('todo')}
                 />
-              ))}
-            </>
-          )}
+                <KanbanColumn
+                  title="In Progress"
+                  icon={<Activity className="w-4 h-4" />}
+                  status="doing"
+                  tasks={tasks.filter(t => t.status === 'doing')}
+                  onDrop={handleDrop}
+                  onCardClick={t => setSelectedTaskId(t.id)}
+                  onStart={handleStartConversation}
+                  onDone={handleMoveToDone}
+                  onAddClick={() => openAddModal('doing')}
+                />
+                <KanbanColumn
+                  title="Completed"
+                  icon={<CheckCircle2 className="w-4 h-4" />}
+                  status="done"
+                  tasks={tasks.filter(t => t.status === 'done')}
+                  onDrop={handleDrop}
+                  onCardClick={t => setSelectedTaskId(t.id)}
+                  onStart={handleStartConversation}
+                  onDone={handleMoveToDone}
+                  onAddClick={() => openAddModal('done')}
+                />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="weekly"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="flex gap-8"
+              >
+                {['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].map((day, idx) => (
+                  <KanbanColumn
+                    key={day}
+                    title={day.charAt(0).toUpperCase() + day.slice(1)}
+                    icon={<Calendar className="w-4 h-4" />}
+                    status={day as any}
+                    tasks={tasks.filter(t => t.status === day)}
+                    onDrop={handleDrop}
+                    onCardClick={t => setSelectedTaskId(t.id)}
+                    onStart={handleStartConversation}
+                    onDone={handleMoveToDone}
+                    onAddClick={() => openAddModal(day as any)}
+                  />
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -290,8 +334,9 @@ export function AgentSuite() {
 // ----------------------------------------------------
 // Kanban Components
 // ----------------------------------------------------
-function KanbanColumn({ title, status, tasks, onDrop, onCardClick, onStart, onDone, onAddClick }: {
+function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart, onDone, onAddClick }: {
   title: string,
+  icon: React.ReactNode,
   status: Task['status'],
   tasks: Task[],
   onDrop: (id: string, status: Task['status']) => void,
@@ -307,28 +352,45 @@ function KanbanColumn({ title, status, tasks, onDrop, onCardClick, onStart, onDo
   });
 
   return (
-    <div ref={dropRef as any} className={cn("flex flex-col w-[340px] bg-gray-100/90 rounded-2xl p-3 border border-gray-200/50 shadow-sm transition-colors shrink-0 max-h-full", isOver && "bg-blue-50 border-blue-200")}>
-       <h2 className="font-semibold text-gray-700 mb-3 px-1 flex items-center justify-between">
-         {title}
-         <span className="bg-white shadow-sm border border-gray-200 text-gray-600 text-xs px-2.5 py-0.5 rounded-full font-medium">{tasks.length}</span>
-       </h2>
-       <div className="flex flex-col gap-2.5 overflow-y-auto px-0.5 pb-2">
-         {tasks.map(task => (
-           <TaskCard 
-             key={task.id} 
-             task={task} 
-             onClick={() => onCardClick(task)} 
-             onStart={(e) => { e.stopPropagation(); onStart(task); }} 
-             onDone={(e) => { e.stopPropagation(); onDone(task.id); }} 
-           />
-         ))}
+    <div 
+      ref={dropRef as any} 
+      className={cn(
+        "flex flex-col w-[350px] bg-slate-200/40 backdrop-blur-[2px] rounded-2xl p-4 border border-slate-200 transition-all duration-300 shrink-0 max-h-full", 
+        isOver && "bg-indigo-50/80 border-indigo-200 ring-2 ring-indigo-500/10"
+      )}
+    >
+       <div className="flex items-center justify-between mb-5 px-1">
+         <div className="flex items-center gap-2.5">
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600">
+             {icon}
+           </div>
+           <h2 className="font-bold text-slate-800 text-sm tracking-tight">{title}</h2>
+         </div>
+         <span className="bg-white/80 shadow-sm border border-slate-200 text-slate-600 text-[11px] px-2.5 py-1 rounded-full font-bold tabular-nums">
+           {tasks.length}
+         </span>
+       </div>
+
+       <div className="flex-1 flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-1 pb-4">
+         <AnimatePresence>
+           {tasks.map(task => (
+             <TaskCard 
+               key={task.id} 
+               task={task} 
+               onClick={() => onCardClick(task)} 
+               onStart={(e) => { e.stopPropagation(); onStart(task); }} 
+               onDone={(e) => { e.stopPropagation(); onDone(task.id); }} 
+             />
+           ))}
+         </AnimatePresence>
        </div>
        
        <button 
          onClick={onAddClick}
-         className="w-full mt-1 rounded-xl flex items-center justify-start text-sm text-gray-600 py-2.5 px-3 hover:bg-gray-200 transition-colors font-medium"
+         className="w-full mt-3 rounded-xl flex items-center justify-center text-[13px] text-slate-500 py-3 px-4 hover:bg-white hover:text-indigo-600 hover:shadow-sm hover:border-slate-200 border border-dashed border-slate-300 transition-all duration-200 font-semibold group"
        >
-         <Plus className="w-4 h-4 mr-2" /> Add a card
+         <Plus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" /> 
+         Add New Card
        </button>
     </div>
   );
@@ -342,47 +404,83 @@ function TaskCard({ task, onClick, onStart, onDone }: { task: Task, onClick: () 
   });
 
   return (
-    <div 
-      ref={dragRef as any} 
-      onClick={onClick} 
-      className={cn("bg-white rounded-xl p-3.5 cursor-pointer transition-all shadow-sm hover:shadow-md border border-gray-200/60 flex flex-col", isDragging && "opacity-50")}
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      ref={dragRef as any}
+      onClick={onClick}
+      className={cn(
+        "bg-white rounded-xl p-4 cursor-pointer transition-all border border-slate-200 shadow-[0_2px_4px_rgba(0,0,0,0.02),0_1px_1px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.08),0_4px_8px_-2px_rgba(0,0,0,0.04)] flex flex-col relative group overflow-hidden",
+        isDragging && "opacity-40 grayscale"
+      )}
     >
-      <div className="flex items-start justify-between mb-2">
-        <h3 className="font-semibold text-gray-900 leading-tight flex-1">{task.title}</h3>
+      {/* Status Bar */}
+      <div className={cn(
+        "absolute top-0 left-0 w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity",
+        task.status === 'done' ? "bg-emerald-500" : task.status === 'doing' ? "bg-amber-500" : "bg-indigo-500"
+      )} />
+
+      <div className="flex items-start justify-between mb-2.5">
+        <h3 className="font-bold text-slate-900 leading-snug flex-1 group-hover:text-indigo-600 transition-colors">
+          {task.title}
+        </h3>
+        <MoreHorizontal className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
       </div>
 
-      <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">{task.description}</p>
+      <p className="text-[13px] text-slate-500 line-clamp-2 mb-4 leading-relaxed font-medium">
+        {task.description}
+      </p>
 
       {task.image && (
-        <div className="w-full h-24 mb-3 rounded-md overflow-hidden border border-gray-100">
-          <img src={task.image} alt="Task attachment" className="w-full h-full object-cover" />
+        <div className="w-full h-32 mb-4 rounded-lg overflow-hidden border border-slate-100 shadow-inner group-hover:border-slate-200 transition-colors">
+          <img src={task.image} alt="Task attachment" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         </div>
       )}
 
-      <div className="flex items-center gap-4 text-xs text-gray-500 mb-3 font-medium mt-auto">
-        <div className="flex items-center gap-1.5" title="Comments">
-          <MessageSquare className="w-3.5 h-3.5" />
-          {task.comments.length}
+      <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center gap-3 text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 hover:text-slate-600 transition-colors" title="Comments">
+            <MessageSquare className="w-3.5 h-3.5" />
+            {task.comments.length}
+          </div>
+          <div className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors" title="Chat Messages">
+            <Bot className="w-3.5 h-3.5 text-indigo-400" />
+            {task.chatHistory.length}
+          </div>
         </div>
-        <div className="flex items-center gap-1.5" title="Chat Messages">
-          <Bot className="w-3.5 h-3.5" />
-          {task.chatHistory.length}
-        </div>
+
+        {task.timestamp && (
+          <div className="text-[10px] text-slate-300 font-medium italic">
+            {new Date(task.timestamp).toLocaleDateString()}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col gap-2 mt-2 border-t border-gray-100 pt-3">
+      <div className="flex flex-col gap-2 mt-4 border-t border-slate-100 pt-4">
         {task.status !== 'done' && (
-          <Button size="sm" variant="outline" className="w-full flex items-center justify-center gap-1.5 h-8 text-xs bg-gray-50 hover:bg-gray-100 shrink-0" onClick={onStart}>
-            <Play className="w-3 h-3 text-blue-600" /> Start Bot
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-none border-slate-200" 
+            onClick={onStart}
+          >
+            <Play className="w-3 h-3 fill-current" /> Execute Agent
           </Button>
         )}
         {task.status === 'doing' && task.hasBotResponded && (
-          <Button size="sm" className="w-full bg-green-600 hover:bg-green-700 flex items-center justify-center gap-1.5 h-8 text-xs text-white shrink-0" onClick={onDone}>
-            <CheckCircle className="w-3 h-3" /> Move to Done
+          <Button 
+            size="sm" 
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 shadow-lg flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98]" 
+            onClick={onDone}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" /> Finalize Task
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
