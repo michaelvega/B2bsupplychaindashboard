@@ -63,6 +63,7 @@ export function CompanyBrain() {
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'agent', content: string }[]>([]);
   const [isGeneratingChat, setIsGeneratingChat] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatTopRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // On mount, try to load cached data
@@ -97,9 +98,15 @@ export function CompanyBrain() {
     }
   }, [chatHistory]);
 
-  // Scroll to bottom
+  // Scroll management
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isGeneratingChat) {
+      // While generating, scroll to bottom to show progress
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else if (chatHistory.length > 0) {
+      // When done generating, scroll to the top of the chat section as requested
+      chatTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [chatHistory, isGeneratingChat]);
 
   const handleSendChat = async (messageOverride?: string) => {
@@ -143,7 +150,7 @@ export function CompanyBrain() {
   const scanAll = async () => {
     setIsScanning(true);
     const now = new Date().toISOString();
-    
+
     // Setup AbortController
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
@@ -151,7 +158,7 @@ export function CompanyBrain() {
     // --- ERP ---
     setErp(s => ({ ...s, status: 'scanning' }));
     try {
-      const res = await fetch(ERP_URL, { 
+      const res = await fetch(ERP_URL, {
         headers: { 'ngrok-skip-browser-warning': 'true' },
         signal
       });
@@ -201,7 +208,7 @@ export function CompanyBrain() {
       setLastScan(now);
       setIsScanning(false);
       // Auto-send "TODO" after data is updated
-      handleSendChat("hello");
+      handleSendChat("Run a comprehensive check accross all the data in azure ./localdata emails.json, erp-data.json, onedrive.json for any discrepancies, errors, or impending catatrophies. Also list potential risks. If needed for deeper inspection, use the RLM skill to parse out and inspect the data corpus. Do not make new outside internet queries.");
     }
   };
 
@@ -275,7 +282,7 @@ export function CompanyBrain() {
                 <h3 className="text-xl font-bold text-gray-900">Scanning Data Lake</h3>
                 <p className="text-gray-500 mt-1 text-sm">This may take a moment while we process your ERP and files.</p>
               </div>
-              <Button 
+              <Button
                 onClick={cancelScan}
                 className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-8 py-6 rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
               >
@@ -287,7 +294,7 @@ export function CompanyBrain() {
         )}
 
         {/* ── AGENT CHAT ── */}
-        <div className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
+        <div ref={chatTopRef} className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col h-[500px] ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-indigo-50/30">
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5 text-indigo-600" />
@@ -298,7 +305,7 @@ export function CompanyBrain() {
             </div>
           </div>
 
-          <div className="flex-1 h-[400px] overflow-y-auto p-6 flex flex-col gap-4 bg-gray-50/30">
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-gray-50/30">
             {chatHistory.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
                 <MessageSquare className="w-8 h-8 opacity-20" />
