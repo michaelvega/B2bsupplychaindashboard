@@ -282,6 +282,28 @@ export function CompanyBrain() {
                 <h3 className="text-xl font-bold text-gray-900">Scanning Data Lake</h3>
                 <p className="text-gray-500 mt-1 text-sm">This may take a moment while we process your ERP and files.</p>
               </div>
+
+              {/* Mirror Status Pills in Overlay */}
+              <div className="grid grid-cols-1 gap-3 w-full max-w-[240px]">
+                {[
+                  { label: 'ERP Data', state: erp },
+                  { label: 'Outlook Emails', state: emails },
+                  { label: 'OneDrive', state: onedrive },
+                ].map(({ label, state }) => (
+                  <div key={label} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100">
+                    <div className="flex items-center gap-2">
+                      {statusIcon(state.status)}
+                      <span className="text-sm font-semibold text-gray-700">{label}</span>
+                    </div>
+                    {state.status === 'scanning' && (
+                      <span className="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full animate-pulse font-bold uppercase tracking-wider">Syncing</span>
+                    )}
+                    {state.status === 'done' && (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    )}
+                  </div>
+                ))}
+              </div>
               <Button
                 onClick={cancelScan}
                 className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-8 py-6 rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-2"

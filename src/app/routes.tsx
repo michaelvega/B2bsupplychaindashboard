@@ -8,7 +8,6 @@ import { OrderErrors } from './pages/OrderErrors';
 import { Forecasting } from './pages/Forecasting';
 import { VendorOnboarding } from './pages/VendorOnboarding';
 import { History } from './pages/History';
-import { Rules } from './pages/Rules';
 import { Settings } from './pages/Settings';
 import { CompanyBrain } from './pages/CompanyBrain';
 import { Sidebar } from './components/Sidebar';
@@ -98,14 +97,6 @@ export const router = createHashRouter([
     element: (
       <Layout>
         <History />
-      </Layout>
-    ),
-  },
-  {
-    path: '/rules',
-    element: (
-      <Layout>
-        <Rules />
       </Layout>
     ),
   },

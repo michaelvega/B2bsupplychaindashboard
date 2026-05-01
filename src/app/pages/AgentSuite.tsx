@@ -9,6 +9,7 @@ import { ThinkingTimer } from '../components/ThinkingTimer';
 
 const ITEM_TYPE = 'TASK_CARD';
 const AZURE_FILE = 'agent-tasks.json';
+const WEEKLY_FILE = 'weekly-agent-tasks.json';
 const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
 
 export interface Task {
@@ -16,7 +17,7 @@ export interface Task {
   title: string;
   description: string;
   image?: string;
-  status: 'todo' | 'doing' | 'done';
+  status: 'todo' | 'doing' | 'done' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday';
   interval?: string;
   comments: { text: string; timestamp: number }[];
   hasBotResponded: boolean;
@@ -27,33 +28,42 @@ export interface Task {
 export function AgentSuite() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState<'daily' | 'weekly'>('daily');
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [addModalStatus, setAddModalStatus] = useState<Task['status']>('todo');
 
   useEffect(() => {
     const loadTasks = async () => {
+      setLoading(true);
+      const filename = view === 'daily' ? AZURE_FILE : WEEKLY_FILE;
       try {
-        const res = await fetch(`/api/azure/${AZURE_FILE}`);
+        const res = await fetch(`/api/azure/${filename}`);
         if (res.ok) {
           const text = await res.text();
           if (text) {
             setTasks(JSON.parse(text));
+          } else {
+            setTasks([]);
           }
+        } else {
+          setTasks([]);
         }
       } catch (err) {
         console.error('Failed to load tasks', err);
+        setTasks([]);
       } finally {
         setLoading(false);
       }
     };
     loadTasks();
-  }, []);
+  }, [view]);
 
   const saveTasks = async (newTasks: Task[]) => {
     setTasks(newTasks);
+    const filename = view === 'daily' ? AZURE_FILE : WEEKLY_FILE;
     try {
-      await fetch(`/api/azure/${AZURE_FILE}`, {
+      await fetch(`/api/azure/${filename}`, {
         method: 'PUT',
         body: JSON.stringify(newTasks, null, 2)
       });
@@ -140,54 +150,92 @@ export function AgentSuite() {
     );
   }
 
-  const todoTasks = tasks.filter(t => t.status === 'todo');
-  const doingTasks = tasks.filter(t => t.status === 'doing');
-  const doneTasks = tasks.filter(t => t.status === 'done');
-
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
       <div className="px-8 py-6 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
-        <div>
+        <div className="flex items-center gap-6">
           <h1 className="text-xl font-semibold text-gray-900">
             Agent Suite
           </h1>
+          
+          {/* View Toggle Slider */}
+          <div className="bg-gray-100 p-1 rounded-xl flex items-center shadow-inner">
+            <button
+              onClick={() => setView('daily')}
+              className={cn(
+                "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
+                view === 'daily' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >
+              Daily Tasks
+            </button>
+            <button
+              onClick={() => setView('weekly')}
+              className={cn(
+                "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
+                view === 'weekly' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >
+              Weekly Tasks
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Kanban Board */}
       <div className="flex-1 overflow-x-auto p-8 bg-gradient-to-br from-slate-50 to-gray-200">
-        <div className="flex gap-6 min-w-[900px] items-start h-full">
-          <KanbanColumn
-            title="To Do"
-            status="todo"
-            tasks={todoTasks}
-            onDrop={handleDrop}
-            onCardClick={t => setSelectedTaskId(t.id)}
-            onStart={handleStartConversation}
-            onDone={handleMoveToDone}
-            onAddClick={() => openAddModal('todo')}
-          />
-          <KanbanColumn
-            title="Doing"
-            status="doing"
-            tasks={doingTasks}
-            onDrop={handleDrop}
-            onCardClick={t => setSelectedTaskId(t.id)}
-            onStart={handleStartConversation}
-            onDone={handleMoveToDone}
-            onAddClick={() => openAddModal('doing')}
-          />
-          <KanbanColumn
-            title="Done"
-            status="done"
-            tasks={doneTasks}
-            onDrop={handleDrop}
-            onCardClick={t => setSelectedTaskId(t.id)}
-            onStart={handleStartConversation}
-            onDone={handleMoveToDone}
-            onAddClick={() => openAddModal('done')}
-          />
+        <div className="flex gap-6 min-w-full items-start h-full">
+          {view === 'daily' ? (
+            <>
+              <KanbanColumn
+                title="To Do"
+                status="todo"
+                tasks={tasks.filter(t => t.status === 'todo')}
+                onDrop={handleDrop}
+                onCardClick={t => setSelectedTaskId(t.id)}
+                onStart={handleStartConversation}
+                onDone={handleMoveToDone}
+                onAddClick={() => openAddModal('todo')}
+              />
+              <KanbanColumn
+                title="Doing"
+                status="doing"
+                tasks={tasks.filter(t => t.status === 'doing')}
+                onDrop={handleDrop}
+                onCardClick={t => setSelectedTaskId(t.id)}
+                onStart={handleStartConversation}
+                onDone={handleMoveToDone}
+                onAddClick={() => openAddModal('doing')}
+              />
+              <KanbanColumn
+                title="Done"
+                status="done"
+                tasks={tasks.filter(t => t.status === 'done')}
+                onDrop={handleDrop}
+                onCardClick={t => setSelectedTaskId(t.id)}
+                onStart={handleStartConversation}
+                onDone={handleMoveToDone}
+                onAddClick={() => openAddModal('done')}
+              />
+            </>
+          ) : (
+            <>
+              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].map((day) => (
+                <KanbanColumn
+                  key={day}
+                  title={day.charAt(0).toUpperCase() + day.slice(1)}
+                  status={day as any}
+                  tasks={tasks.filter(t => t.status === day)}
+                  onDrop={handleDrop}
+                  onCardClick={t => setSelectedTaskId(t.id)}
+                  onStart={handleStartConversation}
+                  onDone={handleMoveToDone}
+                  onAddClick={() => openAddModal(day as any)}
+                />
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -345,7 +393,7 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
   const INITIAL_TEMPLATE = `* Title: 
 * Description: 
 * Image URL (Optional): 
-* Status: ${defaultStatus === 'doing' ? 'Doing' : defaultStatus === 'done' ? 'Done' : 'To Do'}`;
+* Status: ${defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1).replace('todo', 'To Do')}`;
 
   const [chatInput, setChatInput] = useState(INITIAL_TEMPLATE);
   const [chatHistory, setChatHistory] = useState<{role: 'user'|'agent', content: string}[]>([
@@ -426,8 +474,9 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
     const description = descMatch ? descMatch[1].trim() : lastUserMsg;
     const image = imageMatch ? imageMatch[1].trim() : '';
     const extractedStatusStr = statusMatch ? statusMatch[1].toLowerCase().replace('to do', 'todo') : defaultStatus;
-    const status = ['scheduled', 'todo', 'done'].includes(extractedStatusStr) ? extractedStatusStr as Task['status'] : defaultStatus;
-    const interval = intervalMatch ? intervalMatch[1].trim() : (status === 'scheduled' ? 'Daily' : undefined);
+    const allowedStatuses = ['todo', 'doing', 'done', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    const status = allowedStatuses.includes(extractedStatusStr) ? extractedStatusStr as Task['status'] : defaultStatus;
+    const interval = intervalMatch ? intervalMatch[1].trim() : (status === 'todo' ? 'One-time' : undefined);
 
     onAdd({
       id: Math.random().toString(36).substring(7),
@@ -548,7 +597,7 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                  task.status === 'scheduled' ? "bg-purple-100 text-purple-800" :
+                  ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].includes(task.status) ? "bg-purple-100 text-purple-800" :
                     task.status === 'done' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
                 )}>
                   {task.status}

@@ -45,7 +45,6 @@ export function Sidebar() {
 
   const otherNavItems = [
     { path: '/history', label: 'History', icon: History },
-    { path: '/rules', label: 'Schedule', icon: FileText },
     { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
