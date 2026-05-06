@@ -749,12 +749,11 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
 
 function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { task: Task, onClose: () => void, onUpdate: (t: Task) => void, onDelete: () => void, onChatSend: (m: string) => void }) {
   const [chatInput, setChatInput] = useState('');
-  const [commentInput, setCommentInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [task.chatHistory]);
+  }, [task.chatHistory, task.isGenerating]);
 
   const handleSendChat = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -764,137 +763,120 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[85vh] overflow-hidden flex">
-
-        {/* Left Side: Details & Comments */}
-        <div className="w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col h-full shrink-0">
-          <div className="p-6 overflow-y-auto flex-1 border-b border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className={cn(
-                  "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                  ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].includes(task.status) ? "bg-purple-100 text-purple-800" :
-                    task.status === 'done' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
-                )}>
-                  {task.status}
-                </span>
-                {task.interval && <span className="text-xs font-medium text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {task.interval}</span>}
-              </div>
-              <button onClick={onDelete} className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-red-200" title="Delete Task">
-                <Trash2 className="w-3.5 h-3.5" /> Delete
-              </button>
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">{task.title}</h2>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap mb-6">{task.description}</p>
-            {task.image && (
-              <img src={task.image} alt="Attachment" className="w-full rounded-lg border border-gray-200 shadow-sm mb-6" />
-            )}
-          </div>
-
-          <div className="h-1/2 flex flex-col bg-white">
-            <div className="p-4 border-b border-gray-100 font-semibold text-gray-900 flex items-center gap-2 shrink-0">
-              <MessageSquare className="w-4 h-4 text-gray-500" />
-              Comments
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
-              {task.comments.length === 0 ? (
-                <div className="text-sm text-gray-400 text-center py-4">No comments yet.</div>
-              ) : (
-                task.comments.map((c, i) => (
-                  <div key={i} className="bg-gray-50 rounded-lg p-3 text-sm border border-gray-100">
-                    <p className="text-gray-800">{c.text}</p>
-                    <p className="text-[10px] text-gray-400 mt-1">{new Date(c.timestamp).toLocaleString()}</p>
-                  </div>
-                ))
-              )}
-            </div>
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              if (!commentInput.trim()) return;
-              onUpdate({
-                ...task,
-                comments: [...task.comments, { text: commentInput, timestamp: Date.now() }]
-              });
-              setCommentInput('');
-            }} className="p-3 border-t border-gray-200 bg-gray-50 flex gap-2 shrink-0">
-              <input type="text" value={commentInput} onChange={e => setCommentInput(e.target.value)} placeholder="Add a comment..." className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
-              <Button type="submit" size="sm">Post</Button>
-            </form>
-          </div>
-        </div>
-
-        {/* Right Side: Agent Chat History */}
-        <div className="flex-1 flex flex-col h-full bg-white relative">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white z-10 shadow-sm shrink-0">
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              Agent Thread
-            </h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto flex flex-col relative">
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20 rounded-t-2xl">
+          <h2 className="font-semibold text-lg">{task.title}</h2>
+          <div className="flex items-center gap-2">
+            <button onClick={onDelete} className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-red-200" title="Delete Task">
+              <Trash2 className="w-3.5 h-3.5" /> Delete
+            </button>
+            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
               <X className="w-5 h-5" />
             </button>
           </div>
-
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50">
-            {task.chatHistory.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
-                <p>No conversation yet. Send a message to start.</p>
-                <Button onClick={() => {
-                  const initialMsg = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
-                  onChatSend(initialMsg);
-                }} className="bg-blue-600 hover:bg-blue-700">
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Bot with Task Details
-                </Button>
-              </div>
-            ) : (
-              task.chatHistory.map((msg, i) => (
-                <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
-                  {msg.role === 'user' ? (
-                    <div className="max-w-[85%] rounded-2xl px-5 py-3 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
-                      <p className="whitespace-pre-wrap">{msg.content}</p>
-                    </div>
-                  ) : (
-                    <div className="flex w-full justify-start relative group pl-2">
-                      <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
-                      </div>
-                      <button 
-                        onClick={() => downloadAsWord(msg.content, 'Report')}
-                        className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
-                        title="Download as Word"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-            {task.isGenerating && (
-              <div className="flex w-full justify-start">
-                <div className="max-w-[80%] rounded-2xl px-4 py-3.5 shadow-sm bg-white border border-gray-200 rounded-bl-none flex items-center gap-1.5 h-[38px]">
-                  <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>
-                </div>
-              </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
-
-          <form onSubmit={handleSendChat} className="p-4 border-t border-gray-200 bg-white flex gap-3 shrink-0">
-            <input
-              type="text"
-              value={chatInput}
-              onChange={e => setChatInput(e.target.value)}
-              placeholder="Send message to agent..."
-              className="flex-1 border border-gray-300 rounded-full px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner"
-            />
-            <Button type="submit" className="rounded-full w-10 h-10 p-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-md">
-              <Send className="w-4 h-4" />
-            </Button>
-          </form>
         </div>
 
+        <div className="p-6 space-y-6">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className={cn(
+                "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
+                ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].includes(task.status) ? "bg-purple-100 text-purple-800" :
+                  task.status === 'done' ? "bg-green-100 text-green-800" : "bg-stone-100 text-stone-800"
+              )}>
+                {task.status}
+              </span>
+              {task.interval && <span className="text-xs font-medium text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {task.interval}</span>}
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Summary</h3>
+            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{task.description}</p>
+          </div>
+
+          {task.image && (
+            <div className="mb-6">
+              <h3 className="font-semibold text-gray-900 mb-3">Attachment</h3>
+              <img src={task.image} alt="Attachment" className="w-full rounded-lg border border-gray-200 shadow-sm" />
+            </div>
+          )}
+
+          {/* Embedded Chat Flow */}
+          <div className="flex-1 flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white mt-8 mb-4 min-h-[400px]">
+            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold text-sm text-gray-900">Agent Thread</h3>
+                <p className="text-xs text-gray-500">Task execution and discussion history</p>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/30">
+              {task.chatHistory.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4 py-12">
+                  <p>No conversation yet. Send a message to start.</p>
+                  <Button onClick={() => {
+                    const initialMsg = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
+                    onChatSend(initialMsg);
+                  }} className="bg-stone-900 hover:bg-stone-950 text-white">
+                    <Play className="w-4 h-4 mr-2" />
+                    Start Bot with Task Details
+                  </Button>
+                </div>
+              ) : (
+                task.chatHistory.map((msg, i) => (
+                  <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
+                    {msg.role === 'user' ? (
+                      <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
+                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                      </div>
+                    ) : (
+                      <div className="flex w-full justify-start relative group pl-2">
+                        <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                        </div>
+                        <button 
+                          onClick={() => downloadAsWord(msg.content, 'Report')}
+                          className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
+                          title="Download as Word"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+              {task.isGenerating && (
+                <div className="flex w-full justify-start">
+                  <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm bg-white border border-stone-100 rounded-bl-none flex items-center gap-2 text-stone-600 font-medium h-[38px]">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <ThinkingTimer label="Agent is thinking" />
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            <div className="p-4 border-t border-gray-100 bg-white">
+              <form onSubmit={handleSendChat} className="relative flex items-center gap-2 w-full">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  disabled={task.isGenerating}
+                  placeholder="Ask a follow-up..."
+                  className="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-stone-500 focus:border-stone-500 block w-full px-5 py-3 pr-12 transition-all"
+                />
+                <Button
+                  type="submit"
+                  disabled={task.isGenerating || !chatInput.trim()}
+                  className="absolute right-1.5 p-2 bg-stone-900 hover:bg-stone-950 text-white rounded-full w-9 h-9 flex items-center justify-center transition-transform disabled:opacity-50 disabled:hover:scale-100 hover:scale-105"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

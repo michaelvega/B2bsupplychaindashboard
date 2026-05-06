@@ -9,94 +9,81 @@ interface WorkCardProps {
 }
 
 export function WorkCard({ item, onClick }: WorkCardProps) {
-  const priorityColors = {
-    high: 'border-gray-200 bg-white hover:bg-gray-50',
-    medium: 'border-gray-200 bg-white hover:bg-gray-50',
-    low: 'border-gray-200 bg-white hover:bg-gray-50',
-  };
-
-  const priorityBadgeColors = {
-    high: 'bg-red-100 text-red-800',
-    medium: 'bg-yellow-100 text-yellow-800',
-    low: 'bg-blue-100 text-blue-800',
-  };
-
   return (
     <div
-      className={cn(
-        'border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md bg-white',
-        priorityColors[item.priority]
-      )}
+      className="bg-[#FAFAFA] rounded-xl cursor-pointer transition-all border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex flex-col relative group overflow-hidden"
       onClick={onClick}
     >
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-start gap-3 flex-1">
+      {/* Top Header */}
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-white shrink-0">
+        <div className="flex items-center gap-2">
           <AlertCircle className={cn(
-            'w-5 h-5 mt-0.5',
-            item.priority === 'high' ? 'text-red-600' : item.priority === 'medium' ? 'text-yellow-600' : 'text-blue-600'
+            'w-[18px] h-[18px]',
+            item.priority === 'high' ? 'text-red-500' : item.priority === 'medium' ? 'text-amber-500' : 'text-blue-500'
           )} />
-          <div className="flex-1">
-            <h3 className="font-semibold text-gray-900">{item.title}</h3>
-            <p className="text-sm text-gray-600 mt-1">{new Date(item.timestamp).toLocaleString()}</p>
-          </div>
+          <span className="text-[14px] font-medium text-gray-500 capitalize tracking-tight">
+            {item.priority} Priority Alert
+          </span>
         </div>
-        <span className={cn(
-          'px-2 py-1 rounded text-xs font-medium uppercase',
-          priorityBadgeColors[item.priority]
-        )}>
-          {item.priority}
-        </span>
+        <span className="text-xs text-gray-400 font-medium">{new Date(item.timestamp).toLocaleString()}</span>
       </div>
 
-      <div className="space-y-3 ml-8">
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Detected discrepancy:</p>
-          <p className="text-sm text-gray-900">{item.discrepancy}</p>
-        </div>
+      {/* Main Body */}
+      <div className="flex flex-col flex-1 p-5 pb-6">
+        <h3 className="text-[20px] font-medium text-[#1F2937] leading-tight tracking-tight mb-5">
+          {item.title}
+        </h3>
 
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Suggested action:</p>
-          <p className="text-sm text-gray-900">{item.suggestedAction}</p>
-        </div>
+        <div className="space-y-5 flex-1">
+          <div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Detected Discrepancy</p>
+            <p className="text-[14px] text-gray-700 leading-relaxed">{item.discrepancy}</p>
+          </div>
 
-        {/* Preview Box */}
-        {item.preview && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-3 shadow-inner">
-            <div className="flex items-center gap-2 mb-2">
-              <FileEdit className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-semibold text-gray-900">Preview of Changes</span>
-            </div>
-            <div className="space-y-2">
-              {item.preview.map((change, index) => (
-                <div key={index} className="flex items-start gap-2 text-sm">
-                  <div className="flex-1 grid grid-cols-2 gap-2">
-                    {change.before && (
-                      <div className="bg-red-50 border border-red-200 rounded px-2 py-1">
-                        <span className="text-xs text-red-600 font-medium">Before:</span>
-                        <p className="text-gray-900">{change.before}</p>
+          <div>
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Suggested Action</p>
+            <p className="text-[14px] text-gray-700 leading-relaxed">{item.suggestedAction}</p>
+          </div>
+
+          {/* Preview Box */}
+          {item.preview && (
+            <div className="bg-white border border-gray-100 rounded-lg p-4 mt-2 shadow-sm">
+              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-50">
+                <FileEdit className="w-4 h-4 text-gray-400" />
+                <span className="text-[12px] font-bold text-gray-600 uppercase tracking-wider">Preview of Changes</span>
+              </div>
+              <div className="space-y-3">
+                {item.preview.map((change, index) => (
+                  <div key={index} className="grid grid-cols-2 gap-3 text-[13px]">
+                    {change.before ? (
+                      <div className="bg-red-50/40 border border-red-100/50 rounded-md p-2.5">
+                        <span className="block text-[10px] text-red-500 font-bold uppercase mb-1">Before</span>
+                        <p className="text-gray-700">{change.before}</p>
                       </div>
+                    ) : (
+                      <div />
                     )}
-                    <div className="bg-green-50 border border-green-200 rounded px-2 py-1">
-                      <span className="text-xs text-green-600 font-medium">After:</span>
-                      <p className="text-gray-900">{change.after}</p>
+                    <div className="bg-green-50/40 border border-green-100/50 rounded-md p-2.5">
+                      <span className="block text-[10px] text-green-600 font-bold uppercase mb-1">After</span>
+                      <p className="text-gray-700">{change.after}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-3 mt-6 pt-5 border-t border-gray-100">
           <Button
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
               // Handle approve
             }}
-            className="bg-green-600 hover:bg-green-700"
+            className="flex-1 bg-stone-900 hover:bg-stone-950 text-white shadow-sm transition-all"
           >
-            Approve
+            Review & Approve
           </Button>
           <Button
             size="sm"
@@ -105,8 +92,9 @@ export function WorkCard({ item, onClick }: WorkCardProps) {
               e.stopPropagation();
               // Handle deny
             }}
+            className="flex-1 text-gray-600 border-gray-200 hover:bg-gray-50"
           >
-            Deny
+            Dismiss
           </Button>
         </div>
       </div>

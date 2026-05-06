@@ -2,4 +2,42 @@
 @source '../**/*.{js,ts,jsx,tsx}';
 @plugin '@tailwindcss/typography';
 
+@theme {
+  --color-blue-50: #F9F8F6;
+  --color-blue-100: #EFECE6;
+  --color-blue-200: #E7E5E4;
+  --color-blue-300: #D6D3D1;
+  --color-blue-400: #A8A29E;
+  --color-blue-500: #44403C;
+  --color-blue-600: #292524;
+  --color-blue-700: #1C1917;
+  --color-blue-800: #0C0A09;
+  --color-blue-900: #000000;
+  --color-blue-950: #000000;
+
+  --color-indigo-50: #F9F8F6;
+  --color-indigo-100: #EFECE6;
+  --color-indigo-200: #E7E5E4;
+  --color-indigo-300: #D6D3D1;
+  --color-indigo-400: #A8A29E;
+  --color-indigo-500: #44403C;
+  --color-indigo-600: #292524;
+  --color-indigo-700: #1C1917;
+  --color-indigo-800: #0C0A09;
+  --color-indigo-900: #000000;
+  --color-indigo-950: #000000;
+
+  --color-gray-50: #fafaf9;
+  --color-gray-100: #f5f5f4;
+  --color-gray-200: #e7e5e4;
+  --color-gray-300: #d6d3d1;
+  --color-gray-400: #a8a29e;
+  --color-gray-500: #78716c;
+  --color-gray-600: #57534e;
+  --color-gray-700: #44403c;
+  --color-gray-800: #292524;
+  --color-gray-900: #1c1917;
+  --color-gray-950: #0c0a09;
+}
+
 @import 'tw-animate-css';

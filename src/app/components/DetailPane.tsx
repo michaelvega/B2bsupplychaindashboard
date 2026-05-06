@@ -1,6 +1,7 @@
 import { X, FileText, CheckCircle2, XCircle, Send, Bot, Loader2, Edit } from 'lucide-react';
 import { WorkItem } from '../data/mockData';
 import { Button } from './ui/button';
+import { cn } from './ui/utils';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -297,38 +298,35 @@ All state changes have been safely committed to the ERP. This thread is now clos
              <p className="text-xs text-gray-500">Discuss modification limits or manually approve</p>
            </div>
            
-           <div className="flex-1 p-5 overflow-y-auto space-y-6 max-h-[400px]">
+           <div className="flex-1 p-6 overflow-y-auto space-y-6 max-h-[400px] bg-gray-50/30">
              {messages.map((msg, index) => (
-                <div key={index} className={`flex w-full group ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div key={index} className={cn("flex w-full", msg.role === 'user' ? 'justify-end' : 'justify-start')}>
                   {msg.role === 'user' ? (
-                    <div className="max-w-[80%] bg-gray-100 text-gray-800 px-4 py-2 rounded-2xl text-sm">
+                    <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
                       <div className="whitespace-pre-wrap">{msg.content}</div>
                     </div>
                   ) : (
-                    <div className="flex gap-3 w-full max-w-[95%]">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Bot className="w-4 h-4 text-blue-600" />
-                      </div>
+                    <div className="flex w-full justify-start relative group pl-2">
                       <div className="flex-1 min-w-0">
                         {editingIndex === index ? (
                           <div className="flex flex-col gap-2">
                             <textarea
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
-                              className="w-full min-h-[150px] p-3 text-sm border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                              className="w-full min-h-[150px] p-3 text-sm border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500 font-mono bg-white"
                             />
                             <div className="flex justify-end gap-2">
                               <Button variant="outline" size="sm" onClick={() => setEditingIndex(null)} className="h-8">
                                 Cancel
                               </Button>
-                              <Button size="sm" onClick={() => handleSaveEdit(index)} className="h-8 bg-blue-600 hover:bg-blue-700">
+                              <Button size="sm" onClick={() => handleSaveEdit(index)} className="h-8 bg-stone-900 hover:bg-stone-950 text-white">
                                 Save Edited Plan
                               </Button>
                             </div>
                           </div>
                         ) : (
                           <div className="relative group">
-                            <div className="prose prose-sm prose-slate max-w-none text-gray-800">
+                            <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-stone-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                 {msg.content}
                               </ReactMarkdown>
@@ -354,17 +352,17 @@ All state changes have been safely committed to the ERP. This thread is now clos
                 </div>
              ))}
              {isLoading && (
-               <div className="flex gap-3 justify-start items-center">
-                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                  </div>
-                 <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>
+               <div className="flex w-full justify-start">
+                 <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm bg-white border border-stone-100 rounded-bl-none flex items-center gap-2 text-stone-600 font-medium h-[38px]">
+                   <Loader2 className="w-4 h-4 animate-spin" />
+                   <ThinkingTimer label="Agent is thinking" />
+                 </div>
                </div>
              )}
              <div ref={messagesEndRef} />
            </div>
            
-           <div className="p-4 border-t border-gray-200 bg-white">
+           <div className="p-4 border-t border-gray-100 bg-white">
               <div className="flex items-center gap-2 mb-4">
                 <input
                   type="text"
@@ -373,9 +371,9 @@ All state changes have been safely committed to the ERP. This thread is now clos
                   onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
                   placeholder="Ask the agent to adjust the plan..."
                   disabled={isLoading}
-                  className="flex-1 min-w-0 px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-stone-500 focus:border-stone-500 block w-full px-5 py-3 pr-12 transition-all disabled:opacity-50"
                 />
-                <Button onClick={handleSend} disabled={!input.trim() || isLoading} className="bg-blue-600 hover:bg-blue-700 rounded-full w-10 h-10 p-0 flex-shrink-0">
+                <Button onClick={handleSend} disabled={!input.trim() || isLoading} className="bg-stone-900 hover:bg-stone-950 text-white rounded-full w-10 h-10 p-0 flex items-center justify-center transition-transform disabled:opacity-50 disabled:hover:scale-100 hover:scale-105">
                   <Send className="w-4 h-4" />
                 </Button>
               </div>

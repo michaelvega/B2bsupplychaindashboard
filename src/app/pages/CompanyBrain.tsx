@@ -163,6 +163,10 @@ export function CompanyBrain() {
     }
   };
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, isGeneratingChat]);
+
   const scanAll = async () => {
     setIsScanning(true);
     const now = new Date().toISOString();
@@ -335,7 +339,7 @@ export function CompanyBrain() {
         <div ref={chatTopRef} className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col h-[700px] ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-indigo-50/30">
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-gray-900">Agent Brain Hub</h2>
+              <h2 className="font-semibold text-gray-900">Spaces</h2>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-400">Connected to Main Agent</span>
