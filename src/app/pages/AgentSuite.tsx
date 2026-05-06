@@ -28,7 +28,13 @@ export interface Task {
   hasBotResponded: boolean;
   isGenerating?: boolean;
   timestamp: number;
+  assignee?: { type: 'human', id: string, name: string, avatar: string } | { type: 'agent', name: string };
 }
+
+export const DUMMY_HUMANS = [
+  { id: 'h1', name: 'Michael Vega', avatar: 'https://i.pravatar.cc/150?u=michael' },
+  { id: 'h2', name: 'Sarah Chen', avatar: 'https://i.pravatar.cc/150?u=sarah' },
+];
 
 export function AgentSuite() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -83,6 +89,7 @@ export function AgentSuite() {
   };
 
   const handleStartConversation = async (task: Task) => {
+    setSelectedTaskId(task.id);
     const userMessage = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
 
     // 1. Optimistic update
@@ -133,6 +140,25 @@ export function AgentSuite() {
     handleDrop(taskId, 'done');
   };
 
+  const handleAssignAgent = (taskId: string) => {
+    let maxAgentId = 0;
+    tasks.forEach(t => {
+      if (t.assignee?.type === 'agent') {
+        const match = t.assignee.name.match(/Agent (\d+)/);
+        if (match) {
+          maxAgentId = Math.max(maxAgentId, parseInt(match[1], 10));
+        }
+      }
+    });
+    const newTasks = tasks.map(t => t.id === taskId ? { ...t, assignee: { type: 'agent' as const, name: `Agent ${maxAgentId + 1}` } } : t);
+    saveTasks(newTasks);
+  };
+
+  const handleAssignHuman = (taskId: string, human: { id: string, name: string, avatar: string }) => {
+    const newTasks = tasks.map(t => t.id === taskId ? { ...t, assignee: { type: 'human' as const, ...human } } : t);
+    saveTasks(newTasks);
+  };
+
   const handleDeleteTask = (taskId: string) => {
     if (confirm("Are you sure you want to delete this task?")) {
       const newTasks = tasks.filter(t => t.id !== taskId);
@@ -145,6 +171,19 @@ export function AgentSuite() {
     setAddModalStatus(status);
     setShowAddModal(true);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (!showAddModal) {
+          openAddModal('todo');
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAddModal]);
 
   if (loading) {
     return (
@@ -231,6 +270,8 @@ export function AgentSuite() {
                   onStart={handleStartConversation}
                   onDone={handleMoveToDone}
                   onAddClick={() => openAddModal('todo')}
+                  onAssignHuman={handleAssignHuman}
+                  onAssignAgent={handleAssignAgent}
                 />
                 <KanbanColumn
                   title="In Progress"
@@ -242,6 +283,8 @@ export function AgentSuite() {
                   onStart={handleStartConversation}
                   onDone={handleMoveToDone}
                   onAddClick={() => openAddModal('doing')}
+                  onAssignHuman={handleAssignHuman}
+                  onAssignAgent={handleAssignAgent}
                 />
                 <KanbanColumn
                   title="Completed"
@@ -253,6 +296,8 @@ export function AgentSuite() {
                   onStart={handleStartConversation}
                   onDone={handleMoveToDone}
                   onAddClick={() => openAddModal('done')}
+                  onAssignHuman={handleAssignHuman}
+                  onAssignAgent={handleAssignAgent}
                 />
               </motion.div>
             ) : (
@@ -275,6 +320,8 @@ export function AgentSuite() {
                     onStart={handleStartConversation}
                     onDone={handleMoveToDone}
                     onAddClick={() => openAddModal(day as any)}
+                    onAssignHuman={handleAssignHuman}
+                    onAssignAgent={handleAssignAgent}
                   />
                 ))}
               </motion.div>
@@ -282,6 +329,23 @@ export function AgentSuite() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Bottom Input Bar */}
+      {!showAddModal && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-3xl z-40 animate-in slide-in-from-bottom-8 duration-500">
+          <div 
+            onClick={() => openAddModal('todo')}
+            className="bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl flex items-center px-8 py-5 cursor-text group hover:bg-white hover:border-indigo-300/50 hover:shadow-[0_8px_30px_rgb(79,70,229,0.12)] transition-all duration-300 ring-1 ring-slate-900/5"
+          >
+            <Bot className="w-6 h-6 text-indigo-500 mr-4 group-hover:scale-110 transition-transform" />
+            <span className="text-slate-500 font-medium text-base tracking-wide">Tell me what agent you want me to build</span>
+            <div className="ml-auto flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+               <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">⌘</span>
+               <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">K</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modals */}
       {showAddModal && (
@@ -334,7 +398,7 @@ export function AgentSuite() {
 // ----------------------------------------------------
 // Kanban Components
 // ----------------------------------------------------
-function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart, onDone, onAddClick }: {
+function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart, onDone, onAddClick, onAssignHuman, onAssignAgent }: {
   title: string,
   icon: React.ReactNode,
   status: Task['status'],
@@ -343,7 +407,9 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart
   onCardClick: (t: Task) => void,
   onStart: (t: Task) => void,
   onDone: (id: string) => void,
-  onAddClick: () => void
+  onAddClick: () => void,
+  onAssignHuman: (taskId: string, h: any) => void,
+  onAssignAgent: (taskId: string) => void
 }) {
   const [{ isOver }, dropRef] = useDrop({
     accept: ITEM_TYPE,
@@ -380,6 +446,8 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart
                onClick={() => onCardClick(task)} 
                onStart={(e) => { e.stopPropagation(); onStart(task); }} 
                onDone={(e) => { e.stopPropagation(); onDone(task.id); }} 
+               onAssignHuman={(h) => onAssignHuman(task.id, h)}
+               onAssignAgent={() => onAssignAgent(task.id)}
              />
            ))}
          </AnimatePresence>
@@ -396,7 +464,8 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart
   );
 }
 
-function TaskCard({ task, onClick, onStart, onDone }: { task: Task, onClick: () => void, onStart: (e: React.MouseEvent) => void, onDone: (e: React.MouseEvent) => void }) {
+function TaskCard({ task, onClick, onStart, onDone, onAssignHuman, onAssignAgent }: { task: Task, onClick: () => void, onStart: (e: React.MouseEvent) => void, onDone: (e: React.MouseEvent) => void, onAssignHuman: (h: any) => void, onAssignAgent: () => void }) {
+  const [isAssigning, setIsAssigning] = useState(false);
   const [{ isDragging }, dragRef] = useDrag({
     type: ITEM_TYPE,
     item: { id: task.id },
@@ -440,36 +509,67 @@ function TaskCard({ task, onClick, onStart, onDone }: { task: Task, onClick: () 
         </div>
       )}
 
-      <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-3 text-[11px] text-slate-400 font-bold uppercase tracking-wider">
-          <div className="flex items-center gap-1.5 hover:text-slate-600 transition-colors" title="Comments">
-            <MessageSquare className="w-3.5 h-3.5" />
-            {task.comments.length}
-          </div>
-          <div className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors" title="Chat Messages">
-            <Bot className="w-3.5 h-3.5 text-indigo-400" />
-            {task.chatHistory.length}
-          </div>
+      <div className="flex items-end justify-between mt-auto">
+        <div className="flex items-center gap-2">
+          {task.assignee?.type === 'human' && (
+            <img src={task.assignee.avatar} alt={task.assignee.name} className="w-7 h-7 rounded-full shadow-sm border border-slate-200" title={task.assignee.name} />
+          )}
+          {task.assignee?.type === 'agent' && (
+            <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 shadow-sm" title={task.assignee.name}>
+              <Bot className="w-3.5 h-3.5" /> {task.assignee.name}
+            </div>
+          )}
         </div>
 
         {task.timestamp && (
-          <div className="text-[10px] text-slate-300 font-medium italic">
+          <div className="text-[10px] text-slate-300 font-medium italic mb-1">
             {new Date(task.timestamp).toLocaleDateString()}
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-2 mt-4 border-t border-slate-100 pt-4">
-        {task.status !== 'done' && (
+        {!task.assignee && !isAssigning && task.status !== 'done' && (
           <Button 
             size="sm" 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-none border-slate-200" 
+            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-slate-50 hover:bg-slate-100 hover:text-slate-700 transition-all shadow-none border-slate-200" 
+            onClick={(e) => { e.stopPropagation(); setIsAssigning(true); }}
+          >
+            Assign Card
+          </Button>
+        )}
+        
+        {!task.assignee && isAssigning && (
+          <div className="flex flex-col gap-1.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-1 px-1">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Assign to</div>
+              <button onClick={() => setIsAssigning(false)} className="text-slate-400 hover:text-slate-600"><X className="w-3 h-3" /></button>
+            </div>
+            {DUMMY_HUMANS.map(h => (
+              <button key={h.id} onClick={() => { onAssignHuman(h); setIsAssigning(false); }} className="flex items-center gap-2.5 hover:bg-white p-1.5 rounded-lg transition-colors text-left text-xs font-semibold text-slate-700 hover:shadow-sm border border-transparent hover:border-slate-200">
+                <img src={h.avatar} alt="" className="w-6 h-6 rounded-full" /> {h.name}
+              </button>
+            ))}
+            <div className="h-px bg-slate-200 my-0.5 mx-1" />
+            <button onClick={() => { onAssignAgent(); setIsAssigning(false); }} className="flex items-center gap-2.5 hover:bg-white p-1.5 rounded-lg transition-colors text-left text-xs font-semibold text-indigo-700 hover:shadow-sm border border-transparent hover:border-indigo-100">
+              <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0"><Bot className="w-3.5 h-3.5 text-indigo-600" /></div>
+              Assign to Agent
+            </button>
+          </div>
+        )}
+
+        {task.assignee?.type === 'agent' && task.status !== 'done' && (
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-none border-indigo-200" 
             onClick={onStart}
           >
             <Play className="w-3 h-3 fill-current" /> Execute Agent
           </Button>
         )}
+
         {task.status === 'doing' && task.hasBotResponded && (
           <Button 
             size="sm" 
@@ -499,35 +599,16 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  
-  // Drag state
-  const [position, setPosition] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 - 336 : 100, y: typeof window !== 'undefined' ? window.innerHeight / 2 - 350 : 100 });
-  const [isDraggingModal, setIsDraggingModal] = useState(false);
-  const dragOffset = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory, isGenerating]);
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest('button')) return;
-    if ((e.target as HTMLElement).closest('.drag-handle')) {
-      setIsDraggingModal(true);
-      dragOffset.current = { x: e.clientX - position.x, y: e.clientY - position.y };
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    }
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (isDraggingModal) setPosition({ x: e.clientX - dragOffset.current.x, y: e.clientY - dragOffset.current.y });
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (isDraggingModal) {
-      setIsDraggingModal(false);
-      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-    }
-  };
+  // Focus input automatically
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, []);
 
   const handleSendChat = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -591,22 +672,16 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
   };
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-in fade-in duration-200">
       <div 
-        className="absolute pointer-events-auto bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200"
-        style={{ left: position.x, top: position.y, width: '672px', height: '80vh', maxHeight: '800px', minHeight: '500px' }}
+        className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 w-full max-w-3xl h-[85vh] max-h-[800px] min-h-[500px] animate-in zoom-in-95 slide-in-from-bottom-10 duration-300"
       >
-        <div 
-          className="drag-handle px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0 cursor-move"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-        >
-          <h2 className="text-lg font-semibold text-gray-900 pointer-events-none">
+        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <Bot className="w-5 h-5 text-indigo-600" />
             Create New Task
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors cursor-pointer pointer-events-auto">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -641,6 +716,7 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
         <div className="p-4 border-t border-gray-200 bg-white flex flex-col gap-3 shrink-0">
           <div className="relative">
             <textarea 
+              ref={inputRef}
               value={chatInput} 
               onChange={e => setChatInput(e.target.value)} 
               onKeyDown={(e) => {
