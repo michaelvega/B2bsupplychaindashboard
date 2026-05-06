@@ -361,17 +361,20 @@ export function CompanyBrain() {
                       <p className="whitespace-pre-wrap">{msg.content}</p>
                     </div>
                   ) : (
-                    <div className="flex w-full justify-start relative group pl-2">
+                    <div className="flex flex-col w-full justify-start relative group pl-2">
                       <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                       </div>
-                      <button 
-                        onClick={() => downloadAsWord(msg.content, 'Report')}
-                        className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
-                        title="Download as Word"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
+                      <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity self-start">
+                        <button 
+                          onClick={() => downloadAsWord(msg.content, 'Report')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm transition-all hover:bg-gray-50"
+                          title="Download as Word"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          Download
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -111,7 +111,7 @@ export function LandingPage() {
             {t('landing.title')}
           </h1>
           <button
-            onClick={() => navigate('/demo')}
+            onClick={() => navigate('/agent-suite')}
             className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4 px-8 rounded-lg flex items-center gap-2 transition-colors text-lg shadow-xl shadow-blue-900/20"
           >
             {t('landing.enterDemo')}
@@ -398,7 +398,7 @@ export function LandingPage() {
 
         <div className="text-center pt-8 pb-16">
           <button
-            onClick={() => navigate('/demo')}
+            onClick={() => navigate('/agent-suite')}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-10 rounded-lg inline-flex items-center gap-2 transition-colors text-lg shadow-lg"
           >
             {t('landing.launchDashboard')}

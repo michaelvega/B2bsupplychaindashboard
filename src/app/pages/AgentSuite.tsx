@@ -351,9 +351,9 @@ export function AgentSuite() {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-3xl z-40 animate-in slide-in-from-bottom-8 duration-500">
           <div 
             onClick={() => openAddModal('todo')}
-            className="bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl flex items-center px-8 py-5 cursor-text group hover:bg-white hover:border-indigo-300/50 hover:shadow-[0_8px_30px_rgb(79,70,229,0.12)] transition-all duration-300 ring-1 ring-slate-900/5"
+            className="bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl flex items-center px-8 py-5 cursor-text group hover:bg-white hover:border-indigo-300/50 hover:shadow-[0_8px_30px_rgb(79,70,229,0.12)] transition-all duration-300 ring-1 ring-slate-900/5 w-full"
           >
-            <div className="relative group flex items-center">
+            <div className="relative group flex items-center justify-between w-full">
               <span className="text-slate-500 font-medium text-base tracking-wide">Tell me what agent you want me to build</span>
               <div className="ml-auto flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                 <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">⌘</span>
@@ -691,17 +691,20 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
                   <p className="whitespace-pre-wrap">{msg.content}</p>
                 </div>
               ) : (
-                <div className="flex w-full justify-start relative group pl-2">
+                <div className="flex flex-col w-full justify-start relative group pl-2">
                   <div className="prose prose-lg max-w-none w-full text-[#111827] prose-p:my-2 prose-headings:my-2 prose-p:leading-[2.1] prose-li:leading-[2.1] prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                   </div>
-                  <button 
-                    onClick={() => downloadAsWord(msg.content, 'Report')}
-                    className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
-                    title="Download as Word"
-                  >
-                    <Download className="w-4 h-4" />
-                  </button>
+                  <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity self-start">
+                    <button 
+                      onClick={() => downloadAsWord(msg.content, 'Report')}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm transition-all hover:bg-gray-50"
+                      title="Download as Word"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Download
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -829,17 +832,20 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
                         <p className="whitespace-pre-wrap">{msg.content}</p>
                       </div>
                     ) : (
-                      <div className="flex w-full justify-start relative group pl-2">
+                      <div className="flex flex-col w-full justify-start relative group pl-2">
                         <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                         </div>
-                        <button 
-                          onClick={() => downloadAsWord(msg.content, 'Report')}
-                          className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
-                          title="Download as Word"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
+                        <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity self-start">
+                          <button 
+                            onClick={() => downloadAsWord(msg.content, 'Report')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm transition-all hover:bg-gray-50"
+                            title="Download as Word"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            Download
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>

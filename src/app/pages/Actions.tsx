@@ -373,13 +373,16 @@ export function Actions() {
                           </ReactMarkdown>
                         </div>
                         
-                        <button 
-                          onClick={() => downloadAsWord(msg.content, 'Report')}
-                          className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
-                          title="Download as Word"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
+                        <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => downloadAsWord(msg.content, 'Report')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm transition-all hover:bg-gray-50"
+                            title="Download as Word"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            Download
+                          </button>
+                        </div>
 
                         {/* Approve/Deny Action Buttons */}
                         {index === messages.length - 1 && msg.role === 'agent' && msg.content.includes('Approve/Deny') && (

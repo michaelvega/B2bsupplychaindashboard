@@ -28,9 +28,9 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   const mainNavItems = [
-    { path: '/command-center', label: 'Assistant', icon: Terminal },
     { path: '/agent-suite', label: 'Daily Tasks', icon: Calendar },
     { path: '/company-brain', label: 'Company Brain', icon: Brain },
+    { path: '/command-center', label: 'Assistant', icon: Terminal },
   ];
 
   const backlogNavItems = [
