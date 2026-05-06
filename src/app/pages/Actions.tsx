@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Send, Loader2, Bot, Plus, MessageSquare, MoreHorizontal, PenLine, Trash2, Share, Check } from 'lucide-react';
+import { marked } from 'marked';
+import { Send, Loader2, Bot, Plus, MessageSquare, MoreHorizontal, PenLine, Trash2, Share, Check, Download } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useNavigate, useParams } from 'react-router';
 import { ThinkingTimer } from '../components/ThinkingTimer';
@@ -19,6 +20,21 @@ interface ChatSession {
 }
 
 const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+
+const downloadAsWord = async (text: string, title: string) => {
+  const htmlContent = await marked.parse(text);
+  const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+  const footer = "</body></html>";
+  const html = header + htmlContent + footer;
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${title}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 export function Actions() {
   const { chatId } = useParams();
@@ -300,7 +316,6 @@ export function Actions() {
           <div className="max-w-3xl mx-auto space-y-6">
             {!currentChat || messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-500">
-                <Bot className="w-16 h-16 mb-6 text-gray-300" />
                 <h1 className="text-2xl font-semibold text-gray-800 mb-2">Agent Command Center</h1>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10 w-full max-w-2xl">
@@ -329,12 +344,9 @@ export function Actions() {
                       <div className="whitespace-pre-wrap text-base">{msg.content}</div>
                     </div>
                   ) : (
-                    <div className="flex w-full text-base leading-relaxed text-gray-800 gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Bot className="w-5 h-5 text-blue-600" />
-                      </div>
+                    <div className="flex w-full text-base leading-relaxed text-gray-800 gap-4 relative group">
                       <div className="flex-1 min-w-0">
-                        <div className="prose prose-slate max-w-none prose-p:leading-relaxed prose-pre:bg-gray-50 prose-pre:border prose-pre:border-gray-200">
+                        <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                           <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             components={{
@@ -361,6 +373,14 @@ export function Actions() {
                           </ReactMarkdown>
                         </div>
                         
+                        <button 
+                          onClick={() => downloadAsWord(msg.content, 'Report')}
+                          className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
+                          title="Download as Word"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+
                         {/* Approve/Deny Action Buttons */}
                         {index === messages.length - 1 && msg.role === 'agent' && msg.content.includes('Approve/Deny') && (
                           <div className="flex gap-3 mt-6">
@@ -380,9 +400,6 @@ export function Actions() {
             )}
             {isLoading && (
               <div className="flex w-full gap-4 mb-8 justify-start">
-                <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center flex-shrink-0 mt-1">
-                  <Bot className="w-5 h-5 text-blue-600" />
-                </div>
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
                   <span className="text-gray-500 text-sm font-medium"><ThinkingTimer /></span>

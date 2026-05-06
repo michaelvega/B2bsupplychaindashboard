@@ -1,12 +1,28 @@
 import { useState, useEffect, useRef } from 'react';
-import { Brain, RefreshCw, Database, Mail, FolderOpen, CheckCircle, XCircle, Clock, Paperclip, FileSpreadsheet, FileText, Folder, AlertTriangle, MessageSquare, Send, Bot, Loader2 } from 'lucide-react';
+import { Brain, RefreshCw, Database, Mail, FolderOpen, CheckCircle, XCircle, Clock, Paperclip, FileSpreadsheet, FileText, Folder, AlertTriangle, MessageSquare, Send, Bot, Loader2, Download } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { marked } from 'marked';
 import { ThinkingTimer } from '../components/ThinkingTimer';
 
 const ERP_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/erp-data-lake';
 const COMPOSIO_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/composio';
+
+const downloadAsWord = async (text: string, title: string) => {
+  const htmlContent = await marked.parse(text);
+  const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+  const footer = "</body></html>";
+  const html = header + htmlContent + footer;
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${title}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 const CACHE_ERP = '/api/azure/localdata/erp-data.json';
 const CACHE_EMAILS = '/api/azure/localdata/emails.json';
@@ -316,10 +332,9 @@ export function CompanyBrain() {
         )}
 
         {/* ── AGENT CHAT ── */}
-        <div ref={chatTopRef} className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col h-[500px] ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
+        <div ref={chatTopRef} className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col h-[700px] ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-indigo-50/30">
             <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-indigo-600" />
               <h2 className="font-semibold text-gray-900">Agent Brain Hub</h2>
             </div>
             <div className="flex items-center gap-2">
@@ -327,8 +342,9 @@ export function CompanyBrain() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-gray-50/30">
-            {chatHistory.length === 0 ? (
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col bg-gray-50/30">
+            <div className="max-w-3xl mx-auto w-full flex flex-col gap-4">
+              {chatHistory.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
                 <MessageSquare className="w-8 h-8 opacity-20" />
                 <p className="text-sm">Ask anything about your company data...</p>
@@ -336,18 +352,24 @@ export function CompanyBrain() {
             ) : (
               chatHistory.map((msg, i) => (
                 <div key={i} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${msg.role === 'user'
-                    ? 'bg-indigo-600 text-white rounded-br-none'
-                    : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'
-                    }`}>
-                    {msg.role === 'user' ? (
+                  {msg.role === 'user' ? (
+                    <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
                       <p className="whitespace-pre-wrap">{msg.content}</p>
-                    ) : (
-                      <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-gray-800 prose-pre:text-gray-100">
+                    </div>
+                  ) : (
+                    <div className="flex w-full justify-start relative group pl-2">
+                      <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                       </div>
-                    )}
-                  </div>
+                      <button 
+                        onClick={() => downloadAsWord(msg.content, 'Report')}
+                        className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
+                        title="Download as Word"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}
@@ -360,15 +382,16 @@ export function CompanyBrain() {
               </div>
             )}
             <div ref={chatEndRef} />
+            </div>
           </div>
 
-          <div className="p-4 border-t border-gray-100 bg-white">
+          <div className="p-4 border-t border-gray-100 bg-white flex justify-center">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSendChat();
               }}
-              className="relative flex items-center gap-2"
+              className="relative flex items-center gap-2 w-full max-w-3xl"
             >
               <input
                 type="text"

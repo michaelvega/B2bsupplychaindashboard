@@ -4,18 +4,34 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, 
   Image as ImageIcon, Trash2, Layout, Calendar, CheckCircle2, ListTodo, Activity,
-  ChevronRight, MoreHorizontal
+  ChevronRight, MoreHorizontal, Download, FileText
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { cn } from '../components/ui/utils';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { marked } from 'marked';
 import { ThinkingTimer } from '../components/ThinkingTimer';
 
 const ITEM_TYPE = 'TASK_CARD';
 const AZURE_FILE = 'agent-tasks.json';
 const WEEKLY_FILE = 'weekly-agent-tasks.json';
 const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+
+const downloadAsWord = async (text: string, title: string) => {
+  const htmlContent = await marked.parse(text);
+  const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+  const footer = "</body></html>";
+  const html = header + htmlContent + footer;
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${title}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 export interface Task {
   id: string;
@@ -337,11 +353,12 @@ export function AgentSuite() {
             onClick={() => openAddModal('todo')}
             className="bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl flex items-center px-8 py-5 cursor-text group hover:bg-white hover:border-indigo-300/50 hover:shadow-[0_8px_30px_rgb(79,70,229,0.12)] transition-all duration-300 ring-1 ring-slate-900/5"
           >
-            <Bot className="w-6 h-6 text-indigo-500 mr-4 group-hover:scale-110 transition-transform" />
-            <span className="text-slate-500 font-medium text-base tracking-wide">Tell me what agent you want me to build</span>
-            <div className="ml-auto flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-               <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">⌘</span>
-               <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">K</span>
+            <div className="relative group flex items-center">
+              <span className="text-slate-500 font-medium text-base tracking-wide">Tell me what agent you want me to build</span>
+              <div className="ml-auto flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">⌘</span>
+                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1.5 rounded-md border border-slate-200">K</span>
+              </div>
             </div>
           </div>
         </div>
@@ -482,104 +499,85 @@ function TaskCard({ task, onClick, onStart, onDone, onAssignHuman, onAssignAgent
       ref={dragRef as any}
       onClick={onClick}
       className={cn(
-        "bg-white rounded-xl p-4 cursor-pointer transition-all border border-slate-200 shadow-[0_2px_4px_rgba(0,0,0,0.02),0_1px_1px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.08),0_4px_8px_-2px_rgba(0,0,0,0.04)] flex flex-col relative group overflow-hidden",
+        "bg-[#FAFAFA] rounded-xl cursor-pointer transition-all border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex flex-col relative group overflow-hidden min-h-[280px]",
         isDragging && "opacity-40 grayscale"
       )}
     >
-      {/* Status Bar */}
-      <div className={cn(
-        "absolute top-0 left-0 w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity",
-        task.status === 'done' ? "bg-emerald-500" : task.status === 'doing' ? "bg-amber-500" : "bg-indigo-500"
-      )} />
-
-      <div className="flex items-start justify-between mb-2.5">
-        <h3 className="font-bold text-slate-900 leading-snug flex-1 group-hover:text-indigo-600 transition-colors">
-          {task.title}
-        </h3>
-        <MoreHorizontal className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+      {/* Top Header exactly like Harvey */}
+      <div className="flex items-center gap-2 px-5 py-3.5 border-b border-gray-100 bg-white shrink-0">
+        <FileText className="w-[18px] h-[18px] text-gray-400" />
+        <span className="text-[14px] font-medium text-gray-500 capitalize tracking-tight">{task.status.replace('todo', 'To Do')}</span>
       </div>
 
-      <p className="text-[13px] text-slate-500 line-clamp-2 mb-4 leading-relaxed font-medium">
-        {task.description}
-      </p>
+      {/* Main Body */}
+      <div className="flex flex-col flex-1 p-5 pb-6">
+        <div className="flex-1"></div>
+        
+        {task.assignee?.type === 'agent' && (
+          <span className="text-[14px] font-medium text-[#9CA3AF] mb-2">{task.assignee.name}</span>
+        )}
+        <h3 className="text-[20px] font-medium text-[#1F2937] leading-tight tracking-tight">
+          {task.title}
+        </h3>
+        
+        {task.assignee?.type === 'human' && (
+          <div className="mt-4">
+            <img src={task.assignee.avatar} alt={task.assignee.name} className="w-6 h-6 rounded-full shadow-sm border border-gray-200" title={task.assignee.name} />
+          </div>
+        )}
+      </div>
 
-      {task.image && (
-        <div className="w-full h-32 mb-4 rounded-lg overflow-hidden border border-slate-100 shadow-inner group-hover:border-slate-200 transition-colors">
-          <img src={task.image} alt="Task attachment" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+      {!task.assignee && (
+        <div className="px-5 pb-5">
+          {isAssigning ? (
+            <div className="flex flex-col gap-1 p-2 bg-white rounded-lg border border-gray-200 shadow-sm animate-in fade-in zoom-in-95" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-1 px-1">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Assign to</div>
+                <button onClick={() => setIsAssigning(false)} className="text-gray-400 hover:text-gray-600"><X className="w-3 h-3" /></button>
+              </div>
+              {DUMMY_HUMANS.map(h => (
+                <button key={h.id} onClick={() => { onAssignHuman(h); setIsAssigning(false); }} className="flex items-center gap-2 hover:bg-gray-50 p-1.5 rounded transition-colors text-left text-xs font-semibold text-gray-700">
+                  <img src={h.avatar} alt="" className="w-5 h-5 rounded-full" /> {h.name}
+                </button>
+              ))}
+              <div className="h-px bg-gray-100 my-0.5 mx-1" />
+              <button onClick={() => { onAssignAgent(); setIsAssigning(false); }} className="flex items-center gap-2 hover:bg-gray-50 p-1.5 rounded transition-colors text-left text-xs font-semibold text-gray-700">
+                <div className="w-5 h-5 flex items-center justify-center shrink-0"><FileText className="w-4 h-4 text-gray-400" /></div>
+                Assign to Agent
+              </button>
+            </div>
+          ) : (
+            <Button size="sm" variant="ghost" className="w-full text-[12px] font-semibold text-gray-400 hover:text-gray-600 hover:bg-gray-100" onClick={(e) => { e.stopPropagation(); setIsAssigning(true); }}>
+              Assign Task
+            </Button>
+          )}
         </div>
       )}
 
-      <div className="flex items-end justify-between mt-auto">
-        <div className="flex items-center gap-2">
-          {task.assignee?.type === 'human' && (
-            <img src={task.assignee.avatar} alt={task.assignee.name} className="w-7 h-7 rounded-full shadow-sm border border-slate-200" title={task.assignee.name} />
-          )}
-          {task.assignee?.type === 'agent' && (
-            <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 shadow-sm" title={task.assignee.name}>
-              <Bot className="w-3.5 h-3.5" /> {task.assignee.name}
-            </div>
-          )}
-        </div>
-
-        {task.timestamp && (
-          <div className="text-[10px] text-slate-300 font-medium italic mb-1">
-            {new Date(task.timestamp).toLocaleDateString()}
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-2 mt-4 border-t border-slate-100 pt-4">
-        {!task.assignee && !isAssigning && task.status !== 'done' && (
+      {task.assignee?.type === 'agent' && task.status !== 'done' && task.chatHistory.length === 0 && (
+        <div className="px-5 pb-5">
           <Button 
             size="sm" 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-slate-50 hover:bg-slate-100 hover:text-slate-700 transition-all shadow-none border-slate-200" 
-            onClick={(e) => { e.stopPropagation(); setIsAssigning(true); }}
-          >
-            Assign Card
-          </Button>
-        )}
-        
-        {!task.assignee && isAssigning && (
-          <div className="flex flex-col gap-1.5 p-2.5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-1 px-1">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Assign to</div>
-              <button onClick={() => setIsAssigning(false)} className="text-slate-400 hover:text-slate-600"><X className="w-3 h-3" /></button>
-            </div>
-            {DUMMY_HUMANS.map(h => (
-              <button key={h.id} onClick={() => { onAssignHuman(h); setIsAssigning(false); }} className="flex items-center gap-2.5 hover:bg-white p-1.5 rounded-lg transition-colors text-left text-xs font-semibold text-slate-700 hover:shadow-sm border border-transparent hover:border-slate-200">
-                <img src={h.avatar} alt="" className="w-6 h-6 rounded-full" /> {h.name}
-              </button>
-            ))}
-            <div className="h-px bg-slate-200 my-0.5 mx-1" />
-            <button onClick={() => { onAssignAgent(); setIsAssigning(false); }} className="flex items-center gap-2.5 hover:bg-white p-1.5 rounded-lg transition-colors text-left text-xs font-semibold text-indigo-700 hover:shadow-sm border border-transparent hover:border-indigo-100">
-              <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0"><Bot className="w-3.5 h-3.5 text-indigo-600" /></div>
-              Assign to Agent
-            </button>
-          </div>
-        )}
-
-        {task.assignee?.type === 'agent' && task.status !== 'done' && (
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="w-full flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-none border-indigo-200" 
+            className="w-full bg-indigo-50/50 text-indigo-600 hover:bg-indigo-50 border-indigo-100 shadow-none text-[11px] font-bold tracking-widest uppercase transition-all" 
             onClick={onStart}
           >
-            <Play className="w-3 h-3 fill-current" /> Execute Agent
+            <Play className="w-3 h-3 mr-2" /> Execute Agent
           </Button>
-        )}
-
-        {task.status === 'doing' && task.hasBotResponded && (
+        </div>
+      )}
+      
+      {task.status === 'doing' && task.hasBotResponded && (
+        <div className="px-5 pb-5">
           <Button 
             size="sm" 
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 shadow-lg flex items-center justify-center gap-2 h-9 text-[11px] font-bold uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98]" 
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all" 
             onClick={onDone}
           >
             <CheckCircle2 className="w-3.5 h-3.5" /> Finalize Task
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -678,7 +676,6 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
       >
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
           <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <Bot className="w-5 h-5 text-indigo-600" />
             Create New Task
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors cursor-pointer">
@@ -689,18 +686,24 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
         <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50">
           {chatHistory.map((msg, i) => (
             <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
-              <div className={cn(
-                "max-w-[85%] rounded-2xl px-5 py-3 text-sm shadow-sm",
-                msg.role === 'user' ? "bg-blue-600 text-white rounded-br-none" : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
-              )}>
-                {msg.role === 'user' ? (
+              {msg.role === 'user' ? (
+                <div className="max-w-[85%] rounded-2xl px-5 py-3 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
                   <p className="whitespace-pre-wrap">{msg.content}</p>
-                ) : (
-                  <div className="prose prose-sm max-w-none">
+                </div>
+              ) : (
+                <div className="flex w-full justify-start relative group pl-2">
+                  <div className="prose prose-lg max-w-none w-full text-[#111827] prose-p:my-2 prose-headings:my-2 prose-p:leading-[2.1] prose-li:leading-[2.1] prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                   </div>
-                )}
-              </div>
+                  <button 
+                    onClick={() => downloadAsWord(msg.content, 'Report')}
+                    className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
+                    title="Download as Word"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           ))}
           {isGenerating && (
@@ -825,7 +828,6 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
         <div className="flex-1 flex flex-col h-full bg-white relative">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white z-10 shadow-sm shrink-0">
             <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              <Bot className="w-5 h-5 text-blue-600" />
               Agent Thread
             </h3>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors">
@@ -836,7 +838,6 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
           <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50">
             {task.chatHistory.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
-                <Bot className="w-12 h-12 text-gray-300" />
                 <p>No conversation yet. Send a message to start.</p>
                 <Button onClick={() => {
                   const initialMsg = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
@@ -849,18 +850,24 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
             ) : (
               task.chatHistory.map((msg, i) => (
                 <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
-                  <div className={cn(
-                    "max-w-[80%] rounded-2xl px-5 py-3 text-sm shadow-sm",
-                    msg.role === 'user' ? "bg-blue-600 text-white rounded-br-none" : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"
-                  )}>
-                    {msg.role === 'user' ? (
+                  {msg.role === 'user' ? (
+                    <div className="max-w-[85%] rounded-2xl px-5 py-3 text-sm bg-gray-100 text-gray-900 rounded-br-none shadow-sm">
                       <p className="whitespace-pre-wrap">{msg.content}</p>
-                    ) : (
-                      <div className="prose prose-sm max-w-none">
+                    </div>
+                  ) : (
+                    <div className="flex w-full justify-start relative group pl-2">
+                      <div className="prose prose-lg font-sans tracking-tight max-w-none w-full text-[#111827] prose-p:leading-[2.1] prose-p:text-[17px] prose-li:text-[17px] prose-li:leading-[2.1] prose-headings:font-semibold prose-a:text-blue-600 prose-pre:bg-gray-800 prose-pre:text-gray-100">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                       </div>
-                    )}
-                  </div>
+                      <button 
+                        onClick={() => downloadAsWord(msg.content, 'Report')}
+                        className="absolute -top-1 -right-2 opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded shadow-sm border border-gray-200"
+                        title="Download as Word"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}
