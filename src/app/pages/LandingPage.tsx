@@ -58,7 +58,7 @@ const DataFlowDiagram = () => {
       </div>
 
       <div className="absolute p-5 py-4 rounded-xl flex flex-col items-center justify-center z-10 font-semibold shadow-md bg-slate-900 border border-slate-700 text-white animate-hub-pulse text-center" style={{ top: '40px', left: '335px', width: '230px' }}>
-        <img src="/procept-logo.jpg" alt="Procept Logo" className="w-10 h-10 mb-2 rounded-full object-cover mix-blend-screen" />
+        <Brain className="w-7 h-7 mb-1 text-blue-400" />
         {t('landing.diagram.procept')}
         <span className="block text-sm font-normal mt-0.5 text-slate-400 leading-tight">{t('landing.diagram.validation')}</span>
       </div>
