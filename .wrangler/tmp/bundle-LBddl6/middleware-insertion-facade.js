@@ -1,8 +1,8 @@
-				import worker, * as OTHER_EXPORTS from "/Users/silibama/Documents/B2bsupplychaindashboard-main/.wrangler/tmp/pages-h62L4g/functionsWorker-0.7142548150365928.mjs";
+				import worker, * as OTHER_EXPORTS from "/Users/silibama/Documents/B2bsupplychaindashboard-main/.wrangler/tmp/pages-SQSKv5/functionsWorker-0.5252038886840094.mjs";
 				import * as __MIDDLEWARE_0__ from "/Users/silibama/.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts";
 import * as __MIDDLEWARE_1__ from "/Users/silibama/.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts";
 
-				export * from "/Users/silibama/Documents/B2bsupplychaindashboard-main/.wrangler/tmp/pages-h62L4g/functionsWorker-0.7142548150365928.mjs";
+				export * from "/Users/silibama/Documents/B2bsupplychaindashboard-main/.wrangler/tmp/pages-SQSKv5/functionsWorker-0.5252038886840094.mjs";
 				const MIDDLEWARE_TEST_INJECT = "__INJECT_FOR_TESTING_WRANGLER_MIDDLEWARE__";
 				export const __INTERNAL_WRANGLER_MIDDLEWARE__ = [
 					
