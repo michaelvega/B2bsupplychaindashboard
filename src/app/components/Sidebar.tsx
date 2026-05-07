@@ -57,10 +57,10 @@ export function Sidebar() {
       {/* Header */}
       <div className={cn('p-4 border-b border-gray-200 flex items-center', collapsed ? 'justify-center' : 'justify-between gap-2')}>
         {collapsed ? (
-          <ProceptLogo size={24} />
+          <img src="/procept-logo-light.jpg" alt="Procept Logo" className="w-7 h-7 rounded-full object-cover shrink-0" />
         ) : (
           <div className="flex items-center gap-2 min-w-0">
-            <ProceptLogo size={22} />
+            <img src="/procept-logo-light.jpg" alt="Procept Logo" className="w-7 h-7 rounded-full object-cover shrink-0" />
             <h1 className="font-semibold text-lg leading-none truncate">Procept</h1>
           </div>
         )}
