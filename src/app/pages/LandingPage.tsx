@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { ArrowRight, Bot, Target, Zap, Link, ShieldCheck, LineChart, Factory, Store, Settings, Brain } from 'lucide-react';
+import { ArrowRight, Bot, Target, Zap, Link, ShieldCheck, LineChart, Factory, Store, Settings, Brain, Check } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 
 const ProceptLogo = ({ className }: { className?: string }) => (
@@ -119,7 +119,7 @@ export function LandingPage() {
                 <ArrowRight className="w-5 h-5" />
               </a>
               <button
-                onClick={() => navigate('/agent-suite')}
+                onClick={() => navigate('/daily-brief')}
                 className="bg-white/10 hover:bg-white/20 text-slate-200 font-semibold py-3 px-6 rounded-lg inline-flex items-center gap-2 transition-colors text-base border border-white/20 w-fit backdrop-blur-sm"
               >
                 Try Interactive Demo
@@ -314,9 +314,76 @@ export function LandingPage() {
               <p className="text-slate-700 md:text-lg font-medium leading-relaxed">
                 {t('landing.govDesc')}
               </p>
+              <div className="mt-5 inline-flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200/60 shadow-sm w-fit">
+                <div className="p-1 rounded-full bg-green-100 text-green-600 shrink-0 mt-0.5">
+                  <Check className="w-4 h-4" />
+                </div>
+                <p className="text-sm font-medium text-slate-800 leading-snug text-left max-w-lg">
+                  We can install on your own VPC completely on your infrastructure. Zero data exfiltration—your data never touches a Procept server, and we never train models on your data.
+                </p>
+              </div>
             </div>
           </div>
 
+          {/* Claude Code Section */}
+          <div className="mt-12 bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-50 rounded-full blur-[60px] -ml-20 -mb-20 pointer-events-none"></div>
+            
+            <div className="relative z-10">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+                <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl shrink-0 shadow-sm">
+                  <Bot className="w-8 h-8 text-blue-600" />
+                </div>
+                <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+                  How Does Procept Integrate with Claude Code?
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <h3 className="text-lg font-semibold text-slate-900">Direct ERP Integration</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    Procept includes an out-of-the-box SAP skill that integrates directly with your ERP, perfectly complementing Claude Code's capabilities.
+                  </p>
+                </div>
+                
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <h3 className="text-lg font-semibold text-slate-900">Zero IT Distractions</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    Maintain focus on core competencies. Procept provides the necessary infrastructure immediately, saving your IT team months of custom internal tool development.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <h3 className="text-lg font-semibold text-slate-900">Built for Operations</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    Designed specifically for supply chain professionals. We deliver a tailored, autonomous user interface that does not require a bit of code or engineering to automate high impact workflows.
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <h3 className="text-lg font-semibold text-slate-900">Breaking Down Silos</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    Data silos limit AI effectiveness. Our Enterprise Search unifies your data in one accessible location, significantly uplifting our AI coworker and others like Claude Code.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </section>
 
@@ -402,7 +469,7 @@ export function LandingPage() {
 
         <div className="text-center pt-8 pb-16">
           <button
-            onClick={() => navigate('/agent-suite')}
+            onClick={() => navigate('/daily-brief')}
             className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold py-4 px-10 rounded-lg inline-flex items-center gap-2 transition-colors text-lg shadow-lg"
           >
             {t('landing.launchDashboard')}

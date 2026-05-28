@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Loader2, Plus, MessageSquare, Clock, Play, CheckCircle, Bot, X, Send, 
   Image as ImageIcon, Trash2, Layout, Calendar, CheckCircle2, ListTodo, Activity,
-  ChevronRight, MoreHorizontal, Download, FileText
+  ChevronRight, MoreHorizontal, Download, FileText, RefreshCw
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { cn } from '../components/ui/utils';
@@ -111,7 +111,7 @@ export function AgentSuite() {
     // 1. Optimistic update
     const updatedTasks = tasks.map(t => {
       if (t.id === task.id) {
-        return { ...t, chatHistory: [...t.chatHistory, { role: 'user' as const, content: userMessage }], isGenerating: true };
+        return { ...t, status: 'doing' as const, chatHistory: [...t.chatHistory, { role: 'user' as const, content: userMessage }], isGenerating: true };
       }
       return t;
     });
@@ -133,6 +133,7 @@ export function AgentSuite() {
         if (t.id === task.id) {
           return {
             ...t,
+            status: 'done' as const,
             chatHistory: [...t.chatHistory, { role: 'agent' as const, content: responseText }],
             hasBotResponded: true,
             isGenerating: false
@@ -274,46 +275,13 @@ export function AgentSuite() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="flex gap-8"
+                className="w-full flex justify-center"
               >
-                <KanbanColumn
-                  title="To Do"
-                  icon={<ListTodo className="w-4 h-4" />}
-                  status="todo"
-                  tasks={tasks.filter(t => t.status === 'todo')}
-                  onDrop={handleDrop}
+                <DailyTaskGrid 
+                  tasks={tasks}
                   onCardClick={t => setSelectedTaskId(t.id)}
                   onStart={handleStartConversation}
-                  onDone={handleMoveToDone}
                   onAddClick={() => openAddModal('todo')}
-                  onAssignHuman={handleAssignHuman}
-                  onAssignAgent={handleAssignAgent}
-                />
-                <KanbanColumn
-                  title="In Progress"
-                  icon={<Activity className="w-4 h-4" />}
-                  status="doing"
-                  tasks={tasks.filter(t => t.status === 'doing')}
-                  onDrop={handleDrop}
-                  onCardClick={t => setSelectedTaskId(t.id)}
-                  onStart={handleStartConversation}
-                  onDone={handleMoveToDone}
-                  onAddClick={() => openAddModal('doing')}
-                  onAssignHuman={handleAssignHuman}
-                  onAssignAgent={handleAssignAgent}
-                />
-                <KanbanColumn
-                  title="Completed"
-                  icon={<CheckCircle2 className="w-4 h-4" />}
-                  status="done"
-                  tasks={tasks.filter(t => t.status === 'done')}
-                  onDrop={handleDrop}
-                  onCardClick={t => setSelectedTaskId(t.id)}
-                  onStart={handleStartConversation}
-                  onDone={handleMoveToDone}
-                  onAddClick={() => openAddModal('done')}
-                  onAssignHuman={handleAssignHuman}
-                  onAssignAgent={handleAssignAgent}
                 />
               </motion.div>
             ) : (
@@ -771,6 +739,18 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20 rounded-t-2xl">
           <h2 className="font-semibold text-lg">{task.title}</h2>
           <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                if (confirm("Are you sure you want to reset this task to TODO? This will clear its progress and chat history.")) {
+                  onUpdate({ ...task, status: 'todo', chatHistory: [], isGenerating: false, hasBotResponded: false });
+                  onClose();
+                }
+              }} 
+              className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-orange-200" 
+              title="Reset to TODO"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Reset to TODO
+            </button>
             <button onClick={onDelete} className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-red-200" title="Delete Task">
               <Trash2 className="w-3.5 h-3.5" /> Delete
             </button>
@@ -885,5 +865,133 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
         </div>
       </div>
     </div>
+  );
+}
+
+// ----------------------------------------------------
+// Daily View Row-Based Components
+// ----------------------------------------------------
+
+function DailyTaskGrid({ tasks, onCardClick, onStart, onAddClick }: any) {
+  const dailyTasks = tasks.filter((t: Task) => ['todo', 'doing', 'done'].includes(t.status));
+  
+  return (
+    <div className="relative flex flex-col w-full max-w-6xl mx-auto h-full px-4">
+      {/* Background Columns to recreate Kanban look */}
+      <div className="absolute inset-x-4 top-0 bottom-0 grid grid-cols-3 gap-8 pointer-events-none z-0 pb-20">
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
+      </div>
+
+      {/* Headers */}
+      <div className="grid grid-cols-3 gap-8 mb-6 shrink-0 relative z-10 pt-4">
+         <div className="flex items-center gap-2.5 px-2">
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><ListTodo className="w-4 h-4" /></div>
+           <h2 className="font-bold text-slate-800 text-sm tracking-tight">To Do</h2>
+         </div>
+         <div className="flex items-center gap-2.5 px-2">
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><Activity className="w-4 h-4" /></div>
+           <h2 className="font-bold text-slate-800 text-sm tracking-tight">In Progress</h2>
+         </div>
+         <div className="flex items-center gap-2.5 px-2">
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><CheckCircle2 className="w-4 h-4" /></div>
+           <h2 className="font-bold text-slate-800 text-sm tracking-tight">Completed</h2>
+         </div>
+      </div>
+
+      {/* Task Rows */}
+      <div className="flex-1 flex flex-col gap-6 overflow-y-auto pb-24 custom-scrollbar relative z-10">
+        <AnimatePresence>
+          {dailyTasks.map((task: Task) => (
+            <div key={task.id} className="grid grid-cols-3 gap-8">
+              <motion.div 
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className={
+                  task.status === 'todo' ? 'col-start-1' :
+                  task.status === 'doing' ? 'col-start-2' :
+                  'col-start-3'
+                }
+              >
+                 <DailyTaskCard task={task} onClick={() => onCardClick(task)} onStart={() => onStart(task)} />
+              </motion.div>
+            </div>
+          ))}
+        </AnimatePresence>
+        
+        {/* Add Button at bottom of Todo column */}
+        <div className="grid grid-cols-3 gap-8 mt-2">
+           <div>
+             <button 
+               onClick={onAddClick}
+               className="w-full rounded-xl flex items-center justify-center text-[13px] text-slate-500 py-4 px-4 hover:bg-white hover:text-indigo-600 hover:shadow-sm hover:border-slate-200 border border-dashed border-slate-300 transition-all duration-200 font-semibold group"
+             >
+               <Plus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" /> 
+               Add New Task
+             </button>
+           </div>
+           <div />
+           <div />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DailyTaskCard({ task, onClick, onStart }: { task: Task, onClick: () => void, onStart: () => void }) {
+  return (
+    <motion.div
+      layout
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      onClick={onClick}
+      className="bg-white rounded-xl cursor-pointer transition-all border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex flex-col relative overflow-hidden min-h-[220px]"
+    >
+      {/* Top Header */}
+      <div className="flex items-center gap-2 px-5 py-3.5 border-b border-gray-100 bg-gray-50/50 shrink-0">
+        <FileText className="w-[18px] h-[18px] text-gray-400" />
+        <span className="text-[14px] font-medium text-gray-500 capitalize tracking-tight">
+          {task.status === 'todo' ? 'To Do' : task.status === 'doing' ? 'Doing' : 'Done'}
+        </span>
+      </div>
+
+      {/* Main Body */}
+      <div className="flex flex-col flex-1 p-5 pb-6">
+        <span className="text-[14px] font-medium text-indigo-500 mb-2">Automated Agent</span>
+        <h3 className="text-[18px] font-medium text-[#1F2937] leading-tight tracking-tight mb-auto">
+          {task.title}
+        </h3>
+        
+        <div className="mt-6 pt-5 border-t border-gray-100">
+          {task.status === 'todo' && (
+            <Button 
+              size="sm" 
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all" 
+              onClick={(e) => { e.stopPropagation(); onStart(); }}
+            >
+              <Play className="w-3.5 h-3.5" /> Start Agent
+            </Button>
+          )}
+
+          {task.status === 'doing' && (
+            <div className="w-full bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-md py-2 px-3 shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Agent Loading...
+            </div>
+          )}
+
+          {task.status === 'done' && (
+            <Button 
+              size="sm" 
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all" 
+              onClick={(e) => { e.stopPropagation(); onClick(); }}
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" /> Done! Review Task
+            </Button>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 }

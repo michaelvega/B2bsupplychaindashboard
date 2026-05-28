@@ -10,6 +10,8 @@ import { VendorOnboarding } from './pages/VendorOnboarding';
 import { History } from './pages/History';
 import { Settings } from './pages/Settings';
 import { CompanyBrain } from './pages/CompanyBrain';
+import { VisionCenter } from './pages/VisionCenter';
+import { DailyBrief } from './pages/DailyBrief';
 import { Sidebar } from './components/Sidebar';
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -113,6 +115,22 @@ export const router = createHashRouter([
     element: (
       <Layout>
         <CompanyBrain />
+      </Layout>
+    ),
+  },
+  {
+    path: '/vision-center',
+    element: (
+      <Layout>
+        <VisionCenter />
+      </Layout>
+    ),
+  },
+  {
+    path: '/daily-brief',
+    element: (
+      <Layout>
+        <DailyBrief />
       </Layout>
     ),
   },

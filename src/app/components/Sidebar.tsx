@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot, ChevronLeft, ChevronRight, Brain, Calendar, Folder } from 'lucide-react';
+import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot, ChevronLeft, ChevronRight, Brain, Calendar, Folder, Eye } from 'lucide-react';
 import { cn } from './ui/utils';
 
 function ProceptLogo({ size = 22 }: { size?: number }) {
@@ -28,18 +28,24 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   const mainNavItems = [
-    { path: '/agent-suite', label: 'Daily Tasks', icon: Calendar },
-    { path: '/company-brain', label: 'Company Brain', icon: Brain },
-    { path: '/command-center', label: 'Assistant', icon: Terminal },
+    { path: '/daily-brief', label: 'Daily Brief', icon: FileText },
   ];
 
   const backlogNavItems = [
+    { path: '/agent-suite', label: 'Daily Tasks', icon: Calendar },
     { path: '/queues/order-errors', label: 'Order errors', icon: AlertCircle },
   ];
+
+  const knowledgeNavItems = [
+    { path: '/company-brain', label: 'Enterprise Search', icon: Brain },
+    { path: '/command-center', label: 'Assistant', icon: Terminal },
+  ];
+
 
   const synthesisNavItems = [
     { path: '/queues/forecasting', label: 'Forecasting', icon: TrendingUp },
     { path: '/queues/vendor-onboarding', label: 'Vendor onboarding and analytics', icon: Users },
+    { path: '/vision-center', label: 'Vision and Document Center', icon: Eye },
   ];
 
   const otherNavItems = [
@@ -148,6 +154,41 @@ export function Sidebar() {
           </div>
         </div>
 
+        {/* Knowledge */}
+        <div className="mt-6">
+          {!collapsed && (
+            <div className="px-2 mb-2">
+              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Knowledge
+              </h2>
+            </div>
+          )}
+          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
+          <div className="space-y-1">
+            {knowledgeNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  title={collapsed ? item.label : undefined}
+                  className={cn(
+                    'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
+                    collapsed ? 'justify-center' : '',
+                    isActive
+                      ? 'bg-gray-100 text-gray-900 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  )}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {!collapsed && <span>{item.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Data Synthesis */}
         <div className="mt-6">
           {!collapsed && (
@@ -184,8 +225,16 @@ export function Sidebar() {
         </div>
 
         {/* Other nav */}
-        {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
-        <div className="mt-6 space-y-1">
+        <div className="mt-6">
+          {!collapsed && (
+            <div className="px-2 mb-2">
+              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                More
+              </h2>
+            </div>
+          )}
+          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
+          <div className="space-y-1">
           {otherNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -207,6 +256,7 @@ export function Sidebar() {
               </Link>
             );
           })}
+        </div>
         </div>
       </nav>
     </div>

@@ -80,6 +80,7 @@ export function CompanyBrain() {
   const [isGeneratingChat, setIsGeneratingChat] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatTopRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // On mount, try to load cached data
@@ -116,12 +117,8 @@ export function CompanyBrain() {
 
   // Scroll management
   useEffect(() => {
-    if (isGeneratingChat) {
-      // While generating, scroll to bottom to show progress
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    } else if (chatHistory.length > 0) {
-      // When done generating, scroll to the top of the chat section as requested
-      chatTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, isGeneratingChat]);
 
@@ -163,9 +160,6 @@ export function CompanyBrain() {
     }
   };
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory, isGeneratingChat]);
 
   const scanAll = async () => {
     setIsScanning(true);
@@ -228,7 +222,7 @@ export function CompanyBrain() {
       setLastScan(now);
       setIsScanning(false);
       // Auto-send "TODO" after data is updated
-      handleSendChat("Run a comprehensive check accross all the data in azure ./localdata emails.json, erp-data.json, onedrive.json for any discrepancies, errors, or impending catatrophies. Also list potential risks. If needed for deeper inspection, use the RLM skill to parse out and inspect the data corpus. Do not make new outside internet queries.");
+      handleSendChat("Run a comprehensive check accross all the data in azure ./localdata emails.json, erp-data.json, onedrive.json for any discrepancies, errors, or impending catatrophies. Also list potential risks. If needed for deeper inspection, use the RLM skill to parse out and inspect the data corpus. Every data or fact you list you must cite parenthetically. For example (SAP, Sales Order Table). Do not make new outside internet queries.");
     }
   };
 
@@ -251,7 +245,7 @@ export function CompanyBrain() {
               <Brain className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Company Brain</h1>
+              <h1 className="text-xl font-bold text-gray-900">Enterprise Search</h1>
               <p className="text-sm text-gray-500">
                 {lastScan ? `Last synced: ${fmtDate(lastScan)}` : 'No data scanned yet. Click Scan All Data to begin.'}
               </p>
@@ -339,14 +333,14 @@ export function CompanyBrain() {
         <div ref={chatTopRef} className={`bg-white rounded-xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col h-[700px] ${isScanning ? 'opacity-60 grayscale pointer-events-none' : ''}`}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-indigo-50/30">
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-gray-900">Spaces</h2>
+              <h2 className="font-semibold text-gray-900">Ask Knowledge Base</h2>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-400">Connected to Main Agent</span>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col bg-gray-50/30">
+          <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 flex flex-col bg-gray-50/30 scroll-smooth">
             <div className="max-w-3xl mx-auto w-full flex flex-col gap-4">
               {chatHistory.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
