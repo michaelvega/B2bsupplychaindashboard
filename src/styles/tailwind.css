@@ -38,6 +38,29 @@
   --color-gray-800: #292524;
   --color-gray-900: #1c1917;
   --color-gray-950: #0c0a09;
+
+  /* Procept Landing Page — YC Startup Palette */
+  --color-pro-50: #FDFCFB;
+  --color-pro-100: #F5F4F1;
+  --color-pro-200: #E8E5E0;
+  --color-pro-800: #1E293B;
+  --color-pro-900: #0F172A;
+  --color-pro-950: #080B12;
+  --color-accent-50: #EFF6FF;
+  --color-accent-100: #DBEAFE;
+  --color-accent-200: #BFDBFE;
+  --color-accent-400: #60A5FA;
+  --color-accent-500: #3B82F6;
+  --color-accent-600: #2563EB;
+  --color-accent-700: #1D4ED8;
+  --color-cyan-50: #ECFEFF;
+  --color-cyan-100: #CFFAFE;
+  --color-cyan-200: #A5F3FC;
+  --color-cyan-300: #67E8F9;
+  --color-cyan-400: #22D3EE;
+  --color-cyan-500: #06B6D4;
+  --color-cyan-600: #0891B2;
+  --color-cyan-700: #0E7490;
 }
 
 @import 'tw-animate-css';
