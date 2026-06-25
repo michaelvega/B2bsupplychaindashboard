@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { ArrowRight, ArrowDown, Bot, Target, Zap, Link, ShieldCheck, LineChart, Factory, Store, Settings, Brain, Check } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -8,6 +9,90 @@ const ProceptLogo = ({ className }: { className?: string }) => (
     <path d="M 4 50 L 96 50 M 78 36 L 96 50 L 78 64" />
   </svg>
 );
+
+const shimmerKeyframes = `
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+`;
+
+const TiltCard = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hovering, setHovering] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [floatY, setFloatY] = useState(0);
+  const [floatShadow, setFloatShadow] = useState('0 8px 30px rgba(0,0,0,0.08)');
+  const animRef = useRef(0);
+
+  const animate = useCallback(() => {
+    const t = performance.now() / 1000;
+    const y = Math.sin(t * 1.2) * 10; // ±10px oscillation
+    const shadowAlpha = 0.08 + ((Math.sin(t * 1.2) + 1) / 2) * 0.08; // 0.08 → 0.16
+    const shadowY = 8 + ((Math.sin(t * 1.2) + 1) / 2) * 16; // 8px → 24px
+    const shadowBlur = 30 + ((Math.sin(t * 1.2) + 1) / 2) * 25; // 30px → 55px
+    setFloatY(y);
+    setFloatShadow(`0 ${shadowY}px ${shadowBlur}px rgba(0,0,0,${shadowAlpha.toFixed(3)})`);
+    animRef.current = requestAnimationFrame(animate);
+  }, []);
+
+  useEffect(() => {
+    if (!hovering) {
+      animRef.current = requestAnimationFrame(animate);
+    } else {
+      cancelAnimationFrame(animRef.current);
+    }
+    return () => cancelAnimationFrame(animRef.current);
+  }, [hovering, animate]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x, y });
+  };
+
+  // Always use inline transform so CSS transition can interpolate seamlessly
+  const transform = hovering
+    ? `perspective(1200px) rotateY(${tilt.x * 12}deg) rotateX(${-tilt.y * 8}deg) translateZ(20px)`
+    : `perspective(1200px) rotateY(0deg) rotateX(0deg) translateY(${floatY}px)`;
+
+  const boxShadow = hovering
+    ? `${-tilt.x * 30}px ${-tilt.y * 30}px 60px rgba(0,0,0,0.15)`
+    : floatShadow;
+
+  return (
+    <>
+      <style>{shimmerKeyframes}</style>
+      <div
+        ref={ref}
+        className={className}
+        style={{
+          transform,
+          boxShadow,
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.3s ease-out, box-shadow 0.3s ease-out',
+        }}
+        onMouseEnter={() => setHovering(true)}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => { setHovering(false); setTilt({ x: 0, y: 0 }); }}
+      >
+        {/* Shine gleam overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10 rounded-2xl overflow-hidden"
+          style={{
+            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 55%, transparent 60%)',
+            backgroundSize: '200% 100%',
+            animation: hovering ? 'none' : 'shimmer 3.5s ease-in-out infinite',
+          }}
+        />
+        {children}
+      </div>
+    </>
+  );
+};
 
 const DataFlowDiagram = () => {
   const { t } = useTranslation();
@@ -184,13 +269,13 @@ export function LandingPage() {
                 {/* RIGHT — Factory Image */}
                 <div className="relative lg:self-stretch flex items-center">
                   <div className="absolute inset-0 bg-cyan-400/[0.04] rounded-[2.5rem] blur-3xl -z-10 pointer-events-none scale-90" />
-                  <div className="relative w-full rounded-2xl overflow-hidden border border-gray-200/80 shadow-xl shadow-gray-200/50 bg-[#0A0D12] aspect-[5/4] lg:aspect-[16/9]">
+                  <TiltCard className="relative w-full rounded-2xl overflow-hidden border border-gray-200/80 shadow-xl shadow-gray-200/50 bg-[#0A0D12] aspect-[5/4] lg:aspect-[16/9]">
                     <img
                       src="/factoryimage.png"
                       alt="Smart Factory"
                       className="block w-full h-full object-cover"
                     />
-                  </div>
+                  </TiltCard>
                 </div>
 
               </div>
