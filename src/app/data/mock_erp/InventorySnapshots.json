@@ -1,0 +1,14 @@
+[
+  { "ID": 1, "product_ID": 8842, "period": "Jan", "stockQuantity": 350 },
+  { "ID": 2, "product_ID": 2201, "period": "Jan", "stockQuantity": 520 },
+  { "ID": 3, "product_ID": 5512, "period": "Jan", "stockQuantity": 950 },
+  { "ID": 4, "product_ID": 7734, "period": "Jan", "stockQuantity": 410 },
+  { "ID": 5, "product_ID": 8842, "period": "Feb", "stockQuantity": 280 },
+  { "ID": 6, "product_ID": 2201, "period": "Feb", "stockQuantity": 480 },
+  { "ID": 7, "product_ID": 5512, "period": "Feb", "stockQuantity": 920 },
+  { "ID": 8, "product_ID": 7734, "period": "Feb", "stockQuantity": 380 },
+  { "ID": 9, "product_ID": 8842, "period": "Mar", "stockQuantity": 200 },
+  { "ID": 10, "product_ID": 2201, "period": "Mar", "stockQuantity": 450 },
+  { "ID": 11, "product_ID": 5512, "period": "Mar", "stockQuantity": 800 },
+  { "ID": 12, "product_ID": 7734, "period": "Mar", "stockQuantity": 320 }
+]

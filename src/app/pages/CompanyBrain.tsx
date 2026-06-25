@@ -5,9 +5,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { marked } from 'marked';
 import { ThinkingTimer } from '../components/ThinkingTimer';
-
-const ERP_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/erp-data-lake';
-const COMPOSIO_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/composio';
+import { MOCK_ERP_DATA } from '../data/mock_erp';
+import { MOCK_EMAILS, MOCK_ONEDRIVE } from '../data/mock_composio';
 
 const downloadAsWord = async (text: string, title: string) => {
   const htmlContent = await marked.parse(text);
@@ -83,7 +82,7 @@ export function CompanyBrain() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // On mount, try to load cached data
+  // On mount, try to load cached data; fall back to local mock data
   useEffect(() => {
     (async () => {
       const [e, m, o] = await Promise.all([
@@ -91,9 +90,21 @@ export function CompanyBrain() {
         loadFromAzure(CACHE_EMAILS),
         loadFromAzure(CACHE_ONEDRIVE),
       ]);
-      if (e.ok) setErp({ status: 'done', data: e.data.data, lastUpdated: e.data.cachedAt });
-      if (m.ok) setEmails({ status: 'done', data: m.data.data, lastUpdated: m.data.cachedAt });
-      if (o.ok) setOnedrive({ status: 'done', data: o.data.data, lastUpdated: o.data.cachedAt });
+      if (e.ok) {
+        setErp({ status: 'done', data: e.data.data, lastUpdated: e.data.cachedAt });
+      } else {
+        setErp({ status: 'done', data: MOCK_ERP_DATA, lastUpdated: null });
+      }
+      if (m.ok) {
+        setEmails({ status: 'done', data: m.data.data, lastUpdated: m.data.cachedAt });
+      } else {
+        setEmails({ status: 'done', data: MOCK_EMAILS, lastUpdated: null });
+      }
+      if (o.ok) {
+        setOnedrive({ status: 'done', data: o.data.data, lastUpdated: o.data.cachedAt });
+      } else {
+        setOnedrive({ status: 'done', data: MOCK_ONEDRIVE, lastUpdated: null });
+      }
       if (e.ok || m.ok || o.ok) setLastScan(e.data?.cachedAt || m.data?.cachedAt || o.data?.cachedAt || null);
     })();
 
@@ -169,51 +180,37 @@ export function CompanyBrain() {
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
-    // --- ERP ---
+    // --- ERP (local mock data) ---
     setErp(s => ({ ...s, status: 'scanning' }));
     try {
-      const res = await fetch(ERP_URL, {
-        headers: { 'ngrok-skip-browser-warning': 'true' },
-        signal
-      });
-      if (!res.ok) throw new Error('ERP fetch failed');
-      const data = await res.json();
+      // Simulate brief network delay for realistic UX
+      await new Promise(r => setTimeout(r, 400));
+      if (signal.aborted) return;
+      const data = MOCK_ERP_DATA;
       await saveToAzure(CACHE_ERP, { cachedAt: now, data });
       setErp({ status: 'done', data, lastUpdated: now });
     } catch (e: any) {
       if (e.name !== 'AbortError') setErp(s => ({ ...s, status: 'error' }));
     }
 
-    // --- Emails ---
+    // --- Emails (local mock data) ---
     setEmails(s => ({ ...s, status: 'scanning' }));
     try {
-      const res = await fetch(COMPOSIO_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-        body: JSON.stringify({ command: "execute OUTLOOK_QUERY_EMAILS --account proceptai@outlook.com -d '{\"top\":15,\"folder\":\"inbox\",\"orderby\":\"receivedDateTime desc\"}'" }),
-        signal
-      });
-      const json = await res.json();
-      const emailList = json?.output ? JSON.parse(json.output)?.data?.value : json?.data?.value;
-      await saveToAzure(CACHE_EMAILS, { cachedAt: now, data: emailList });
-      setEmails({ status: 'done', data: emailList, lastUpdated: now });
+      await new Promise(r => setTimeout(r, 600));
+      if (signal.aborted) return;
+      await saveToAzure(CACHE_EMAILS, { cachedAt: now, data: MOCK_EMAILS });
+      setEmails({ status: 'done', data: MOCK_EMAILS, lastUpdated: now });
     } catch (e: any) {
       if (e.name !== 'AbortError') setEmails(s => ({ ...s, status: 'error' }));
     }
 
-    // --- OneDrive ---
+    // --- OneDrive (local mock data) ---
     setOnedrive(s => ({ ...s, status: 'scanning' }));
     try {
-      const res = await fetch(COMPOSIO_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-        body: JSON.stringify({ command: "execute ONE_DRIVE_LIST_FOLDER_CHILDREN -d '{\"drive_id\":\"6631d2fa1dc0782d\",\"folder_path\":\"/\"}'" }),
-        signal
-      });
-      const json = await res.json();
-      const items = json?.output ? JSON.parse(json.output)?.data?.value : json?.data?.value;
-      await saveToAzure(CACHE_ONEDRIVE, { cachedAt: now, data: items });
-      setOnedrive({ status: 'done', data: items, lastUpdated: now });
+      await new Promise(r => setTimeout(r, 500));
+      if (signal.aborted) return;
+      await saveToAzure(CACHE_ONEDRIVE, { cachedAt: now, data: MOCK_ONEDRIVE });
+      setOnedrive({ status: 'done', data: MOCK_ONEDRIVE, lastUpdated: now });
     } catch (e: any) {
       if (e.name !== 'AbortError') setOnedrive(s => ({ ...s, status: 'error' }));
     }

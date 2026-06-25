@@ -1,0 +1,52 @@
+[
+  {
+    "id": "AAMkAGIzM2E3NGExLTg3MmYtNGJiNS1iMjFhLWQwYzZmODQwMDAwMQBGAAAAAADfW8rYeHBDRrbK5yNnGQsBBwCVkD3URKVHtLmWJVz-BxO0AAAAAAEMAACVkD3URKVHtLmWJVz-BxO0AAErO1_4AAA=",
+    "subject": "PO #8842 - Shortage Alert - Immediate Action Required",
+    "bodyPreview": "We've identified a critical shortage on SKU 8842 (Industrial Bearings). Current stock at 200 units with 350 unit demand forecasted for next month. Please review and create purchase order.",
+    "from": { "emailAddress": { "name": "Supply Chain Alert", "address": "alerts@supplychain.com" } },
+    "isRead": false,
+    "receivedDateTime": "2026-06-24T09:15:00Z",
+    "hasAttachments": true,
+    "webLink": "https://outlook.office.com/mail/inbox/id/example1"
+  },
+  {
+    "id": "AAMkAGIzM2E3NGExLTg3MmYtNGJiNS1iMjFhLWQwYzZmODQwMDAwMQBGAAAAAADfW8rYeHBDRrbK5yNnGQsBBwCVkD3URKVHtLmWJVz-BxO0AAAAAAEMAACVkD3URKVHtLmWJVz-BxO0AAErO1_5AAA=",
+    "subject": "New Vendor Onboarding - Acme Industrial Supply",
+    "bodyPreview": "Please process onboarding for new vendor Acme Industrial Supply. W9 and banking details attached. Vendor ID to be created in SAP.",
+    "from": { "emailAddress": { "name": "Procurement Team", "address": "procurement@company.com" } },
+    "isRead": false,
+    "receivedDateTime": "2026-06-24T11:30:00Z",
+    "hasAttachments": true,
+    "webLink": "https://outlook.office.com/mail/inbox/id/example2"
+  },
+  {
+    "id": "AAMkAGIzM2E3NGExLTg3MmYtNGJiNS1iMjFhLWQwYzZmODQwMDAwMQBGAAAAAADfW8rYeHBDRrbK5yNnGQsBBwCVkD3URKVHtLmWJVz-BxO0AAAAAAEMAACVkD3URKVHtLmWJVz-BxO0AAErO1_6AAA=",
+    "subject": "Invoice Discrepancy - Supplier Invoice #INV-9921",
+    "bodyPreview": "Invoice #INV-9921 from Supplier B shows $14.50/unit for FAST-100, but our PO has $12.50/unit. Variance of $2,000 on 1,000 units. Please review and reconcile.",
+    "from": { "emailAddress": { "name": "AP Department", "address": "ap@company.com" } },
+    "isRead": true,
+    "receivedDateTime": "2026-06-23T14:00:00Z",
+    "hasAttachments": false,
+    "webLink": "https://outlook.office.com/mail/inbox/id/example3"
+  },
+  {
+    "id": "AAMkAGIzM2E3NGExLTg3MmYtNGJiNS1iMjFhLWQwYzZmODQwMDAwMQBGAAAAAADfW8rYeHBDRrbK5yNnGQsBBwCVkD3URKVHtLmWJVz-BxO0AAAAAAEMAACVkD3URKVHtLmWJVz-BxO0AAErO1_7AAA=",
+    "subject": "Delivery Delay - Shipment #7001 Status Update",
+    "bodyPreview": "Shipment #7001 for Sales Order #AMZ-BAD-999 has been delayed due to carrier issues. Estimated delivery now June 28. Customer has been notified.",
+    "from": { "emailAddress": { "name": "Logistics Desk", "address": "logistics@3pl.com" } },
+    "isRead": false,
+    "receivedDateTime": "2026-06-23T08:45:00Z",
+    "hasAttachments": true,
+    "webLink": "https://outlook.office.com/mail/inbox/id/example4"
+  },
+  {
+    "id": "AAMkAGIzM2E3NGExLTg3MmYtNGJiNS1iMjFhLWQwYzZmODQwMDAwMQBGAAAAAADfW8rYeHBDRrbK5yNnGQsBBwCVkD3URKVHtLmWJVz-BxO0AAAAAAEMAACVkD3URKVHtLmWJVz-BxO0AAErO1_8AAA=",
+    "subject": "Quarterly Supplier Scorecard - Q2 2026",
+    "bodyPreview": "Q2 scorecards are ready for review. Supplier 200 maintains 98% on-time delivery. Supplier 201 dropped to 85% due to recent shortages. Full report attached.",
+    "from": { "emailAddress": { "name": "Quality Assurance", "address": "qa@company.com" } },
+    "isRead": true,
+    "receivedDateTime": "2026-06-22T16:00:00Z",
+    "hasAttachments": true,
+    "webLink": "https://outlook.office.com/mail/inbox/id/example5"
+  }
+]

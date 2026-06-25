@@ -1,0 +1,5 @@
+[
+  { "ID": 1, "product_ID": 1, "supplier_ID": 200, "leadTimeDays": 5, "minOrderQty": 1000, "standardCost": 8 },
+  { "ID": 2, "product_ID": 2, "supplier_ID": 200, "leadTimeDays": 0, "minOrderQty": 0, "standardCost": 0 },
+  { "ID": 3, "product_ID": 3, "supplier_ID": 201, "leadTimeDays": 14, "minOrderQty": 500, "standardCost": 35 }
+]

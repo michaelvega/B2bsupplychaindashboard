@@ -1,0 +1,6 @@
+[
+  { "ID": 1, "product_ID": 1, "businessPartner_ID": 100, "baseCost": 12.5, "landedCost": 14.0, "effectiveDate": "2026-01-01" },
+  { "ID": 2, "product_ID": 3, "businessPartner_ID": 100, "baseCost": 45.0, "landedCost": 48.5, "effectiveDate": "2026-01-01" },
+  { "ID": 3, "product_ID": 1, "businessPartner_ID": 101, "baseCost": 13.0, "landedCost": 14.5, "effectiveDate": "2026-01-01" },
+  { "ID": 4, "product_ID": 3, "businessPartner_ID": 101, "baseCost": 46.0, "landedCost": 49.5, "effectiveDate": "2026-01-01" }
+]

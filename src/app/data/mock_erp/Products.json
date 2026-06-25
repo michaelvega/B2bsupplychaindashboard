@@ -1,0 +1,9 @@
+[
+  { "ID": 1, "sku": "FAST-100", "description": "Industrial Bolt 10mm", "uom": "BX", "status": "Active" },
+  { "ID": 2, "sku": "FAST-101", "description": "Industrial Bolt 12mm", "uom": "BX", "status": "Discontinued" },
+  { "ID": 3, "sku": "WIDG-500", "description": "Premium Bearing", "uom": "EA", "status": "Active" },
+  { "ID": 2201, "sku": "2201", "description": "Steel Fasteners", "uom": "BX", "status": "Active" },
+  { "ID": 5512, "sku": "5512", "description": "Hydraulic Seals", "uom": "EA", "status": "Active" },
+  { "ID": 7734, "sku": "7734", "description": "Drive Belts", "uom": "EA", "status": "Active" },
+  { "ID": 8842, "sku": "8842", "description": "Industrial Bearings", "uom": "EA", "status": "Active" }
+]
