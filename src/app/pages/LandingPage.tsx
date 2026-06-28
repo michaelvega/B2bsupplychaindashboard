@@ -180,9 +180,9 @@ export function LandingPage() {
     <div className="bg-white min-h-screen text-pro-900" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>
 
       {/* ──────────────────────────────────── */}
-      {/* NAV — Clean, light bg */}
+      {/* NAV — Transparent glass over video */}
       {/* ──────────────────────────────────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-100">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-pro-950/40 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <img
@@ -190,7 +190,7 @@ export function LandingPage() {
               alt="Procept"
               className="w-9 h-9 rounded-lg"
             />
-            <span className="font-bold text-lg tracking-tight text-pro-900">
+            <span className="font-bold text-lg tracking-tight text-white">
               Procept
             </span>
           </div>
@@ -198,7 +198,7 @@ export function LandingPage() {
             href="https://calendly.com/sscarozzi/30min"
             target="_blank"
             rel="noreferrer"
-            className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-5 py-2.5 rounded-lg transition-all text-sm shadow-lg shadow-accent-600/15 hover:shadow-accent-500/25"
+            className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-5 py-2.5 rounded-lg transition-all text-sm shadow-lg shadow-accent-600/20 hover:shadow-accent-500/30"
           >
             Book a Call
           </a>
@@ -206,21 +206,24 @@ export function LandingPage() {
       </nav>
 
       {/* ──────────────────────────────────── */}
-      {/* HERO — White + dot grid + Spline */}
+      {/* HERO — Full-bleed factory video background */}
       {/* ──────────────────────────────────── */}
-      <section className="relative min-h-screen bg-white overflow-hidden flex flex-col pt-16">
-        {/* Dot-grid pattern — YC/Firecrawl style */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `radial-gradient(circle, #d4d4d8 1px, transparent 1px)`,
-            backgroundSize: '28px 28px',
-          }}
-        />
+      <section className="relative min-h-screen overflow-hidden flex flex-col pt-16 bg-pro-950">
+        {/* Background video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster="/factoryimage.png"
+        >
+          <source src="/hero-factory.mp4" type="video/mp4" />
+        </video>
 
-        {/* Ambient glow — cyan/teal to complement Spline's blue factory glow */}
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-cyan-400/[0.06] rounded-full blur-[150px] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-400/[0.04] rounded-full blur-[120px] -translate-x-1/4 translate-y-1/4 pointer-events-none" />
+        {/* Overlay gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-pro-950/90 via-pro-950/70 to-pro-950/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-pro-950/60 via-transparent to-pro-950/30" />
 
         {/* Content */}
         <div className="relative z-10 flex-1 flex flex-col">
@@ -230,19 +233,19 @@ export function LandingPage() {
 
                 {/* LEFT — Copy */}
                 <div className="space-y-5 lg:space-y-7 lg:pr-8">
-                  {/* Tagline */}
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-pro-900 leading-[1.08]">
-                    Procept: Your Always On Call{' '}
-                    <span className="text-accent-600">Procurement&nbsp;Officer</span>
-                  </h1>
-
                   {/* Eyebrow / Subline */}
-                  <p className="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400">
-                    vertical procurement operations agent automation
+                  <p className="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-accent-400">
+                    Agentic AI Operations Layer for Smart Procurement and Manufacturing
                   </p>
 
+                  {/* Tagline */}
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08]">
+                    Your Always On Call{' '}
+                    <span className="text-accent-400">Procurement&nbsp;Officer</span>
+                  </h1>
+
                   {/* ERP Hook */}
-                  <p className="text-base sm:text-lg text-gray-500 max-w-lg leading-relaxed">
+                  <p className="text-base sm:text-lg text-slate-300 max-w-lg leading-relaxed">
                     Unsilo your data to unlock agent automation with your preexisting&nbsp;ERP
                   </p>
 
@@ -252,31 +255,22 @@ export function LandingPage() {
                       href="https://calendly.com/sscarozzi/30min"
                       target="_blank"
                       rel="noreferrer"
-                      className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-7 py-3.5 rounded-xl inline-flex items-center gap-2.5 transition-all text-sm shadow-lg shadow-accent-600/20 hover:shadow-accent-500/25 hover:-translate-y-0.5"
+                      className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-7 py-3.5 rounded-xl inline-flex items-center gap-2.5 transition-all text-sm shadow-lg shadow-accent-600/30 hover:shadow-accent-500/35 hover:-translate-y-0.5"
                     >
                       Book a Call
                       <ArrowRight className="w-4 h-4" />
                     </a>
                     <button
                       onClick={() => navigate('/daily-brief')}
-                      className="text-gray-500 hover:text-pro-900 font-medium px-6 py-3.5 rounded-xl inline-flex items-center gap-2 transition-all text-sm border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      className="text-slate-300 hover:text-white font-medium px-6 py-3.5 rounded-xl inline-flex items-center gap-2 transition-all text-sm border border-slate-600 hover:border-slate-400 hover:bg-white/10"
                     >
                       Try Interactive Demo
                     </button>
                   </div>
                 </div>
 
-                {/* RIGHT — Factory Image */}
-                <div className="relative lg:self-stretch flex items-center">
-                  <div className="absolute inset-0 bg-cyan-400/[0.04] rounded-[2.5rem] blur-3xl -z-10 pointer-events-none scale-90" />
-                  <TiltCard className="relative w-full rounded-2xl overflow-hidden border border-gray-200/80 shadow-xl shadow-gray-200/50 bg-[#0A0D12] aspect-[5/4] lg:aspect-[16/9]">
-                    <img
-                      src="/factoryimage.png"
-                      alt="Smart Factory"
-                      className="block w-full h-full object-cover"
-                    />
-                  </TiltCard>
-                </div>
+                {/* RIGHT — empty, video fills the space */}
+                <div />
 
               </div>
             </div>
@@ -284,7 +278,7 @@ export function LandingPage() {
 
           {/* Scroll hint */}
           <div className="text-center pb-8">
-            <div className="inline-flex flex-col items-center gap-2 text-gray-300 text-xs tracking-widest uppercase font-medium">
+            <div className="inline-flex flex-col items-center gap-2 text-slate-500 text-xs tracking-widest uppercase font-medium">
               <span>Scroll</span>
               <ArrowDown className="w-3.5 h-3.5" />
             </div>
@@ -297,27 +291,6 @@ export function LandingPage() {
       {/* ──────────────────────────────────── */}
       <main className="relative max-w-5xl mx-auto px-6 lg:px-8 py-16 space-y-24 lg:space-y-32">
 
-        {/* ── STATS STRIP ── */}
-        <section>
-          <p className="text-center text-pro-800 mb-12 max-w-3xl mx-auto text-lg font-medium leading-relaxed">
-            {t('landing.statsIntro')}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-0 bg-pro-100 rounded-2xl overflow-hidden">
-            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center md:border-r border-pro-200">
-              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">60%</div>
-              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">{t('landing.stat1Desc')}</p>
-            </div>
-            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center md:border-r border-pro-200">
-              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">$1.2B</div>
-              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">{t('landing.stat2Desc')}</p>
-            </div>
-            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center">
-              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">{t('landing.days')}</div>
-              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">{t('landing.stat3Desc')}</p>
-            </div>
-          </div>
-        </section>
-
         {/* ── PROBLEM SECTION ── */}
         <section>
           <div className="mb-12">
@@ -328,17 +301,21 @@ export function LandingPage() {
               {t('landing.problemTitle')}
             </h2>
           </div>
-          <div className="text-pro-800 leading-relaxed text-lg mb-12 max-w-3xl">
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <span className="text-accent-500 mt-1.5 shrink-0">—</span>
-                <span>{t('landing.problemDesc1')}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent-500 mt-1.5 shrink-0">—</span>
-                <span>{t('landing.problemDesc2')}</span>
-              </li>
-            </ul>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-0 bg-pro-100 rounded-2xl overflow-hidden mb-12">
+            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center md:border-r border-pro-200">
+              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">60%</div>
+              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">{t('landing.stat1Desc')}</p>
+            </div>
+            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center md:border-r border-pro-200">
+              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">$4.8M</div>
+              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">average PPV margin leakage per manufacturer from stale master pricing data</p>
+            </div>
+            <div className="bg-pro-100 p-8 md:p-10 flex flex-col items-center text-center">
+              <div className="text-6xl font-bold text-accent-600 mb-3 tracking-tight">{t('landing.days')}</div>
+              <p className="text-pro-800 text-sm leading-relaxed max-w-[220px]">{t('landing.stat3Desc')}</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -415,70 +392,171 @@ export function LandingPage() {
             </h2>
           </div>
           <div className="text-pro-800 leading-relaxed text-lg max-w-3xl">
-            <ul className="space-y-3">
+            <h3 className="text-2xl md:text-3xl font-bold text-pro-900 mb-4">The How</h3>
+            <ul className="space-y-3 mb-10">
               <li className="flex items-start gap-3">
                 <span className="text-accent-500 mt-1.5 shrink-0">—</span>
-                <span>{t('landing.solutionDesc1')}</span>
+                <span>Procept sits on top of your ERP, Outlook, and OneDrive so that your procurement/operations teams can create complex workflows from natural usage, completely automatically.</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-accent-500 mt-1.5 shrink-0">—</span>
-                <span>{t('landing.solutionDesc2')}</span>
+                <span>We deploy autonomous AI Coworkers that proactively monitor your ERP, Outlook, and OneDrive to perform life-saving actions before catastrophes.</span>
               </li>
             </ul>
           </div>
 
-          <DataFlowDiagram />
+          {/* Scenario Cards — full width */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+              {/* Scenario 1 */}
+              <div className="bg-white rounded-2xl shadow-sm border border-pro-200 p-8 flex flex-col h-full hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-pro-100 rounded-bl-full -mr-20 -mt-20 z-0 pointer-events-none group-hover:bg-accent-50/50 transition-colors" />
+                <ShieldCheck className="w-10 h-10 text-accent-600 mb-6 relative z-10" />
+                <h3 className="text-2xl font-bold text-pro-900 mb-5 relative z-10">{t('landing.scenario1Title')}</h3>
+                <ul className="space-y-4 text-pro-700 relative z-10 text-sm leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario1Bul1')}</strong>{t('landing.scenario1Bul1B')}</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario1Bul2')}</strong>{t('landing.scenario1Bul2B')}<i>{t('landing.scenario1Bul2C')}</i>{t('landing.scenario1Bul2D')}</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario1Bul3')}</strong>{t('landing.scenario1Bul3B')}</span>
+                  </li>
+                </ul>
+              </div>
 
-          {/* Scenario Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-            {/* Scenario 1 */}
-            <div className="bg-white rounded-2xl shadow-sm border border-pro-200 p-8 flex flex-col h-full hover:shadow-md transition-shadow relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-pro-100 rounded-bl-full -mr-20 -mt-20 z-0 pointer-events-none group-hover:bg-accent-50/50 transition-colors" />
-              <ShieldCheck className="w-10 h-10 text-accent-600 mb-6 relative z-10" />
-              <h3 className="text-2xl font-bold text-pro-900 mb-5 relative z-10">{t('landing.scenario1Title')}</h3>
-              <ul className="space-y-4 text-pro-700 relative z-10 text-sm leading-relaxed">
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario1Bul1')}</strong>{t('landing.scenario1Bul1B')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario1Bul2')}</strong>{t('landing.scenario1Bul2B')}<i>{t('landing.scenario1Bul2C')}</i>{t('landing.scenario1Bul2D')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario1Bul3')}</strong>{t('landing.scenario1Bul3B')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario1Bul4')}</strong>{t('landing.scenario1Bul4B')}</span>
-                </li>
-              </ul>
+              {/* Scenario 2 */}
+              <div className="bg-white rounded-2xl shadow-sm border border-pro-200 p-8 flex flex-col h-full hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-pro-100 rounded-bl-full -mr-20 -mt-20 z-0 pointer-events-none group-hover:bg-accent-50/50 transition-colors" />
+                <LineChart className="w-10 h-10 text-accent-600 mb-6 relative z-10" />
+                <h3 className="text-2xl font-bold text-pro-900 mb-5 relative z-10">{t('landing.scenario2Title')}</h3>
+                <ul className="space-y-4 text-pro-700 relative z-10 text-sm leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario2Bul2')}</strong>{t('landing.scenario2Bul2B')}</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario2Bul3')}</strong>{t('landing.scenario2Bul3B')}</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
+                    <span><strong>{t('landing.scenario2Bul4')}</strong>{t('landing.scenario2Bul4B')}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            {/* Scenario 2 */}
-            <div className="bg-white rounded-2xl shadow-sm border border-pro-200 p-8 flex flex-col h-full hover:shadow-md transition-shadow relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-pro-100 rounded-bl-full -mr-20 -mt-20 z-0 pointer-events-none group-hover:bg-accent-50/50 transition-colors" />
-              <LineChart className="w-10 h-10 text-accent-600 mb-6 relative z-10" />
-              <h3 className="text-2xl font-bold text-pro-900 mb-5 relative z-10">{t('landing.scenario2Title')}</h3>
-              <ul className="space-y-4 text-pro-700 relative z-10 text-sm leading-relaxed">
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario2Bul1')}</strong>{t('landing.scenario2Bul1B')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario2Bul2')}</strong>{t('landing.scenario2Bul2B')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario2Bul3')}</strong>{t('landing.scenario2Bul3B')}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 shrink-0" />
-                  <span><strong>{t('landing.scenario2Bul4')}</strong>{t('landing.scenario2Bul4B')}</span>
-                </li>
-              </ul>
+          {/* Data Zero Error */}
+          <div className="mb-10 bg-white border border-pro-200 rounded-2xl p-6 md:p-8 flex items-center gap-5 shadow-sm">
+            <div className="p-3 bg-accent-50 rounded-xl text-accent-600 shadow-sm shrink-0">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <p className="text-pro-800 text-base md:text-lg leading-relaxed">
+              <strong className="text-pro-900 font-semibold">Data Zero Error:</strong> Systematically eliminates manual data entry waste and reactive administrative friction, once automated agents scrub your operational data.
+            </p>
+          </div>
+
+          <div className="text-pro-800 leading-relaxed text-lg max-w-3xl">
+            <h3 className="text-2xl md:text-3xl font-bold text-pro-900 mb-4">The Result</h3>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <span className="text-accent-500 mt-1.5 shrink-0">—</span>
+                <span>By embedding Procept directly into Outlook, your ERP, and OneDrive, individual contributors can create bespoke automations, forecasting models, and workflows purely from natural usage and natural language.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-accent-500 mt-1.5 shrink-0">—</span>
+                <span>This unlocks AI seamlessly for procurement and operations, without touching the core competencies of your IT team.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Proven Impact */}
+          <div className="mt-16">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent-600 mb-6">
+              Proven Procurement Uplift
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Operations */}
+              <div className="bg-white border border-pro-200 rounded-2xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow group">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-pro-100">
+                  <div className="p-3 bg-accent-50 rounded-xl text-accent-600 shadow-sm">
+                    <Zap className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-pro-900 tracking-wide uppercase text-sm group-hover:text-accent-600 transition-colors">
+                    Operations
+                  </h3>
+                </div>
+                <ul className="space-y-5 text-pro-800 text-base leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Resolution Speed:</strong> Shift exception resolution time from days to hours.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Claims Compliance:</strong> 100% of damage/shortage claims filed within the 48-hour window.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Execution Adherence:</strong> &gt;90% correct autonomous tool routing.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Inventory & Forecasting */}
+              <div className="bg-white border border-pro-200 rounded-2xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow group">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-pro-100">
+                  <div className="p-3 bg-accent-50 rounded-xl text-accent-600 shadow-sm">
+                    <LineChart className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-pro-900 tracking-wide uppercase text-sm group-hover:text-accent-600 transition-colors">
+                    Inventory &amp; Forecasting
+                  </h3>
+                </div>
+                <ul className="space-y-5 text-pro-800 text-base leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Forecast Accuracy:</strong> 15–20% improvement in regional MAPE/MAE.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Stockout Reduction:</strong> &gt;50% lower stockout rates in LatAm centers.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Inventory Optimization:</strong> 20–30% reduction in excess and understock.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Order Accuracy */}
+              <div className="bg-white border border-pro-200 rounded-2xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow group">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-pro-100">
+                  <div className="p-3 bg-accent-50 rounded-xl text-accent-600 shadow-sm">
+                    <Target className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-pro-900 tracking-wide uppercase text-sm group-hover:text-accent-600 transition-colors">
+                    Order Accuracy
+                  </h3>
+                </div>
+                <ul className="space-y-5 text-pro-800 text-base leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Exception Reduction:</strong> &gt;70% decrease in manual order errors.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Manual Touch Time:</strong> &lt;10 minutes spent per unresolved error.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-accent-500 mt-2.5 shrink-0" />
+                    <span><strong className="text-pro-900 font-semibold">Data Accuracy:</strong> &lt;2% post-agent data entry error rate.</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
