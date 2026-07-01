@@ -12,7 +12,7 @@ import { ThinkingTimer } from '../components/ThinkingTimer';
 import { orderErrorItems, forecastingItems } from '../data/mockData';
 import { forecastingProducts } from '../data/forecastingData';
 
-const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+const TARGET_URL = 'https://membrain-agent.jollygrass-e659853e.eastus2.azurecontainerapps.io/api/chat';
 const STORAGE_KEY = 'daily_brief_content';
 const STORAGE_TS_KEY = 'daily_brief_timestamp';
 const PROMPT = "Run a comprehensive check accross all the data in azure ./localdata emails.json, erp-data.json, onedrive.json for any discrepancies, errors, or impending catatrophies. Also list potential risks. If needed for deeper inspection, use the RLM skill to parse out and inspect the data corpus. Every data or fact you list you must cite parenthetically. For example (SAP, Sales Order Table). It should be formatted as a daily brief and update. Do not make new outside internet queries.";

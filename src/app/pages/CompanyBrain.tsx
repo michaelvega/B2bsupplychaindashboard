@@ -26,7 +26,7 @@ const downloadAsWord = async (text: string, title: string) => {
 const CACHE_ERP = '/api/azure/localdata/erp-data.json';
 const CACHE_EMAILS = '/api/azure/localdata/emails.json';
 const CACHE_ONEDRIVE = '/api/azure/localdata/onedrive.json';
-const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+const TARGET_URL = 'https://membrain-agent.jollygrass-e659853e.eastus2.azurecontainerapps.io/api/chat';
 const CHAT_STORAGE_KEY = 'company_brain_chat_history';
 
 type ScanStatus = 'idle' | 'scanning' | 'done' | 'error';

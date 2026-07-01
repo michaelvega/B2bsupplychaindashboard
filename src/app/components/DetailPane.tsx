@@ -13,7 +13,7 @@ interface Message {
   content: string;
 }
 
-const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+const TARGET_URL = 'https://membrain-agent.jollygrass-e659853e.eastus2.azurecontainerapps.io/api/chat';
 
 interface DetailPaneProps {
   item: WorkItem | null;

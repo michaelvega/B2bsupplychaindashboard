@@ -16,7 +16,7 @@ import { ThinkingTimer } from '../components/ThinkingTimer';
 const ITEM_TYPE = 'TASK_CARD';
 const AZURE_FILE = 'agent-tasks.json';
 const WEEKLY_FILE = 'weekly-agent-tasks.json';
-const TARGET_URL = 'https://membrain-agent.jollyground-dd12577e.eastus.azurecontainerapps.io/api/chat';
+const TARGET_URL = 'https://membrain-agent.jollygrass-e659853e.eastus2.azurecontainerapps.io/api/chat';
 
 const downloadAsWord = async (text: string, title: string) => {
   const htmlContent = await marked.parse(text);
