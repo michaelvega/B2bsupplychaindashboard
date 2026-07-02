@@ -331,24 +331,6 @@ export function AgentSuite() {
         </div>
       </div>
 
-      {/* Bottom Input Bar */}
-      {!showAddModal && (
-        <div className="absolute bottom-8 left-1/2 -trangray-x-1/2 w-full max-w-3xl z-40 animate-in slide-in-from-bottom-8 duration-500">
-          <div 
-            onClick={() => openAddModal('todo')}
-            className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl flex items-center px-8 py-5 cursor-text group hover:bg-white hover:border-indigo-300/50 hover:shadow-[0_8px_30px_rgb(79,70,229,0.12)] transition-all duration-300 ring-1 ring-gray-900/5 w-full"
-          >
-            <div className="relative group flex items-center justify-between w-full">
-              <span className="text-gray-500 font-medium text-base tracking-wide">Tell me what agent you want me to build</span>
-              <div className="ml-auto flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1.5 rounded-md border border-gray-200">⌘</span>
-                <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1.5 rounded-md border border-gray-200">K</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Modals */}
       {showAddModal && (
         <AddTaskModal
