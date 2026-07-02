@@ -55,7 +55,7 @@ export function Dashboard() {
   const allPanelsHidden = !panelsVisible.actionQueue && !panelsVisible.affectedOrders && !panelsVisible.inventoryForecast;
 
   return (
-    <div className="flex flex-col h-full max-w-[1400px] mx-auto overflow-hidden">
+    <div className="flex flex-col h-full max-w-[1400px] mx-auto overflow-hidden bg-grid-pattern-light bg-gray-50/50">
       <div className="flex-1 min-h-0">
         {allPanelsHidden ? (
           <div className="flex items-center justify-center h-full text-gray-400 text-sm">
@@ -69,7 +69,7 @@ export function Dashboard() {
                 <ResizablePanel defaultSize={40} minSize={20}>
                   <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between flex-shrink-0">
-                      <h2 className="text-lg font-semibold text-gray-900">Action Queue</h2>
+                      <h2 className="text-sm font-semibold text-gray-700">Action Queue</h2>
                       <button
                         onClick={() => togglePanel('actionQueue')}
                         className="p-1.5 rounded-md text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors flex-shrink-0"
@@ -102,7 +102,7 @@ export function Dashboard() {
                     <ResizablePanel defaultSize={50} minSize={20}>
                       <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between flex-shrink-0">
-                          <h2 className="text-sm font-semibold text-gray-900">Affected Orders & Products</h2>
+                          <h2 className="text-sm font-semibold text-gray-700">Affected Orders & Products</h2>
                           <button
                             onClick={() => togglePanel('affectedOrders')}
                             className="p-1.5 rounded-md text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors flex-shrink-0"
@@ -157,9 +157,9 @@ export function Dashboard() {
                 {/* Bottom Right: Inventory Forecast Chart */}
                 {panelsVisible.inventoryForecast && (
                   <ResizablePanel defaultSize={50} minSize={15}>
-                    <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm p-4 overflow-hidden">
-                      <div className="flex items-center justify-between mb-2 flex-shrink-0">
-                        <h2 className="text-sm font-semibold text-gray-900">Inventory Forecast - ML Predictions</h2>
+                    <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                      <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between flex-shrink-0">
+                        <h2 className="text-sm font-semibold text-gray-700">Inventory Forecast - ML Predictions</h2>
                         <button
                           onClick={() => togglePanel('inventoryForecast')}
                           className="p-1.5 rounded-md text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors flex-shrink-0"
@@ -168,7 +168,7 @@ export function Dashboard() {
                           <X className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="flex-1 min-h-0">
+                      <div className="flex-1 min-h-0 p-4">
                         <ResponsiveContainer width="100%" height="100%">
                           <ComposedChart data={monthlyStockData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />

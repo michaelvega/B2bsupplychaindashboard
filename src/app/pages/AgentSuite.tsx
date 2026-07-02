@@ -132,31 +132,31 @@ export function AgentSuite() {
   }
 
   return (
-    <div className="h-full flex flex-col bg-slate-50 relative overflow-hidden">
+    <div className="h-full flex flex-col bg-gray-50 relative overflow-hidden">
       {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <div className="absolute inset-0 z-0 pointer-events-none bg-grid-pattern-light"></div>
 
       {/* Header */}
-      <div className="relative z-10 px-8 py-5 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between shrink-0 shadow-sm">
+      <div className="relative z-10 px-8 py-5 border-b border-gray-200 bg-white/80 backdrop-blur-md flex items-center justify-between shrink-0 shadow-sm">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 p-2 rounded-lg shadow-indigo-200 shadow-lg">
-              <Calendar className="w-5 h-5 text-white" />
+            <div className="bg-gray-200 p-2 rounded-lg">
+              <Calendar className="w-5 h-5 text-gray-600" />
             </div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-xl font-bold text-gray-900 tracking-tight">
               Calendar
             </h1>
           </div>
 
           {/* View Toggle Slider */}
-          <div className="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200 shadow-inner">
+          <div className="bg-gray-100 p-1 rounded-xl flex items-center border border-gray-200 shadow-inner">
             <button
               onClick={() => setView('daily')}
               className={cn(
                 "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2",
                 view === 'daily'
-                  ? "bg-white text-indigo-600 shadow-md ring-1 ring-slate-200"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
+                  ? "bg-white text-gray-700 shadow-md ring-1 ring-gray-200"
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-200/50"
               )}
             >
               <Clock className="w-4 h-4" />
@@ -167,8 +167,8 @@ export function AgentSuite() {
               className={cn(
                 "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2",
                 view === 'weekly'
-                  ? "bg-white text-indigo-600 shadow-md ring-1 ring-slate-200"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
+                  ? "bg-white text-gray-700 shadow-md ring-1 ring-gray-200"
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-200/50"
               )}
             >
               <Calendar className="w-4 h-4" />
@@ -307,7 +307,7 @@ function SpreadsheetWithChart() {
                 contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 itemStyle={{ fontSize: '12px' }}
               />
-              <Bar dataKey="tasks" fill="#6366f1" radius={[4, 4, 0, 0]} maxBarSize={50} name="Tasks" />
+              <Bar dataKey="tasks" fill="#9ca3af" radius={[4, 4, 0, 0]} maxBarSize={50} name="Tasks" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -339,18 +339,18 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onDone,
     <div
       ref={dropRef as any}
       className={cn(
-        "flex flex-col w-[350px] bg-slate-200/40 backdrop-blur-[2px] rounded-2xl p-4 border border-slate-200 transition-all duration-300 shrink-0 max-h-full",
-        isOver && "bg-indigo-50/80 border-indigo-200 ring-2 ring-indigo-500/10"
+        "flex flex-col w-[350px] bg-gray-200/40 backdrop-blur-[2px] rounded-2xl p-4 border border-gray-200 transition-all duration-300 shrink-0 max-h-full",
+        isOver && "bg-gray-100/80 border-gray-300 ring-2 ring-gray-400/10"
       )}
     >
        <div className="flex items-center justify-between mb-5 px-1">
          <div className="flex items-center gap-2.5">
-           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600">
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-gray-100 text-gray-700">
              {icon}
            </div>
-           <h2 className="font-bold text-slate-800 text-sm tracking-tight">{title}</h2>
+           <h2 className="font-bold text-gray-800 text-sm tracking-tight">{title}</h2>
          </div>
-         <span className="bg-white/80 shadow-sm border border-slate-200 text-slate-600 text-[11px] px-2.5 py-1 rounded-full font-bold tabular-nums">
+         <span className="bg-white/80 shadow-sm border border-gray-200 text-gray-600 text-[11px] px-2.5 py-1 rounded-full font-bold tabular-nums">
            {tasks.length}
          </span>
        </div>
@@ -370,7 +370,7 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onDone,
 
        <button
          onClick={onAddClick}
-         className="w-full mt-3 rounded-xl flex items-center justify-center text-[13px] text-slate-500 py-3 px-4 hover:bg-white hover:text-indigo-600 hover:shadow-sm hover:border-slate-200 border border-dashed border-slate-300 transition-all duration-200 font-semibold group"
+         className="w-full mt-3 rounded-xl flex items-center justify-center text-[13px] text-gray-500 py-3 px-4 hover:bg-white hover:text-gray-700 hover:shadow-sm hover:border-gray-200 border border-dashed border-gray-300 transition-all duration-200 font-semibold group"
        >
          <Plus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
          Add New Card
@@ -420,7 +420,7 @@ function SimpleTaskCard({ task, onClick, onDone }: { task: Task, onClick: () => 
         <div className="px-5 pb-5">
           <Button
             size="sm"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all"
+            className="w-full bg-gray-800 hover:bg-gray-900 text-white shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all"
             onClick={onDone}
           >
             <CheckCircle2 className="w-3.5 h-3.5" /> Finalize Task
@@ -512,24 +512,24 @@ function DailyTaskGrid({ tasks, onCardClick, onAddClick }: any) {
     <div className="relative flex flex-col w-full max-w-6xl mx-auto h-full px-4">
       {/* Background Columns */}
       <div className="absolute inset-x-4 top-0 bottom-0 grid grid-cols-3 gap-8 pointer-events-none z-0 pb-20">
-        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
-        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
-        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-slate-200/40 backdrop-blur-[2px] rounded-2xl border border-slate-200"></div></div>
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-gray-200/40 backdrop-blur-[2px] rounded-2xl border border-gray-200"></div></div>
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-gray-200/40 backdrop-blur-[2px] rounded-2xl border border-gray-200"></div></div>
+        <div className="relative h-full"><div className="absolute -inset-x-3 inset-y-0 bg-gray-200/40 backdrop-blur-[2px] rounded-2xl border border-gray-200"></div></div>
       </div>
 
       {/* Headers */}
       <div className="grid grid-cols-3 gap-8 mb-6 shrink-0 relative z-10 pt-4">
          <div className="flex items-center gap-2.5 px-2">
-           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><ListTodo className="w-4 h-4" /></div>
-           <h2 className="font-bold text-slate-800 text-sm tracking-tight">To Do</h2>
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-gray-100 text-gray-700"><ListTodo className="w-4 h-4" /></div>
+           <h2 className="font-bold text-gray-800 text-sm tracking-tight">To Do</h2>
          </div>
          <div className="flex items-center gap-2.5 px-2">
-           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><Activity className="w-4 h-4" /></div>
-           <h2 className="font-bold text-slate-800 text-sm tracking-tight">In Progress</h2>
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-gray-100 text-gray-700"><Activity className="w-4 h-4" /></div>
+           <h2 className="font-bold text-gray-800 text-sm tracking-tight">In Progress</h2>
          </div>
          <div className="flex items-center gap-2.5 px-2">
-           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 text-indigo-600"><CheckCircle2 className="w-4 h-4" /></div>
-           <h2 className="font-bold text-slate-800 text-sm tracking-tight">Completed</h2>
+           <div className="p-1.5 rounded-lg bg-white shadow-sm border border-gray-100 text-gray-700"><CheckCircle2 className="w-4 h-4" /></div>
+           <h2 className="font-bold text-gray-800 text-sm tracking-tight">Completed</h2>
          </div>
       </div>
 
@@ -560,7 +560,7 @@ function DailyTaskGrid({ tasks, onCardClick, onAddClick }: any) {
            <div>
              <button
                onClick={onAddClick}
-               className="w-full rounded-xl flex items-center justify-center text-[13px] text-slate-500 py-4 px-4 hover:bg-white hover:text-indigo-600 hover:shadow-sm hover:border-slate-200 border border-dashed border-slate-300 transition-all duration-200 font-semibold group"
+               className="w-full rounded-xl flex items-center justify-center text-[13px] text-gray-500 py-4 px-4 hover:bg-white hover:text-gray-700 hover:shadow-sm hover:border-gray-200 border border-dashed border-gray-300 transition-all duration-200 font-semibold group"
              >
                <Plus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                Add New Task

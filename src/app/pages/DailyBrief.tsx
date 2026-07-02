@@ -210,19 +210,19 @@ export function DailyBrief() {
   ];
 
   return (
-    <div className="h-full flex flex-col bg-[#fafbfc]">
+    <div className="h-full flex flex-col bg-grid-pattern-light bg-gray-50/50">
       {/* Top Bar */}
       <div className="shrink-0 bg-white border-b border-gray-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div>
-              <p className="text-indigo-400 text-[11px] font-semibold tracking-[0.12em] uppercase">{dateStr}</p>
+              <p className="text-gray-500 text-[11px] font-semibold tracking-[0.12em] uppercase">{dateStr}</p>
               <h1 className="text-xl font-bold tracking-tight text-gray-900 mt-0.5">
                 {greeting}
               </h1>
             </div>
             <div className="hidden md:flex items-center gap-1.5 text-xs text-gray-400">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse" />
               <span>System Live</span>
               <span className="text-gray-200 mx-1">|</span>
               <span>{timeStr} UTC</span>
@@ -241,7 +241,7 @@ export function DailyBrief() {
             <button
               onClick={handleRefresh}
               disabled={isGenerating}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 text-white font-semibold text-sm shadow-sm hover:bg-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gray-800 text-white font-semibold text-sm shadow-sm hover:bg-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
               {isGenerating ? 'Analyzing...' : 'Refresh Brief'}
@@ -257,15 +257,15 @@ export function DailyBrief() {
           <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/30">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
-                  <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
+                <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <TrendingUp className="w-3.5 h-3.5 text-gray-700" />
                 </div>
                 <h2 className="font-semibold text-gray-900 text-sm">Supply Chain Performance</h2>
                 <span className="text-[10px] text-gray-400 font-medium ml-2">Last 30 Days</span>
               </div>
               <div className="flex items-center gap-4 text-[11px]">
-                <span className="flex items-center gap-1.5 text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />Shipments</span>
-                <span className="flex items-center gap-1.5 text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />Orders</span>
+                <span className="flex items-center gap-1.5 text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-gray-500" />Shipments</span>
+                <span className="flex items-center gap-1.5 text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-gray-400" />Orders</span>
                 <span className="flex items-center gap-1.5 text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-red-400" />Delays</span>
               </div>
             </div>
@@ -515,12 +515,12 @@ export function DailyBrief() {
               <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gray-50/30">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                    <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                      <Calendar className="w-3.5 h-3.5 text-gray-700" />
                     </div>
                     <h3 className="font-semibold text-gray-900 text-sm">Daily Tasks</h3>
                   </div>
-                  <a href="#/agent-suite" className="text-xs text-indigo-600 font-medium flex items-center gap-0.5 hover:text-indigo-700 transition-colors">
+                  <a href="#/agent-suite" className="text-xs text-gray-700 font-medium flex items-center gap-0.5 hover:text-gray-700 transition-colors">
                     View All
                     <ChevronRight className="w-3 h-3" />
                   </a>
@@ -537,8 +537,8 @@ export function DailyBrief() {
             {/* Card header */}
             <div className="flex items-center justify-between px-7 py-4 border-b border-gray-100 bg-gray-50/50">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
-                  <FileText className="w-3.5 h-3.5 text-indigo-600" />
+                <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <FileText className="w-3.5 h-3.5 text-gray-700" />
                 </div>
                 <h2 className="font-semibold text-gray-900 text-sm">Intelligence Report</h2>
               </div>
@@ -555,10 +555,10 @@ export function DailyBrief() {
               {isGenerating ? (
                 <div className="flex flex-col items-center justify-center py-24 text-gray-400 gap-5">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center">
-                      <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+                    <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center">
+                      <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center">
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gray-500 flex items-center justify-center">
                       <Zap className="w-3 h-3 text-white" />
                     </div>
                   </div>
@@ -579,8 +579,8 @@ export function DailyBrief() {
                   prose-p:leading-[1.7] prose-p:text-[14.5px] prose-p:text-gray-700 prose-p:my-2
                   prose-li:text-[14.5px] prose-li:leading-[1.7] prose-li:text-gray-700
                   prose-strong:text-gray-900 prose-strong:font-semibold
-                  prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline
-                  prose-code:text-indigo-600 prose-code:bg-indigo-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
+                  prose-a:text-gray-700 prose-a:no-underline hover:prose-a:underline
+                  prose-code:text-gray-700 prose-code:bg-indigo-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
                   prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-pre:rounded-xl
                   prose-table:text-sm prose-th:bg-gray-50 prose-th:font-semibold
                   prose-hr:border-gray-100
@@ -653,7 +653,7 @@ function DailyTasksFetcher() {
         </div>
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-indigo-400 rounded-full transition-all duration-500"
+            className="h-full bg-gradient-to-r from-gray-400 to-gray-300 rounded-full transition-all duration-500"
             style={{ width: `${tasks.length ? (doneTasks.length / tasks.length) * 100 : 0}%` }}
           />
         </div>
@@ -664,14 +664,14 @@ function DailyTasksFetcher() {
           <div key={task.id} className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors group">
             <div className={`w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center ${
               task.status === 'doing'
-                ? 'border-indigo-400 bg-indigo-50'
+                ? 'border-gray-400 bg-gray-50'
                 : 'border-gray-300'
             }`}>
-              {task.status === 'doing' && <div className="w-2 h-2 rounded-sm bg-indigo-500" />}
+              {task.status === 'doing' && <div className="w-2 h-2 rounded-sm bg-gray-500" />}
             </div>
             <span className="text-sm text-gray-700 truncate flex-1">{task.title}</span>
             {task.status === 'doing' && (
-              <span className="text-[10px] bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">In Progress</span>
+              <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">In Progress</span>
             )}
           </div>
         ))}
