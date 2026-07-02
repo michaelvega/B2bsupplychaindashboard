@@ -1,4 +1,6 @@
+import { useRef, useState } from 'react';
 import { createHashRouter } from 'react-router';
+import type { ImperativePanelHandle } from 'react-resizable-panels';
 import { LandingPage } from './pages/LandingPage';
 import { Actions } from './pages/Actions';
 import { AgentSuite } from './pages/AgentSuite';
@@ -9,18 +11,47 @@ import { Forecasting } from './pages/Forecasting';
 import { VendorOnboarding } from './pages/VendorOnboarding';
 import { History } from './pages/History';
 import { Settings } from './pages/Settings';
-import { CompanyBrain } from './pages/CompanyBrain';
-import { VisionCenter } from './pages/VisionCenter';
 import { DailyBrief } from './pages/DailyBrief';
 import { Sidebar } from './components/Sidebar';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from './components/ui/resizable';
 
 function Layout({ children }: { children: React.ReactNode }) {
+  const sidebarPanelRef = useRef<ImperativePanelHandle>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const handleToggleSidebar = () => {
+    if (sidebarPanelRef.current?.isCollapsed()) {
+      sidebarPanelRef.current?.expand();
+    } else {
+      sidebarPanelRef.current?.collapse();
+    }
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
+    <div className="h-screen bg-gray-50">
+      <ResizablePanelGroup direction="horizontal" autoSaveId="main-layout">
+        <ResizablePanel
+          ref={sidebarPanelRef}
+          defaultSize={16}
+          minSize={4}
+          maxSize={25}
+          collapsible
+          collapsedSize={3.5}
+          onCollapse={() => setSidebarCollapsed(true)}
+          onExpand={() => setSidebarCollapsed(false)}
+        >
+          <Sidebar
+            collapsed={sidebarCollapsed}
+            onToggleCollapse={handleToggleSidebar}
+          />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={84} minSize={40}>
+          <main className="h-full overflow-y-auto">
+            {children}
+          </main>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }
@@ -107,22 +138,6 @@ export const router = createHashRouter([
     element: (
       <Layout>
         <Settings />
-      </Layout>
-    ),
-  },
-  {
-    path: '/company-brain',
-    element: (
-      <Layout>
-        <CompanyBrain />
-      </Layout>
-    ),
-  },
-  {
-    path: '/vision-center',
-    element: (
-      <Layout>
-        <VisionCenter />
       </Layout>
     ),
   },

@@ -611,10 +611,7 @@ export function LandingPage() {
                     title: 'Built for Operations',
                     desc: 'Designed specifically for supply chain professionals. We deliver a tailored, autonomous user interface that does not require a bit of code or engineering to automate high impact workflows.',
                   },
-                  {
-                    title: 'Breaking Down Silos',
-                    desc: 'Data silos limit AI effectiveness. Our Enterprise Search unifies your data in one accessible location, significantly uplifting our AI coworker and others like Claude Code.',
-                  },
+
                 ].map((card) => (
                   <div key={card.title} className="bg-pro-50 border border-pro-200/60 rounded-2xl p-6 hover:shadow-sm hover:border-pro-200 transition-all group/card">
                     <div className="flex items-center gap-3 mb-3">

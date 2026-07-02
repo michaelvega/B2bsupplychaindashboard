@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Home, Clock, History, Settings, FileText, LayoutDashboard, Terminal, AlertCircle, TrendingUp, Users, Bot, ChevronLeft, ChevronRight, Brain, Calendar, Folder, Eye } from 'lucide-react';
+import { FileText, Calendar, AlertCircle, Brain, Terminal, TrendingUp, Users, History, Settings, ChevronLeft, ChevronRight, ChevronDown, FolderKanban } from 'lucide-react';
 import { cn } from './ui/utils';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './ui/collapsible';
 
 function ProceptLogo({ size = 22 }: { size?: number }) {
   return (
@@ -23,41 +23,110 @@ function ProceptLogo({ size = 22 }: { size?: number }) {
   );
 }
 
-export function Sidebar() {
+interface LeafMenuItem {
+  type: 'leaf';
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path: string;
+}
+
+interface ParentMenuItem {
+  type: 'parent';
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  children: Omit<LeafMenuItem, 'type'>[];
+}
+
+type MenuItem = LeafMenuItem | ParentMenuItem;
+
+const menuItems: MenuItem[] = [
+  {
+    type: 'leaf',
+    label: 'Daily Brief',
+    icon: FileText,
+    path: '/daily-brief',
+  },
+  {
+    type: 'parent',
+    label: 'Action Backlog',
+    icon: FolderKanban,
+    children: [
+      { label: 'Daily Tasks', icon: Calendar, path: '/agent-suite' },
+      { label: 'Order Errors', icon: AlertCircle, path: '/queues/order-errors' },
+      { label: 'Forecasting', icon: TrendingUp, path: '/queues/forecasting' },
+      { label: 'Vendor Onboarding', icon: Users, path: '/queues/vendor-onboarding' },
+    ],
+  },
+  {
+    type: 'parent',
+    label: 'Knowledge',
+    icon: Brain,
+    children: [
+      { label: 'Assistant', icon: Terminal, path: '/command-center' },
+    ],
+  },
+  {
+    type: 'parent',
+    label: 'System',
+    icon: Settings,
+    children: [
+      { label: 'History', icon: History, path: '/history' },
+      { label: 'Settings', icon: Settings, path: '/settings' },
+    ],
+  },
+];
+
+function NavLink({
+  path,
+  label,
+  icon: Icon,
+  collapsed,
+  indent,
+}: {
+  path: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  collapsed: boolean;
+  indent?: boolean;
+}) {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
+  const isActive = location.pathname === path;
 
-  const mainNavItems = [
-    { path: '/daily-brief', label: 'Daily Brief', icon: FileText },
-  ];
+  return (
+    <Link
+      to={path}
+      title={collapsed ? label : undefined}
+      className={cn(
+        'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
+        collapsed ? 'justify-center' : '',
+        indent && !collapsed ? 'ml-4' : '',
+        isActive
+          ? 'bg-gray-100 text-gray-900 font-medium'
+          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+      )}
+    >
+      <Icon className="w-4 h-4 flex-shrink-0" />
+      {!collapsed && <span className="truncate">{label}</span>}
+    </Link>
+  );
+}
 
-  const backlogNavItems = [
-    { path: '/agent-suite', label: 'Daily Tasks', icon: Calendar },
-    { path: '/queues/order-errors', label: 'Order errors', icon: AlertCircle },
-  ];
+interface SidebarProps {
+  collapsed: boolean;
+  onToggleCollapse: () => void;
+}
 
-  const knowledgeNavItems = [
-    { path: '/company-brain', label: 'Enterprise Search', icon: Brain },
-    { path: '/command-center', label: 'Assistant', icon: Terminal },
-  ];
+export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
+  const location = useLocation();
 
-
-  const synthesisNavItems = [
-    { path: '/queues/forecasting', label: 'Forecasting', icon: TrendingUp },
-    { path: '/queues/vendor-onboarding', label: 'Vendor onboarding and analytics', icon: Users },
-    { path: '/vision-center', label: 'Vision and Document Center', icon: Eye },
-  ];
-
-  const otherNavItems = [
-    { path: '/history', label: 'History', icon: History },
-    { path: '/settings', label: 'Settings', icon: Settings },
-  ];
+  const isParentActive = (parent: ParentMenuItem) =>
+    parent.children.some((child) => location.pathname === child.path);
 
   return (
     <div
       className={cn(
-        'border-r border-gray-200 bg-white flex flex-col h-screen transition-all duration-300 ease-in-out relative',
-        collapsed ? 'w-16' : 'w-64'
+        'border-r border-gray-200 bg-white flex flex-col h-full transition-all duration-300 ease-in-out relative',
+        collapsed ? 'w-16' : 'w-full'
       )}
     >
       {/* Header */}
@@ -71,7 +140,7 @@ export function Sidebar() {
           </div>
         )}
         <button
-          onClick={() => setCollapsed((c) => !c)}
+          onClick={onToggleCollapse}
           className={cn(
             'flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors flex-shrink-0',
             collapsed && 'hidden'
@@ -85,7 +154,7 @@ export function Sidebar() {
       {/* Expand button when collapsed */}
       {collapsed && (
         <button
-          onClick={() => setCollapsed(false)}
+          onClick={onToggleCollapse}
           className="mx-auto mt-3 flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
           aria-label="Expand sidebar"
         >
@@ -95,168 +164,73 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto p-3">
-        <div className="space-y-1">
-          {mainNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+        <div className="space-y-0.5">
+          {menuItems.map((item) => {
+            if (item.type === 'leaf') {
+              return (
+                <NavLink
+                  key={item.path}
+                  path={item.path}
+                  label={item.label}
+                  icon={item.icon}
+                  collapsed={collapsed}
+                />
+              );
+            }
+
+            // Parent item — expandable via Collapsible, default open if active child
+            const ParentIcon = item.icon;
+            const active = isParentActive(item);
+
+            if (collapsed) {
+              // In collapsed mode, show a divider and render children as icon-only links
+              return (
+                <div key={item.label}>
+                  <div className="border-t border-gray-100 my-2 mx-1" />
+                  {item.children.map((child) => (
+                    <NavLink
+                      key={child.path}
+                      path={child.path}
+                      label={child.label}
+                      icon={child.icon}
+                      collapsed={collapsed}
+                    />
+                  ))}
+                </div>
+              );
+            }
+
             return (
-              <Link
-                key={item.path}
-                to={item.path}
-                title={collapsed ? item.label : undefined}
-                className={cn(
-                  'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
-                  collapsed ? 'justify-center' : '',
-                  isActive
-                    ? 'bg-gray-100 text-gray-900 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                )}
-              >
-                <Icon className="w-4 h-4 flex-shrink-0" />
-                {!collapsed && <span>{item.label}</span>}
-              </Link>
+              <Collapsible key={item.label} defaultOpen={active}>
+                <CollapsibleTrigger
+                  className={cn(
+                    'flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm transition-colors group',
+                    active
+                      ? 'text-gray-900 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  )}
+                >
+                  <ParentIcon className="w-4 h-4 flex-shrink-0" />
+                  <span className="flex-1 text-left truncate">{item.label}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 transition-transform duration-200 group-data-[state=closed]:-rotate-90" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                  <div className="pt-0.5 pb-1 space-y-0.5">
+                    {item.children.map((child) => (
+                      <NavLink
+                        key={child.path}
+                        path={child.path}
+                        label={child.label}
+                        icon={child.icon}
+                        collapsed={collapsed}
+                        indent
+                      />
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             );
           })}
-        </div>
-
-        {/* Action Backlog */}
-        <div className="mt-6">
-          {!collapsed && (
-            <div className="px-2 mb-2">
-              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Action Backlog
-              </h2>
-            </div>
-          )}
-          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
-          <div className="space-y-1">
-            {backlogNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  title={collapsed ? item.label : undefined}
-                  className={cn(
-                    'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
-                    collapsed ? 'justify-center' : '',
-                    isActive
-                      ? 'bg-gray-100 text-gray-900 font-medium'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  )}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Knowledge */}
-        <div className="mt-6">
-          {!collapsed && (
-            <div className="px-2 mb-2">
-              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Knowledge
-              </h2>
-            </div>
-          )}
-          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
-          <div className="space-y-1">
-            {knowledgeNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  title={collapsed ? item.label : undefined}
-                  className={cn(
-                    'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
-                    collapsed ? 'justify-center' : '',
-                    isActive
-                      ? 'bg-gray-100 text-gray-900 font-medium'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  )}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Data Synthesis */}
-        <div className="mt-6">
-          {!collapsed && (
-            <div className="px-2 mb-2">
-              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Data Synthesis
-              </h2>
-            </div>
-          )}
-          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
-          <div className="space-y-1">
-            {synthesisNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  title={collapsed ? item.label : undefined}
-                  className={cn(
-                    'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
-                    collapsed ? 'justify-center' : '',
-                    isActive
-                      ? 'bg-gray-100 text-gray-900 font-medium'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  )}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Other nav */}
-        <div className="mt-6">
-          {!collapsed && (
-            <div className="px-2 mb-2">
-              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                More
-              </h2>
-            </div>
-          )}
-          {collapsed && <div className="border-t border-gray-100 my-2 mx-1" />}
-          <div className="space-y-1">
-          {otherNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                title={collapsed ? item.label : undefined}
-                className={cn(
-                  'flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-sm',
-                  collapsed ? 'justify-center' : '',
-                  isActive
-                    ? 'bg-gray-100 text-gray-900 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                )}
-              >
-                <Icon className="w-4 h-4 flex-shrink-0" />
-                {!collapsed && <span>{item.label}</span>}
-              </Link>
-            );
-          })}
-        </div>
         </div>
       </nav>
     </div>
