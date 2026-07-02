@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { FileText, Calendar, AlertCircle, Brain, Terminal, TrendingUp, Users, History, Settings, ChevronLeft, ChevronRight, ChevronDown, FolderKanban } from 'lucide-react';
+import { FileText, Calendar, AlertCircle, TrendingUp, Users, History, Settings, ChevronLeft, ChevronRight, ChevronDown, FolderKanban } from 'lucide-react';
 import { cn } from './ui/utils';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './ui/collapsible';
 
@@ -47,22 +47,19 @@ const menuItems: MenuItem[] = [
     path: '/daily-brief',
   },
   {
+    type: 'leaf',
+    label: 'Calendar',
+    icon: Calendar,
+    path: '/agent-suite',
+  },
+  {
     type: 'parent',
     label: 'Action Backlog',
     icon: FolderKanban,
     children: [
-      { label: 'Daily Tasks', icon: Calendar, path: '/agent-suite' },
       { label: 'Order Errors', icon: AlertCircle, path: '/queues/order-errors' },
       { label: 'Forecasting', icon: TrendingUp, path: '/queues/forecasting' },
       { label: 'Vendor Onboarding', icon: Users, path: '/queues/vendor-onboarding' },
-    ],
-  },
-  {
-    type: 'parent',
-    label: 'Knowledge',
-    icon: Brain,
-    children: [
-      { label: 'Assistant', icon: Terminal, path: '/command-center' },
     ],
   },
   {

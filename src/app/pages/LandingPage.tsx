@@ -180,9 +180,9 @@ export function LandingPage() {
     <div className="bg-white min-h-screen text-pro-900" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>
 
       {/* ──────────────────────────────────── */}
-      {/* NAV — Transparent glass over video */}
+      {/* NAV — Dark glass over lightened video */}
       {/* ──────────────────────────────────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-pro-950/40 backdrop-blur-xl border-b border-white/10">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-black/30 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <img
@@ -206,7 +206,7 @@ export function LandingPage() {
       </nav>
 
       {/* ──────────────────────────────────── */}
-      {/* HERO — Full-bleed factory video background */}
+      {/* HERO — Factory video, subtle overlay, transparent glass cards */}
       {/* ──────────────────────────────────── */}
       <section className="relative min-h-screen overflow-hidden flex flex-col pt-16 bg-pro-950">
         {/* Background video */}
@@ -221,56 +221,184 @@ export function LandingPage() {
           <source src="/hero-factory.mp4" type="video/mp4" />
         </video>
 
-        {/* Overlay gradient for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-pro-950/90 via-pro-950/70 to-pro-950/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-pro-950/60 via-transparent to-pro-950/30" />
+        {/* Subtle overlay — keeps video visible */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/35 to-black/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25" />
 
         {/* Content */}
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex-1 flex items-center">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-12 lg:py-20">
-              <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-12 lg:py-16">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-                {/* LEFT — Copy */}
-                <div className="space-y-5 lg:space-y-7 lg:pr-8">
-                  {/* Eyebrow / Subline */}
-                  <p className="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-accent-400">
+                {/* ── LEFT COLUMN — Title only, no box ── */}
+                <div className="lg:pr-10">
+                  <p className="text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-accent-400 mb-4">
                     Agentic AI Operations Layer for Smart Procurement and Manufacturing
                   </p>
 
-                  {/* Tagline */}
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08]">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.08] mb-4">
                     Your Always On Call{' '}
-                    <span className="text-accent-400">Procurement&nbsp;Officer</span>
+                    <span className="text-accent-400">Procurement&nbsp;Ops</span>
                   </h1>
 
-                  {/* ERP Hook */}
-                  <p className="text-base sm:text-lg text-slate-300 max-w-lg leading-relaxed">
+                  <p className="text-base text-slate-300/90 max-w-lg leading-relaxed mb-6">
                     Unsilo your data to unlock agent automation with your preexisting&nbsp;ERP
                   </p>
 
-                  {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-4 pt-1">
+                  <div className="flex flex-wrap items-center gap-3">
                     <a
                       href="https://calendly.com/sscarozzi/30min"
                       target="_blank"
                       rel="noreferrer"
-                      className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-7 py-3.5 rounded-xl inline-flex items-center gap-2.5 transition-all text-sm shadow-lg shadow-accent-600/30 hover:shadow-accent-500/35 hover:-translate-y-0.5"
+                      className="bg-accent-600 hover:bg-accent-500 text-white font-semibold px-6 py-3 rounded-xl inline-flex items-center gap-2 transition-all text-sm shadow-lg shadow-accent-600/30 hover:shadow-accent-500/35 hover:-translate-y-0.5"
                     >
                       Book a Call
                       <ArrowRight className="w-4 h-4" />
                     </a>
                     <button
                       onClick={() => navigate('/daily-brief')}
-                      className="text-slate-300 hover:text-white font-medium px-6 py-3.5 rounded-xl inline-flex items-center gap-2 transition-all text-sm border border-slate-600 hover:border-slate-400 hover:bg-white/10"
+                      className="text-white/80 hover:text-white font-medium px-5 py-3 rounded-xl inline-flex items-center gap-2 transition-all text-sm border border-white/20 hover:border-white/40 hover:bg-white/10"
                     >
                       Try Interactive Demo
                     </button>
                   </div>
                 </div>
 
-                {/* RIGHT — empty, video fills the space */}
-                <div />
+                {/* ── RIGHT COLUMN — skinnier boxes ── */}
+                <div className="space-y-5 lg:pl-10">
+                  {/* Revenue Increase — intricate bar chart */}
+                  <div className="bg-black/15 backdrop-blur-[2px] border border-white/10 rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-white/90 font-semibold text-sm">Revenue Increase</span>
+                      <span className="text-emerald-400 text-xs font-bold bg-emerald-500/20 px-2.5 py-1 rounded-full">+18.2%</span>
+                    </div>
+                    {/* Bar chart — ~100 thin bars, mixed black/blue/grey */}
+                    <div className="flex items-end gap-px h-28">
+                      {(() => {
+                        const colors = [
+                          'rgba(0,0,0,0.28)',
+                          '#4A7DE6',
+                          'rgba(255,255,255,0.22)',
+                          'rgba(0,0,0,0.28)',
+                          '#4A7DE6',
+                          'rgba(255,255,255,0.22)',
+                          'rgba(0,0,0,0.28)',
+                        ];
+                        // Generate a realistic trend: growth → dip → recovery → surge
+                        const trend = [
+                          15,16,18,17,20,19,22,24,23,26,  // rising
+                          28,27,30,32,31,34,36,35,38,40,  // climbing
+                          42,41,44,46,45,48,47,50,52,51,  // peak
+                          50,48,45,42,38,35,32,28,25,22,  // dip
+                          20,18,16,19,22,24,28,30,26,24,  // bottom
+                          28,32,35,38,42,40,44,48,45,42,  // recovery
+                          46,50,48,52,49,55,53,50,54,58,  // building
+                          56,60,58,62,60,65,63,68,66,70,  // climbing higher
+                          68,72,70,75,73,78,76,80,78,82,  // nearing peak
+                          80,84,82,86,84,88,85,90,87,92,  // final surge
+                        ];
+                        return trend.map((h, i) => (
+                          <div
+                            key={i}
+                            className="flex-1 rounded-t-full"
+                            style={{ height: `${h}%`, backgroundColor: colors[i % colors.length], minWidth: 1 }}
+                          />
+                        ));
+                      })()}
+                    </div>
+                    <div className="flex justify-between mt-2.5 text-[9px] text-white/25 font-medium">
+                      <span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q1</span><span>Q2</span><span>Q3</span>
+                    </div>
+                  </div>
+
+                  {/* Two boxes under Revenue */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Incoming Stock — with agent-click animation */}
+                    <div className="bg-black/15 backdrop-blur-[2px] border border-white/10 rounded-2xl p-5 relative overflow-hidden">
+                      <style>
+                        {`
+                          @keyframes agent-fix {
+                            0%, 20% { opacity: 1; }
+                            25% { opacity: 0.6; }
+                            30% { opacity: 1; }
+                            45% { opacity: 0.6; }
+                            48% { opacity: 1; }
+                            55% { opacity: 1; }
+                            70% { opacity: 0; }
+                            100% { opacity: 0; }
+                          }
+                          @keyframes agent-fixed-show {
+                            0%, 70% { opacity: 0; transform: translateY(4px); }
+                            80% { opacity: 1; transform: translateY(0); }
+                            100% { opacity: 1; transform: translateY(0); }
+                          }
+                          @keyframes cursor-tap {
+                            0%, 38% { opacity: 0; transform: translate(0, 0); }
+                            42% { opacity: 1; transform: translate(0, 0); }
+                            48% { opacity: 1; transform: translate(-2px, 2px); }
+                            52% { opacity: 1; transform: translate(0, 0); }
+                            55%, 100% { opacity: 0; transform: translate(0, 0); }
+                          }
+                          @keyframes run-agent-flash {
+                            0%, 48% { opacity: 0; }
+                            52% { opacity: 1; }
+                            65% { opacity: 1; }
+                            70% { opacity: 0; }
+                            100% { opacity: 0; }
+                          }
+                          .animate-agent-fix { animation: agent-fix 6s ease-in-out infinite; }
+                          .animate-agent-fixed-show { animation: agent-fixed-show 6s ease-in-out infinite; }
+                          .animate-cursor-tap { animation: cursor-tap 6s ease-in-out infinite; }
+                          .animate-run-agent-flash { animation: run-agent-flash 6s ease-in-out infinite; }
+                        `}
+                      </style>
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-white/90 font-semibold text-sm">Incoming Stock</span>
+                        {/* Cursor that clicks */}
+                        <span className="animate-cursor-tap text-white/80 text-xs" title="Click to run agent">🖱️</span>
+                      </div>
+                      <div className="space-y-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                          <span className="text-white/70 text-xs">SKU-2841</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                          <span className="text-white/70 text-xs">SKU-6193</span>
+                        </div>
+                        {/* Delayed row — animates to fixed */}
+                        <div className="flex items-center gap-2 bg-red-500/10 -mx-1.5 px-1.5 py-1 rounded border border-red-500/15 animate-agent-fix">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+                          <span className="text-white/80 text-xs">SKU-7730</span>
+                          <span className="text-red-400 text-[10px] font-bold ml-auto">Delayed</span>
+                        </div>
+                        {/* Fixed row — appears after agent runs */}
+                        <div className="flex items-center gap-2 -mx-1.5 px-1.5 py-1 rounded animate-agent-fixed-show absolute bottom-5 left-5 right-5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                          <span className="text-white/80 text-xs">SKU-7730</span>
+                          <span className="text-emerald-400 text-[10px] font-bold ml-auto">Fixed ✓</span>
+                        </div>
+                      </div>
+                      {/* Run Agent flash */}
+                      <div className="animate-run-agent-flash absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <span className="bg-accent-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Run Agent →</span>
+                      </div>
+                    </div>
+
+                    {/* Missed Orders */}
+                    <div className="bg-black/15 backdrop-blur-[2px] border border-white/10 rounded-2xl p-5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                          <Check className="w-3.5 h-3.5 text-emerald-300" />
+                        </div>
+                        <span className="text-white/90 font-semibold text-sm">Missed Orders</span>
+                      </div>
+                      <div className="text-2xl font-bold text-white mb-1">847</div>
+                      <div className="text-xs text-emerald-400 font-medium">Reconciled</div>
+                    </div>
+                  </div>
+                </div>
 
               </div>
             </div>
@@ -278,7 +406,7 @@ export function LandingPage() {
 
           {/* Scroll hint */}
           <div className="text-center pb-8">
-            <div className="inline-flex flex-col items-center gap-2 text-slate-500 text-xs tracking-widest uppercase font-medium">
+            <div className="inline-flex flex-col items-center gap-2 text-white/30 text-xs tracking-widest uppercase font-medium">
               <span>Scroll</span>
               <ArrowDown className="w-3.5 h-3.5" />
             </div>
