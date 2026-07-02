@@ -405,7 +405,7 @@ function KanbanColumn({ title, icon, status, tasks, onDrop, onCardClick, onStart
     <div 
       ref={dropRef as any} 
       className={cn(
-        "flex flex-col w-[350px] bg-gray-200/40 backdrop-blur-[2px] rounded-2xl p-4 border border-gray-200 transition-all duration-300 shrink-0 max-h-full", 
+        "flex flex-col flex-1 min-w-[220px] bg-gray-200/40 backdrop-blur-[2px] rounded-2xl p-4 border border-gray-200 transition-all duration-300",
         isOver && "bg-gray-100/80 border-gray-300 ring-2 ring-gray-400/10"
       )}
     >
@@ -526,7 +526,7 @@ function TaskCard({ task, onClick, onStart, onDone, onAssignHuman, onAssignAgent
           <Button 
             size="sm" 
             variant="outline" 
-            className="w-full bg-indigo-50/50 text-gray-600 hover:bg-indigo-50 border-indigo-100 shadow-none text-[11px] font-bold tracking-widest uppercase transition-all" 
+            className="w-full bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200 shadow-none text-[11px] font-bold tracking-widest uppercase transition-all"
             onClick={onStart}
           >
             <Play className="w-3 h-3 mr-2" /> Execute Agent
@@ -637,14 +637,15 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-in fade-in duration-200">
-      <div 
-        className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 w-full max-w-3xl h-[85vh] max-h-[800px] min-h-[500px] animate-in zoom-in-95 slide-in-from-bottom-10 duration-300"
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6 animate-in fade-in duration-200">
+      <div
+        className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200/60 w-full max-w-3xl h-[85vh] max-h-[800px] min-h-[500px] animate-in zoom-in-95 slide-in-from-bottom-10 duration-300"
       >
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            Create New Task
-          </h2>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Create New Task</h2>
+            <p className="text-xs text-gray-400 mt-0.5">Chat with the agent to build your task</p>
+          </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
@@ -698,15 +699,15 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
                   handleSendChat();
                 }
               }}
-              placeholder="Edit template or reply to agent... (Cmd+Enter to send)" 
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner resize-none h-32" 
+              placeholder="Edit template or reply to agent... (Cmd+Enter to send)"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all resize-none h-32 bg-gray-50"
             />
-            <Button onClick={handleSendChat} disabled={isGenerating || !chatInput.trim()} className="absolute bottom-3 right-3 rounded-lg w-9 h-9 p-0 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-md disabled:opacity-50">
+            <Button onClick={handleSendChat} disabled={isGenerating || !chatInput.trim()} className="absolute bottom-3 right-3 rounded-lg w-9 h-9 p-0 flex items-center justify-center bg-gray-800 hover:bg-gray-900 shadow-sm disabled:opacity-50">
               <Send className="w-4 h-4" />
             </Button>
           </div>
           <div className="flex justify-end pt-1">
-            <Button onClick={handleApprove} className="bg-green-600 hover:bg-green-700 text-white shadow-md flex items-center gap-2">
+            <Button onClick={handleApprove} className="bg-gray-800 hover:bg-gray-900 text-white shadow-sm flex items-center gap-2">
               <CheckCircle className="w-4 h-4" /> Approve & Create Task
             </Button>
           </div>
@@ -733,28 +734,31 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto flex flex-col relative">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20 rounded-t-2xl">
-          <h2 className="font-semibold text-lg">{task.title}</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col">
+        <div className="shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-20">
+          <div>
+            <h2 className="font-semibold text-lg text-gray-900">{task.title}</h2>
+            <p className="text-xs text-gray-400 mt-0.5">Task detail & agent conversation</p>
+          </div>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => {
-                if (confirm("Are you sure you want to reset this task to TODO? This will clear its progress and chat history.")) {
+                if (confirm("Reset this task to TODO?")) {
                   onUpdate({ ...task, status: 'todo', chatHistory: [], isGenerating: false, hasBotResponded: false });
                   onClose();
                 }
-              }} 
-              className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-orange-200" 
+              }}
+              className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-xs font-medium transition-colors"
               title="Reset to TODO"
             >
-              <RefreshCw className="w-3.5 h-3.5" /> Reset to TODO
+              <RefreshCw className="w-3.5 h-3.5" /> Reset
             </button>
-            <button onClick={onDelete} className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded px-2 py-1 flex items-center gap-1.5 text-xs font-medium transition-colors border border-transparent hover:border-red-200" title="Delete Task">
+            <button onClick={onDelete} className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-xs font-medium transition-colors" title="Delete Task">
               <Trash2 className="w-3.5 h-3.5" /> Delete
             </button>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <X className="w-5 h-5" />
+            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-1">
+              <X className="w-5 h-5 text-gray-400" />
             </button>
           </div>
         </div>
@@ -764,7 +768,7 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
             <div className="flex items-center gap-2 mb-4">
               <span className={cn(
                 "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].includes(task.status) ? "bg-purple-100 text-purple-800" :
+                ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].includes(task.status) ? "bg-gray-100 text-gray-700" :
                   task.status === 'done' ? "bg-green-100 text-green-800" : "bg-stone-100 text-stone-800"
               )}>
                 {task.status}
@@ -798,7 +802,7 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
                   <Button onClick={() => {
                     const initialMsg = `Task: ${task.title}\nDescription: ${task.description}\n\nPlease execute this task.`;
                     onChatSend(initialMsg);
-                  }} className="bg-stone-900 hover:bg-stone-950 text-white">
+                  }} className="bg-gray-800 hover:bg-gray-900 text-white rounded-lg px-4 py-2 text-sm font-medium shadow-sm">
                     <Play className="w-4 h-4 mr-2" />
                     Start Bot with Task Details
                   </Button>
@@ -832,7 +836,7 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
               )}
               {task.isGenerating && (
                 <div className="flex w-full justify-start">
-                  <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm bg-white border border-stone-100 rounded-bl-none flex items-center gap-2 text-stone-600 font-medium h-[38px]">
+                  <div className="max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm bg-white border border-gray-100 rounded-bl-none flex items-center gap-2 text-gray-600 font-medium h-[38px]">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <ThinkingTimer label="Agent is thinking" />
                   </div>
@@ -849,12 +853,12 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
                   onChange={(e) => setChatInput(e.target.value)}
                   disabled={task.isGenerating}
                   placeholder="Ask a follow-up..."
-                  className="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-stone-500 focus:border-stone-500 block w-full px-5 py-3 pr-12 transition-all"
+                  className="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full focus:ring-1 focus:ring-gray-400 focus:border-gray-400 block w-full px-5 py-3 pr-12 transition-all outline-none"
                 />
                 <Button
                   type="submit"
                   disabled={task.isGenerating || !chatInput.trim()}
-                  className="absolute right-1.5 p-2 bg-stone-900 hover:bg-stone-950 text-white rounded-full w-9 h-9 flex items-center justify-center transition-transform disabled:opacity-50 disabled:hover:scale-100 hover:scale-105"
+                  className="absolute right-1.5 p-2 bg-gray-800 hover:bg-gray-900 text-white rounded-full w-9 h-9 flex items-center justify-center transition-transform disabled:opacity-50 disabled:hover:scale-100 hover:scale-105"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
@@ -946,7 +950,7 @@ function DailyTaskCard({ task, onClick, onStart }: { task: Task, onClick: () => 
       layout
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       onClick={onClick}
-      className="bg-white rounded-xl cursor-pointer transition-all border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex flex-col relative overflow-hidden min-h-[220px]"
+      className="bg-white rounded-xl cursor-pointer transition-all border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] flex flex-col relative overflow-hidden min-h-[300px]"
     >
       {/* Top Header */}
       <div className="flex items-center gap-2 px-5 py-3.5 border-b border-gray-100 bg-gray-50/50 shrink-0">
@@ -975,7 +979,7 @@ function DailyTaskCard({ task, onClick, onStart }: { task: Task, onClick: () => 
           )}
 
           {task.status === 'doing' && (
-            <div className="w-full bg-indigo-50 border border-indigo-100 text-gray-600 rounded-md py-2 px-3 shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+            <div className="w-full bg-gray-100 border border-gray-200 text-gray-600 rounded-md py-2 px-3 shadow-sm flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest">
               <Loader2 className="w-3.5 h-3.5 animate-spin" /> Agent Loading...
             </div>
           )}
