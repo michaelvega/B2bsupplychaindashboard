@@ -40,7 +40,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="h-screen bg-gray-50">
-      <ResizablePanelGroup direction="horizontal" autoSaveId="main-layout-v3">
+      <ResizablePanelGroup direction="horizontal" autoSaveId="main-layout-v4">
         {/* Left Sidebar */}
         <ResizablePanel
           ref={sidebarPanelRef}
