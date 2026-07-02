@@ -636,10 +636,19 @@ function AddTaskModal({ onClose, onAdd, defaultStatus }: { onClose: () => void, 
     });
   };
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6 animate-in fade-in duration-200" onClick={onClose}>
       <div
         className="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200/60 w-full max-w-3xl h-[85vh] max-h-[800px] min-h-[500px] animate-in zoom-in-95 slide-in-from-bottom-10 duration-300"
+        onClick={e => e.stopPropagation()}
       >
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
           <div>
@@ -733,9 +742,17 @@ function TaskDetailModal({ task, onClose, onUpdate, onDelete, onChatSend }: { ta
     setChatInput('');
   };
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
         <div className="shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-20">
           <div>
             <h2 className="font-semibold text-lg text-gray-900">{task.title}</h2>
