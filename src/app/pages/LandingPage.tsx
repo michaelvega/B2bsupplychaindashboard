@@ -361,46 +361,52 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══════════════ USE CASES ═══════════════ */}
+      {/* ═══════════════ INTEGRATIONS ═══════════════ */}
+      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Integrations</p>
+          <h2 className="text-3xl md:text-4xl font-light text-white tracking-tight leading-tight mb-4">
+            Connects to <span className="font-normal">everything you already use.</span>
+          </h2>
+          <p className="text-sm text-white/30 max-w-lg mx-auto mb-16">
+            No rip-and-replace. Procept sits on top of your existing stack — ERP, email, file systems, and databases.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
+            {[
+              'SAP', 'Oracle', 'Microsoft\nDynamics', 'NetSuite', 'JD Edwards', 'Infor',
+              'Outlook', 'Gmail', 'SharePoint', 'OneDrive', 'Snowflake', 'PostgreSQL',
+            ].map((name, i) => (
+              <div key={i} className="bg-black p-6 flex items-center justify-center group hover:bg-white/[0.03] transition-colors">
+                <span className="text-xs text-white/25 group-hover:text-white/40 transition-colors font-medium tracking-wide whitespace-pre-line text-center leading-snug">{name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ INDUSTRIES ═══════════════ */}
       <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-20">
-            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Use Cases</p>
+            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Industries</p>
             <h2 className="text-3xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-2xl">
-              Built to eliminate<br />
-              <span className="font-normal">upstream data bottlenecks.</span>
+              Purpose-built for<br />
+              <span className="font-normal">the industrial economy.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                icon: <Globe className="w-4 h-4 text-white/60" />,
-                title: 'Unstructured Supplier Document Automation',
-                desc: 'Stop forcing sourcing teams to manually re-key data. Autonomous agents instantly ingest complex supplier PDFs, compliance certificates, and email threads, translating them into structured data for your ERP.',
-              },
-              {
-                icon: <ShieldCheck className="w-4 h-4 text-white/60" />,
-                title: 'Procurement Error Prevention',
-                desc: 'Legacy systems catch mistakes after the fabric is cut. Our agents cross-reference incoming supplier specs against original merchandise plans, instantly flagging mismatches in price, quantity, or materials before the purchase order is issued.',
-              },
-              {
-                icon: <BarChart3 className="w-4 h-4 text-white/60" />,
-                title: 'Supplier Risk Intelligence',
-                desc: 'Continuous monitoring of supplier compliance and on-time performance. Automatic flagging of vendors approaching risk thresholds — before a missed delivery cascades into a production stoppage.',
-              },
-              {
-                icon: <Factory className="w-4 h-4 text-white/60" />,
-                title: 'Dealer Network Visibility',
-                desc: 'See demand signals across your entire multi-state dealer network. When 50 independent hardware stores start ordering the same SKU, your central warehouse knows before the stockout.',
-              },
-            ].map((item, i) => (
+              { label: 'Food & Beverage', desc: 'Perishable inventory, cold chain logistics, and volatile commodity pricing demand real-time forecasting and supplier orchestration.' },
+              { label: 'Distribution', desc: 'Multi-warehouse networks, dealer fulfillment, and long-tail SKU management across thousands of independent retail endpoints.' },
+              { label: 'Chemicals', desc: 'Hazmat compliance, batch traceability, and complex supplier qualification workflows that legacy ERPs can\'t automate.' },
+              { label: 'Robotics', desc: 'Precision component sourcing, engineer-to-order workflows, and bill-of-materials validation at scale.' },
+              { label: 'Industrials', desc: 'Heavy equipment distribution, service parts logistics, and weather-driven demand across multi-state territories.' },
+            ].map((industry, i) => (
               <div key={i} className="bg-white/[0.03] border border-white/[0.06] p-8 group hover:bg-white/[0.05] transition-all">
-                <div className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center mb-5 group-hover:bg-white/[0.1] transition-colors">
-                  {item.icon}
-                </div>
-                <h3 className="text-lg font-medium text-white mb-3">{item.title}</h3>
-                <p className="text-sm text-white/30 leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-medium text-white mb-3">{industry.label}</h3>
+                <p className="text-sm text-white/30 leading-relaxed">{industry.desc}</p>
               </div>
             ))}
           </div>
