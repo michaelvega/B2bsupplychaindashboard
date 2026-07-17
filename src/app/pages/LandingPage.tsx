@@ -58,8 +58,7 @@ export function LandingPage() {
           key={HERO_VIDEOS[videoIndex]}
           autoPlay muted playsInline
           className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-          style={{ opacity: fadeVideo ? 0 : 1 }}
-          poster="/factoryimage.png"
+          style={{ opacity: fadeVideo ? 0 : 1, backgroundColor: 'black' }}
         >
           <source src={HERO_VIDEOS[videoIndex]} type="video/mp4" />
         </video>
