@@ -396,17 +396,20 @@ export function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-0">
             {[
-              { label: 'Food & Beverage', desc: 'Perishable inventory, cold chain logistics, and volatile commodity pricing demand real-time forecasting and supplier orchestration.' },
-              { label: 'Distribution', desc: 'Multi-warehouse networks, dealer fulfillment, and long-tail SKU management across thousands of independent retail endpoints.' },
-              { label: 'Chemicals', desc: 'Hazmat compliance, batch traceability, and complex supplier qualification workflows that legacy ERPs can\'t automate.' },
-              { label: 'Robotics', desc: 'Precision component sourcing, engineer-to-order workflows, and bill-of-materials validation at scale.' },
-              { label: 'Industrials', desc: 'Heavy equipment distribution, service parts logistics, and weather-driven demand across multi-state territories.' },
+              { num: '01', label: 'Food & Beverage', desc: 'Perishable inventory, cold chain logistics, and volatile commodity pricing demand real-time forecasting and supplier orchestration.' },
+              { num: '02', label: 'Distribution', desc: 'Multi-warehouse networks, dealer fulfillment, and long-tail SKU management across thousands of independent retail endpoints.' },
+              { num: '03', label: 'Chemicals', desc: 'Hazmat compliance, batch traceability, and complex supplier qualification workflows that legacy ERPs can\'t automate.' },
+              { num: '04', label: 'Robotics', desc: 'Precision component sourcing, engineer-to-order workflows, and bill-of-materials validation at scale.' },
+              { num: '05', label: 'Industrials', desc: 'Heavy equipment distribution, service parts logistics, and weather-driven demand across multi-state territories.' },
             ].map((industry, i) => (
-              <div key={i} className="bg-white/[0.03] border border-white/[0.06] p-8 group hover:bg-white/[0.05] transition-all">
-                <h3 className="text-lg font-medium text-white mb-3">{industry.label}</h3>
-                <p className="text-sm text-white/30 leading-relaxed">{industry.desc}</p>
+              <div key={i} className="group py-6 border-b border-white/[0.04] last:border-b-0 flex items-start gap-6">
+                <span className="text-xs text-white/15 font-mono mt-1 tabular-nums">{industry.num}</span>
+                <div>
+                  <h3 className="text-base font-medium text-white mb-1.5 group-hover:text-white/80 transition-colors">{industry.label}</h3>
+                  <p className="text-sm text-white/25 leading-relaxed max-w-md">{industry.desc}</p>
+                </div>
               </div>
             ))}
           </div>
