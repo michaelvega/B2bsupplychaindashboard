@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { ArrowRight, ArrowDown, ShieldCheck, TrendingUp, BarChart3, Factory, Globe, Brain, Cpu, Zap, Leaf, ExternalLink } from 'lucide-react';
 
@@ -7,18 +7,61 @@ const IMG_FACTORY = 'https://images.unsplash.com/photo-1578575437130-527eed3abbe
 const IMG_TECH = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&auto=format&fit=crop&q=85';
 const IMG_LOGISTICS = 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&auto=format&fit=crop&q=85';
 
+const HERO_VIDEOS = [
+  '/hero-cargo.mp4',
+  '/hero-city.mp4',
+  '/hero-factory.mp4',
+];
+
 export function LandingPage() {
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState(false);
+  const [videoIndex, setVideoIndex] = useState(0);
+  const [fadeVideo, setFadeVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => { setLoaded(true); }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const advance = () => {
+      setFadeVideo(true);
+      setTimeout(() => {
+        setVideoIndex(prev => (prev + 1) % HERO_VIDEOS.length);
+        setFadeVideo(false);
+      }, 700);
+    };
+    video.addEventListener('ended', advance);
+    const timer = setTimeout(advance, 15000); // fallback: auto-advance after 15s
+    return () => {
+      video.removeEventListener('ended', advance);
+      clearTimeout(timer);
+    };
+  }, [videoIndex]);
+
+  // Play the video when index changes (after fade transition)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || fadeVideo) return;
+    video.load();
+    video.play().catch(() => {});
+  }, [videoIndex, fadeVideo]);
 
   return (
     <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="relative h-screen w-full overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" poster="/factoryimage.png">
-          <source src="/hero-factory.mp4" type="video/mp4" />
+        <video
+          ref={videoRef}
+          key={HERO_VIDEOS[videoIndex]}
+          autoPlay muted playsInline
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          style={{ opacity: fadeVideo ? 0 : 1 }}
+          poster="/factoryimage.png"
+        >
+          <source src={HERO_VIDEOS[videoIndex]} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
