@@ -10,6 +10,7 @@ const IMG_LOGISTICS = 'https://images.unsplash.com/photo-1518186285589-2f7649de8
 const HERO_VIDEOS = [
   '/cargoships.mov',
   '/city%20video.mov',
+  '/truck%20video.mov',
   '/hero-factory.mp4',
 ];
 
