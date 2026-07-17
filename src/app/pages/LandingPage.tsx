@@ -8,8 +8,8 @@ const IMG_TECH = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w
 const IMG_LOGISTICS = 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&auto=format&fit=crop&q=85';
 
 const HERO_VIDEOS = [
-  '/hero-cargo.mp4',
-  '/hero-city.mp4',
+  '/cargoships.mov',
+  '/city%20video.mov',
   '/hero-factory.mp4',
 ];
 
