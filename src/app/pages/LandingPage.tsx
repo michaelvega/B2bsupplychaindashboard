@@ -107,34 +107,36 @@ export function LandingPage() {
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState(false);
   const [videoIndex, setVideoIndex] = useState(0);
-  const [showA, setShowA] = useState(true); // toggle which video layer is visible
+  const [fadeVideo, setFadeVideo] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
-  const vidA = useRef<HTMLVideoElement>(null);
-  const vidB = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => { setLoaded(true); }, []);
 
-  const advance = () => {
-    const nextIndex = (videoIndex + 1) % HERO_VIDEOS.length;
-    // Start the hidden video playing, then crossfade
-    const hidden = showA ? vidB.current : vidA.current;
-    if (hidden) { hidden.src = HERO_VIDEOS[nextIndex]; hidden.play().catch(() => {}); }
-    setShowA(prev => !prev);
-    setVideoIndex(nextIndex);
-  };
-
-  // Wire up ended event and fallback timer on active video
   useEffect(() => {
-    const active = showA ? vidA.current : vidB.current;
-    if (!active) return;
-    const onEnded = () => advance();
-    active.addEventListener('ended', onEnded);
-    const timer = setTimeout(advance, 15000);
+    const video = videoRef.current;
+    if (!video) return;
+    const advance = () => {
+      setFadeVideo(true);
+      setTimeout(() => {
+        setVideoIndex(prev => (prev + 1) % HERO_VIDEOS.length);
+        setTimeout(() => setFadeVideo(false), 50);
+      }, 250);
+    };
+    video.addEventListener('ended', advance);
+    const timer = setTimeout(advance, 12000);
     return () => {
-      active.removeEventListener('ended', onEnded);
+      video.removeEventListener('ended', advance);
       clearTimeout(timer);
     };
-  }, [videoIndex, showA]);
+  }, [videoIndex]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || fadeVideo) return;
+    video.load();
+    video.play().catch(() => {});
+  }, [videoIndex, fadeVideo]);
 
   return (
     <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
@@ -143,11 +145,8 @@ export function LandingPage() {
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="relative h-screen w-full overflow-hidden bg-black">
-        <video ref={vidA} key={`a-${HERO_VIDEOS[videoIndex]}`} autoPlay muted playsInline className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" style={{ opacity: showA ? 1 : 0 }}>
+        <video ref={videoRef} key={HERO_VIDEOS[videoIndex]} autoPlay muted playsInline className="absolute inset-0 w-full h-full object-cover transition-opacity duration-200" style={{ opacity: fadeVideo ? 0 : 1 }}>
           <source src={HERO_VIDEOS[videoIndex]} type="video/mp4" />
-        </video>
-        <video ref={vidB} key={`b-${HERO_VIDEOS[(videoIndex + 1) % HERO_VIDEOS.length]}`} muted playsInline className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" style={{ opacity: showA ? 0 : 1 }}>
-          <source src={HERO_VIDEOS[(videoIndex + 1) % HERO_VIDEOS.length]} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
