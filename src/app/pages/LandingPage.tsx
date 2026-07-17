@@ -1,101 +1,78 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowRight, ArrowDown, Check, BarChart3, Brain, ShieldCheck, TrendingUp, Zap, Factory, Globe, Users } from 'lucide-react';
+import { ArrowRight, ArrowDown, ShieldCheck, TrendingUp, BarChart3, Factory, Globe, Brain, Cpu, Zap, Leaf, ExternalLink } from 'lucide-react';
+
+const IMG_WAREHOUSE = 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=1800&auto=format&fit=crop&q=85';
+const IMG_FACTORY = 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1200&auto=format&fit=crop&q=85';
+const IMG_TECH = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&auto=format&fit=crop&q=85';
+const IMG_LOGISTICS = 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&auto=format&fit=crop&q=85';
 
 export function LandingPage() {
   const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { setLoaded(true); }, []);
 
   return (
-    <div className="bg-black text-white min-h-screen" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
 
-      {/* ── NAV ── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-8 h-8 rounded-lg" />
-            <span className="font-bold text-lg tracking-tight text-white">Procept</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/daily-brief')} className="text-white/60 hover:text-white text-sm font-medium transition-colors">
-              Demo
-            </button>
-            <a
-              href="https://calendly.com/sscarozzi/30min"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-white text-black font-semibold px-5 py-2.5 rounded-lg transition-all text-sm hover:bg-gray-200"
-            >
-              Book a Call
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col pt-16">
-        <video
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          poster="/factoryimage.png"
-        >
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section className="relative h-screen w-full overflow-hidden">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" poster="/factoryimage.png">
           <source src="/hero-factory.mp4" type="video/mp4" />
         </video>
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+        <div className="absolute inset-0 flex flex-col justify-between p-10 md:p-16">
+          <div className={cn('transition-all duration-1000', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+            <div className="flex items-center gap-3">
+              <img src="/procept-logo-light.jpg" alt="Procept" className="w-8 h-8 rounded-lg object-cover ring-1 ring-white/20" />
+              <span className="text-white/70 text-xs tracking-[0.25em] uppercase font-medium">Procept</span>
+            </div>
+          </div>
 
-        <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex-1 flex items-center">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-20">
-              <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] mb-8">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-medium text-white/70 tracking-wide">AI-Powered Supply Chain Intelligence</span>
-                </div>
-
-                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] mb-6">
-                  AI for your<br />supply chain.
-                </h1>
-
-                <p className="text-lg sm:text-xl text-white/60 max-w-xl leading-relaxed mb-10">
-                  Equip your procurement and operations teams with the hidden knowledge trapped inside your ERP. Autonomous agents that resolve errors, forecast demand, and orchestrate supply — before disruption hits your bottom line.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <button
-                    onClick={() => navigate('/daily-brief')}
-                    className="bg-white text-black font-semibold px-7 py-3.5 rounded-xl inline-flex items-center gap-2 transition-all text-base hover:bg-gray-200 hover:-translate-y-0.5"
-                  >
-                    Try Interactive Demo
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <a
-                    href="https://calendly.com/sscarozzi/30min"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-white/70 hover:text-white font-medium px-6 py-3.5 rounded-xl inline-flex items-center gap-2 transition-all text-base border border-white/20 hover:border-white/40"
-                  >
-                    Talk to Founders
-                  </a>
-                </div>
+            <div className="max-w-2xl">
+              <div className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8 transition-all duration-1000 delay-200', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-[11px] text-white/50 tracking-[0.15em] uppercase">AI-Powered Supply Chain Intelligence</span>
+              </div>
+              <h1 className={cn('text-5xl md:text-7xl lg:text-8xl font-light text-white tracking-tight leading-none mb-4 transition-all duration-1000 delay-300', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+                AI for your<br />
+                <span className="font-normal">supply chain.</span>
+              </h1>
+              <p className={cn('text-white/30 text-lg font-light max-w-lg leading-relaxed mb-8 transition-all duration-1000 delay-500', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+                Equip your operations teams with the hidden intelligence trapped inside your ERP. Autonomous agents that resolve procurement errors, forecast demand, and orchestrate supply — before disruption hits your P&L.
+              </p>
+              <div className={cn('flex items-center gap-4 transition-all duration-1000 delay-700', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+                <button onClick={() => navigate('/daily-brief')} className="group flex items-center gap-3 px-8 py-4 bg-white text-black text-sm font-medium hover:bg-white/90 transition-all">
+                  Open Demo
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <a href="https://calendly.com/sscarozzi/30min" target="_blank" rel="noreferrer" className="text-white/40 text-sm font-light hover:text-white/70 transition-colors">
+                  Talk to founders →
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="text-center pb-8">
-            <div className="inline-flex flex-col items-center gap-2 text-white/20 text-xs tracking-widest uppercase font-medium animate-bounce">
-              <span>Scroll</span>
-              <ArrowDown className="w-3.5 h-3.5" />
+          <div className={cn('flex justify-center transition-all duration-1000 delay-900', loaded ? 'opacity-100' : 'opacity-0')}>
+            <div className="flex flex-col items-center gap-2 text-white/20">
+              <span className="text-[10px] tracking-[0.2em] uppercase">Scroll</span>
+              <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── STATS BAR ── */}
-      <section className="relative z-10 -mt-1 bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">The Cost of Standing Still</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight max-w-2xl mx-auto">
-              By 2027, companies that don't adopt AI in their supply chain will lose <span className="text-white">30% of competitive advantage</span>.
+      {/* ═══════════════ STATS ═══════════════ */}
+      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-20">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">The Cost of Standing Still</p>
+            <h2 className="text-4xl md:text-5xl font-light text-white tracking-tight leading-tight max-w-2xl">
+              By 2027, companies that<br />
+              <span className="font-normal">don't adopt AI supply chain</span> will lose 30% of competitive advantage.
             </h2>
           </div>
 
@@ -106,334 +83,280 @@ export function LandingPage() {
               { value: '14 Days', label: 'average time to detect and resolve a supplier fulfillment mismatch' },
               { value: '83%', label: 'of supply chain leaders say AI is critical to their 2027 roadmap' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 text-center">
-                <div className="text-3xl font-bold text-white mb-2 tracking-tight">{stat.value}</div>
-                <p className="text-sm text-white/50 leading-relaxed">{stat.label}</p>
+              <div key={i} className="bg-white/[0.03] border border-white/[0.06] p-6">
+                <div className="text-3xl font-normal text-white mb-2 tracking-tight">{stat.value}</div>
+                <p className="text-sm text-white/30 leading-relaxed">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">The Platform</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-[1.15]">
-              Every supply chain workflow,<br />autonomous.
+      {/* ═══════════════ FEATURES WITH IMAGES ═══════════════ */}
+      <section className="relative bg-[#fafaf8] py-24 md:py-32 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-20">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-stone-400 mb-4">The Platform</p>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-900 tracking-tight leading-tight max-w-2xl">
+              Every supply chain workflow,<br />
+              <span className="font-normal">autonomous.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {/* Procurement Error Resolution */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-white/[0.06] flex items-center justify-center mb-6 group-hover:bg-white/[0.1] transition-colors">
-                <ShieldCheck className="w-6 h-6 text-white/80" />
+          {/* Procurement Errors */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
+            <div className="relative overflow-hidden aspect-[4/3] bg-stone-100 order-2 lg:order-1">
+              <img src={IMG_WAREHOUSE} alt="Warehouse" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col justify-center order-1 lg:order-2">
+              <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-6 text-stone-500">
+                <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Procurement Error Resolution</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-4">
-                Autonomous agents detect and resolve purchase order discrepancies, fulfillment mismatches, and pricing errors within minutes — not days.
+              <h3 className="text-2xl font-medium text-stone-900 mb-4">Procurement Error Resolution</h3>
+              <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-md">
+                Autonomous agents detect and resolve purchase order discrepancies, fulfillment mismatches, and pricing errors within minutes — not days. Your team stops firefighting and starts managing.
               </p>
-              <ul className="space-y-2 text-sm text-white/40">
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+              <div className="space-y-3 text-sm text-stone-400">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>Real-time PO-to-invoice reconciliation</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
-                  <span>Automated vendor discrepancy alerts</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
+                  <span>Automated vendor discrepancy detection</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>70% reduction in manual order errors</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Supply Planning */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-white/[0.06] flex items-center justify-center mb-6 group-hover:bg-white/[0.1] transition-colors">
-                <Brain className="w-6 h-6 text-white/80" />
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Supply Planning & Orchestration</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-4">
-                AI-driven inventory allocation across warehouses, automated reorder point calculation, and dynamic safety stock adjustment based on real-time conditions.
+            </div>
+          </div>
+
+          {/* Supply Planning */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
+            <div className="flex flex-col justify-center">
+              <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-6 text-stone-500">
+                <Brain className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-medium text-stone-900 mb-4">Supply Planning & Orchestration</h3>
+              <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-md">
+                AI-driven inventory allocation across your warehouse network. Dynamic reorder points. Safety stock that adjusts to real-time conditions — not last quarter's averages.
               </p>
-              <ul className="space-y-2 text-sm text-white/40">
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+              <div className="space-y-3 text-sm text-stone-400">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>Multi-warehouse inventory balancing</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>Dynamic reorder point optimization</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>20-30% reduction in excess inventory</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Demand Forecasting */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-white/[0.06] flex items-center justify-center mb-6 group-hover:bg-white/[0.1] transition-colors">
-                <TrendingUp className="w-6 h-6 text-white/80" />
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Demand Forecasting with ML</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-4">
-                Machine learning models that ingest weather patterns, macro indicators, and real-time sales data to predict demand surges before they happen — not after.
+            </div>
+            <div className="relative overflow-hidden aspect-[4/3] bg-stone-100">
+              <img src={IMG_FACTORY} alt="Factory" className="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          {/* ML Forecasting */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="relative overflow-hidden aspect-[4/3] bg-stone-100 order-2 lg:order-1">
+              <img src={IMG_TECH} alt="Technology" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col justify-center order-1 lg:order-2">
+              <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-6 text-stone-500">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-medium text-stone-900 mb-4">Demand Forecasting with ML</h3>
+              <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-md">
+                Machine learning models trained on weather patterns, macro indicators, and real-time sales data. Predict demand surges before they happen — stop forecasting with last year's weather.
               </p>
-              <ul className="space-y-2 text-sm text-white/40">
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+              <div className="space-y-3 text-sm text-stone-400">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>Real-time weather-driven demand modeling</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>Long-tail parts and SKU forecasting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-white/30 mt-0.5 shrink-0" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-1 rounded-full bg-stone-400" />
                   <span>15-20% improvement in forecast accuracy</span>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">How It Works</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-[1.15]">
-              Your ERP has the data.<br />We surface the intelligence.
+      {/* ═══════════════ HOW IT WORKS — Dark ═══════════════ */}
+      <section className="relative bg-[#0f0f0f] py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="overflow-hidden">
+              <img src={IMG_LOGISTICS} alt="Logistics" className="w-full aspect-[4/3] object-cover opacity-80 hover:opacity-100 transition-all duration-700" />
+            </div>
+            <div>
+              <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">How It Works</p>
+              <h2 className="text-4xl md:text-5xl font-light text-white tracking-tight leading-tight mb-8">
+                Your ERP has the data.<br />
+                <span className="font-normal">We surface the intelligence.</span>
+              </h2>
+              <div className="space-y-6">
+                {[
+                  {
+                    icon: <Cpu className="w-4 h-4 text-white/50" />,
+                    title: 'Multi-Spoke Architecture',
+                    desc: 'Weather models, freight indices, raw material futures, supplier performance — each gets its own lane. They all feed into a unified forecast that tells you what\'s actually going to happen. And unlike black-box tools, you can see exactly why it made the call.',
+                  },
+                  {
+                    icon: <Zap className="w-4 h-4 text-white/50" />,
+                    title: 'Autonomous Agents, Always Running',
+                    desc: 'Agents continuously scan your purchase orders, invoices, inventory levels, and supplier communications. They surface risks and opportunities without anyone clicking a button. Resolution happens while your team sleeps.',
+                  },
+                  {
+                    icon: <Leaf className="w-4 h-4 text-white/50" />,
+                    title: 'Built to Eliminate Waste',
+                    desc: 'Supply chains over-order by 15-25% as buffer against uncertainty. That\'s not a logistics problem — it\'s a forecasting problem. Better predictions mean less dead stock, fewer emergency shipments, less working capital trapped in warehouses.',
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0">{item.icon}</div>
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-1">{item.title}</h3>
+                      <p className="text-sm text-white/30 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ USE CASES ═══════════════ */}
+      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-20">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Use Cases</p>
+            <h2 className="text-4xl md:text-5xl font-light text-white tracking-tight leading-tight max-w-2xl">
+              Built for specialty<br />
+              <span className="font-normal">wholesale distribution.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {[
               {
-                step: '01',
-                title: 'Connect',
-                desc: 'Plug into your existing ERP, email, and file systems. No migration. No IT project. We sit on top of what you already use.',
-                icon: <Globe className="w-5 h-5" />,
+                icon: <Globe className="w-4 h-4 text-white/60" />,
+                title: 'Weather-Driven Demand Shocks',
+                desc: 'Stop forecasting with last year\'s weather. Dynamic agent ingests real-time regional weather models to automatically adjust inventory allocation. A Kentucky ice storm triggers chainsaw stock rebalancing before the first dealer call.',
               },
               {
-                step: '02',
-                title: 'Analyze',
-                desc: 'Our agents continuously scan your operational data — purchase orders, invoices, inventory levels, supplier communications — surfacing hidden risks and opportunities.',
-                icon: <Brain className="w-5 h-5" />,
+                icon: <BarChart3 className="w-4 h-4 text-white/60" />,
+                title: 'Long-Tail Parts Forecasting',
+                desc: 'Millions in working capital trapped in obsolete replacement parts. Our digital inventory analyst recalculates the exact mix of whole-goods versus parts based on the active lifespan of equipment in your territory.',
               },
               {
-                step: '03',
-                title: 'Act',
-                desc: 'Autonomous workflows execute resolution actions, generate forecasts, and alert your team — all before the coffee gets cold.',
-                icon: <Zap className="w-5 h-5" />,
+                icon: <ShieldCheck className="w-4 h-4 text-white/60" />,
+                title: 'Supplier Risk Intelligence',
+                desc: 'Continuous monitoring of supplier compliance and on-time performance. Automatic flagging of vendors approaching risk thresholds — before a missed delivery cascades into a production stoppage.',
+              },
+              {
+                icon: <Factory className="w-4 h-4 text-white/60" />,
+                title: 'Dealer Network Visibility',
+                desc: 'See demand signals across your entire multi-state dealer network. When 50 independent hardware stores start ordering the same SKU, your central warehouse knows before the stockout.',
               },
             ].map((item, i) => (
-              <div key={i} className="relative group">
-                <div className="text-white/10 text-7xl font-bold mb-4 tracking-tighter">{item.step}</div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-white/60">
-                    {item.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-white">{item.title}</h3>
+              <div key={i} className="bg-white/[0.03] border border-white/[0.06] p-8 group hover:bg-white/[0.05] transition-all">
+                <div className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center mb-5 group-hover:bg-white/[0.1] transition-colors">
+                  {item.icon}
                 </div>
-                <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-medium text-white mb-3">{item.title}</h3>
+                <p className="text-sm text-white/30 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── USE CASES ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">Use Cases</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-[1.15]">
-              Built for specialty wholesale distribution.
-            </h2>
-          </div>
+      {/* ═══════════════ ABOUT ═══════════════ */}
+      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4 text-center">Who We Are</p>
+          <h2 className="text-3xl md:text-4xl font-light text-white tracking-tight leading-tight mb-4 text-center">
+            Built by supply chain engineers,<br />
+            <span className="font-normal">for supply chain operators.</span>
+          </h2>
+          <p className="text-sm text-white/30 leading-relaxed text-center max-w-xl mx-auto mb-16">
+            Georgia Tech computer scientists who studied supply chain at Scheller. We built Procept because the gap between having data and making decisions shouldn't require a PhD — or three weeks in Excel.
+          </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Weather-Driven Demand */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 group hover:bg-white/[0.05] transition-all">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 mt-1">
-                  <Globe className="w-5 h-5 text-white/60" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Weather-Driven Demand Shocks</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">
-                    Stop forecasting with last year's weather. Dynamic agent ingests real-time regional weather models to automatically adjust short-term inventory allocation across your territory. A Kentucky ice storm triggers chainsaw stock rebalancing before the first call comes in.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Long-tail Parts */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 group hover:bg-white/[0.05] transition-all">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 mt-1">
-                  <BarChart3 className="w-5 h-5 text-white/60" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Long-Tail Parts Forecasting</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">
-                    Millions in working capital trapped in obsolete replacement parts. Our digital inventory analyst recalculates the exact mix of whole-goods versus parts based on the active lifespan of equipment currently in your territory.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Supplier Risk */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 group hover:bg-white/[0.05] transition-all">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 mt-1">
-                  <ShieldCheck className="w-5 h-5 text-white/60" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Supplier Risk Intelligence</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">
-                    Continuous monitoring of supplier compliance, on-time performance, and quality metrics. Automatic flagging of vendors approaching risk thresholds — before a missed delivery cascades into a production stoppage.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Dealer Network */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 group hover:bg-white/[0.05] transition-all">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 mt-1">
-                  <Factory className="w-5 h-5 text-white/60" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Multi-Tier Dealer Network Visibility</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">
-                    See demand signals across your entire six-state dealer network. When 50 independent hardware stores start ordering the same SKU, your central warehouse knows before the stockout.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS 2 ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded-3xl p-10 md:p-16">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-              {[
-                { value: '15-20%', label: 'improvement in regional forecast accuracy with ML-driven demand sensing' },
-                { value: '>70%', label: 'reduction in manual procurement error resolution time' },
-                { value: '20-30%', label: 'reduction in excess and understock inventory across warehouses' },
-              ].map((stat, i) => (
-                <div key={i} className={i < 2 ? 'md:border-r border-white/[0.06]' : ''}>
-                  <div className="text-4xl font-bold text-white mb-3 tracking-tight">{stat.value}</div>
-                  <p className="text-white/40 text-sm leading-relaxed max-w-[240px] mx-auto">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FOUNDERS ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">Who We Are</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight max-w-3xl mx-auto leading-[1.15]">
-              Built by supply chain engineers,<br />for supply chain operators.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Sam */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 text-center group hover:bg-white/[0.05] transition-all">
-              <div className="w-20 h-20 rounded-full bg-white/[0.06] mx-auto mb-5 flex items-center justify-center text-2xl font-bold text-white/40">
-                SC
-              </div>
-              <h3 className="text-xl font-bold text-white mb-1">Sam Carozzi</h3>
-              <p className="text-white/40 text-sm mb-4">Data Science</p>
-              <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
-                Data scientist with forecasting experience in hospitality and insurance. Bachelor's graduate and current MS Computer Science candidate at Georgia Tech, specializing in supply chain intelligence. Capstone research focused on autonomous procurement workflows and ERP data integration.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div className="bg-white/[0.03] border border-white/[0.06] p-8">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center text-lg font-light text-white/30 mb-5">SC</div>
+              <h3 className="text-lg font-medium text-white mb-1">Sam Carozzi</h3>
+              <p className="text-xs text-white/40 mb-1">Co-Founder</p>
+              <p className="text-xs text-white/30 mb-4">Data Science · Georgia Tech</p>
+              <p className="text-sm text-white/50 leading-relaxed mb-4">
+                Data scientist with forecasting experience in hospitality and insurance. MS Computer Science candidate at Georgia Tech. Supply chain capstone research focused on autonomous procurement workflows and ERP data integration. Believes AI should make operations people more powerful, not replace them.
               </p>
+              <a href="https://www.linkedin.com/in/samantha-carozzi-904976245/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition-colors">
+                LinkedIn <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
 
-            {/* Michael */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 text-center group hover:bg-white/[0.05] transition-all">
-              <div className="w-20 h-20 rounded-full bg-white/[0.06] mx-auto mb-5 flex items-center justify-center text-2xl font-bold text-white/40">
-                MV
-              </div>
-              <h3 className="text-xl font-bold text-white mb-1">Michael Vega</h3>
-              <p className="text-white/40 text-sm mb-4">Machine Learning</p>
-              <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
-                ML specialist with applied forecasting experience at an investment research firm, building predictive models for Pinterest's market performance. Bachelor's graduate and current MS Computer Science candidate at Georgia Tech. Supply chain capstone with focus on demand sensing and inventory optimization algorithms.
+            <div className="bg-white/[0.03] border border-white/[0.06] p-8">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center text-lg font-light text-white/30 mb-5">MV</div>
+              <h3 className="text-lg font-medium text-white mb-1">Michael Vega</h3>
+              <p className="text-xs text-white/40 mb-1">Co-Founder</p>
+              <p className="text-xs text-white/30 mb-4">Machine Learning · Georgia Tech</p>
+              <p className="text-sm text-white/50 leading-relaxed mb-4">
+                ML specialist with applied forecasting experience at an investment research firm, building predictive models for Pinterest. MS Computer Science candidate at Georgia Tech. Supply chain capstone with focus on demand sensing and inventory optimization. Writes philosophy on the side.
               </p>
+              <a href="https://www.linkedin.com/in/vegamichael1/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition-colors">
+                LinkedIn <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
           </div>
 
-          <div className="text-center mt-10">
-            <p className="text-white/30 text-sm">
-              Georgia Tech · Scheller College of Business · Supply Chain & Logistics Institute
+          <div className="text-center max-w-xl mx-auto mb-20">
+            <p className="text-sm text-white/30 leading-relaxed">
+              Procept exists because good forecasting shouldn't cost six figures or require a data engineering team. Better predictions. Less waste. Tools that let operations people actually operate — instead of fighting their ERP for three weeks every quarter.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* ── CTA ── */}
-      <section className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="bg-white/[0.04] border border-white/[0.08] rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-transparent pointer-events-none" />
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-                Ready to see what your supply chain<br />has been hiding from you?
-              </h2>
-              <p className="text-white/40 text-lg mb-8 max-w-md mx-auto">
-                Unlock the intelligence trapped in your ERP. Autonomous agents, zero IT lift.
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={() => navigate('/daily-brief')}
-                  className="bg-white text-black font-semibold px-8 py-4 rounded-xl inline-flex items-center gap-2.5 transition-all text-base hover:bg-gray-200 hover:-translate-y-0.5"
-                >
-                  Launch Interactive Demo
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <a
-                  href="https://calendly.com/sscarozzi/30min"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-white/60 hover:text-white font-medium px-6 py-4 rounded-xl inline-flex items-center gap-2 transition-colors border border-white/15 hover:border-white/30"
-                >
-                  Talk to Founders
-                </a>
-              </div>
-            </div>
+          <div className="text-center">
+            <button onClick={() => navigate('/daily-brief')} className="group inline-flex items-center gap-3 px-10 py-4 bg-white text-black text-sm font-medium hover:bg-white/90 transition-all">
+              Launch Interactive Demo
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="bg-black border-t border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* ═══════════════ FOOTER ═══════════════ */}
+      <footer className="bg-black border-t border-white/[0.06] py-8 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-60" />
-            <span className="text-sm text-white/30">Procept © 2026</span>
+            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-50" />
+            <span className="text-xs text-white/20">Procept © 2026</span>
           </div>
-          <p className="text-xs text-white/20">
+          <p className="text-xs text-white/15">
             Equipping supply chain professionals with the hidden knowledge inside their company.
           </p>
         </div>
       </footer>
     </div>
   );
+}
+
+function cn(...classes: (string | boolean | undefined | null)[]): string {
+  return classes.filter(Boolean).join(' ');
 }
