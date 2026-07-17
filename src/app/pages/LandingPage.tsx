@@ -75,11 +75,7 @@ export function LandingPage() {
 
           <div className="flex-1 flex items-center">
             <div className="max-w-2xl">
-              <div className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8 transition-all duration-1000 delay-200', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] text-white/50 tracking-[0.15em] uppercase">Autonomous Supply Chain Intelligence</span>
-              </div>
-              <h1 className={cn('text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.08] mb-6 transition-all duration-1000 delay-300 max-w-3xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+              <h1 className={cn('text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.08] mb-6 transition-all duration-1000 delay-200 max-w-3xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
                 Automating supply chains that predict the future<br />
                 <span className="font-normal text-white/90">instead of reacting to the past.</span>
               </h1>
