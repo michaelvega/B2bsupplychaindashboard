@@ -76,15 +76,15 @@ export function LandingPage() {
           <div className="flex-1 flex items-center">
             <div className="max-w-2xl">
               <div className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8 transition-all duration-1000 delay-200', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span className="text-[11px] text-white/50 tracking-[0.15em] uppercase">AI-Powered Supply Chain Intelligence</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] text-white/50 tracking-[0.15em] uppercase">Autonomous Supply Chain Intelligence</span>
               </div>
-              <h1 className={cn('text-5xl md:text-7xl lg:text-8xl font-light text-white tracking-tight leading-none mb-4 transition-all duration-1000 delay-300', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                AI for your<br />
-                <span className="font-normal">supply chain.</span>
+              <h1 className={cn('text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.08] mb-6 transition-all duration-1000 delay-300 max-w-3xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
+                Automating supply chains that predict the future<br />
+                <span className="font-normal text-white/90">instead of reacting to the past.</span>
               </h1>
-              <p className={cn('text-white/30 text-lg font-light max-w-lg leading-relaxed mb-8 transition-all duration-1000 delay-500', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                Equip your operations teams with the hidden intelligence trapped inside your ERP. Autonomous agents that resolve procurement errors, forecast demand, and orchestrate supply — before disruption hits your P&L.
+              <p className={cn('text-white/60 text-base sm:text-lg leading-relaxed mb-8 transition-all duration-1000 delay-500 max-w-xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')} style={{ fontWeight: 450 }}>
+                AI agents that never sleep. Automatically predict demand, catch discrepancies, and secure inventory before disruptions hit.
               </p>
               <div className={cn('flex items-center gap-4 transition-all duration-1000 delay-700', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
                 <button onClick={() => navigate('/daily-brief')} className="group flex items-center gap-3 px-8 py-4 bg-white text-black text-sm font-medium hover:bg-white/90 transition-all">
