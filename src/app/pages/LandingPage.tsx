@@ -8,8 +8,9 @@ const IMG_TECH = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w
 const IMG_LOGISTICS = 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&auto=format&fit=crop&q=85';
 
 const HERO_VIDEOS = [
-  '/cargoships.mov',
   '/city%20video.mov',
+  '/cargoships.mov',
+  '/night%20cargo.mov',
   '/truck%20video.mov',
   '/hero-factory.mp4',
 ];
@@ -161,11 +162,11 @@ export function LandingPage() {
           <div className="flex-1 flex items-center">
             <div className="max-w-3xl">
               <h1 className={cn('text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 transition-all duration-1000 delay-200', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                Automating supply chains that predict the future<br />
-                <span className="font-normal text-white/90">instead of reacting to the past.</span>
+                Autonomous AI that never sleeps,<br />
+                <span className="font-normal text-white/90">for a supply chain that never stops moving.</span>
               </h1>
-              <p className={cn('text-white/60 text-base sm:text-lg leading-relaxed mb-8 transition-all duration-1000 delay-400 max-w-xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')} style={{ fontWeight: 450 }}>
-                AI agents that never sleep. Automatically predict demand, catch discrepancies, and secure inventory before disruptions hit.
+              <p className={cn('text-white/60 text-base sm:text-lg leading-relaxed mb-8 transition-all duration-1000 delay-400 max-w-xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')} style={{ fontWeight: 500 }}>
+                Automatically predict demand, catch discrepancies, and secure inventory before disruptions hit.
               </p>
               <div className={cn('flex items-center gap-4 transition-all duration-1000 delay-600', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
                 <button onClick={() => setDemoOpen(true)} className="group flex items-center gap-3 px-8 py-4 bg-white text-black text-sm font-medium hover:bg-white/90 transition-all">
