@@ -361,30 +361,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══════════════ INTEGRATIONS ═══════════════ */}
-      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Integrations</p>
-          <h2 className="text-3xl md:text-4xl font-light text-white tracking-tight leading-tight mb-4">
-            Connects to <span className="font-normal">everything you already use.</span>
-          </h2>
-          <p className="text-sm text-white/30 max-w-lg mx-auto mb-16">
-            No rip-and-replace. Procept sits on top of your existing stack — ERP, email, file systems, and databases.
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/[0.04] rounded-2xl overflow-hidden">
-            {[
-              'SAP', 'Oracle', 'Microsoft\nDynamics', 'NetSuite', 'JD Edwards', 'Infor',
-              'Outlook', 'Gmail', 'SharePoint', 'OneDrive', 'Snowflake', 'PostgreSQL',
-            ].map((name, i) => (
-              <div key={i} className="bg-black p-6 flex items-center justify-center group hover:bg-white/[0.03] transition-colors">
-                <span className="text-xs text-white/25 group-hover:text-white/40 transition-colors font-medium tracking-wide whitespace-pre-line text-center leading-snug">{name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════ INDUSTRIES ═══════════════ */}
       <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
