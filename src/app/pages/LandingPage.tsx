@@ -65,7 +65,7 @@ function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               <Check className="w-6 h-6 text-white/60" />
             </div>
             <h3 className="text-lg font-medium text-white mb-2">Thank you.</h3>
-            <p className="text-sm text-white/30 leading-relaxed">Your demo request has been sent. Check your email for a confirmation — we'll be in touch shortly.</p>
+            <p className="text-sm text-white/30 leading-relaxed">Your demo request has been sent. Check your email for a confirmation. We'll be in touch shortly.</p>
             <button onClick={onClose} className="mt-6 text-sm text-white/40 hover:text-white/70 transition-colors">Close</button>
           </div>
         ) : (
@@ -193,7 +193,7 @@ export function LandingPage() {
           <div className="mb-20">
             <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">The Cost of Standing Still</p>
             <h2 className="text-3xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-2xl">
-              By 2027, <span className="font-normal">25% of supply chain decisions</span> will be made by intelligent edge ecosystems — leaving legacy operators behind.
+              By 2027, <span className="font-normal">25% of supply chain decisions</span> will be made by intelligent edge ecosystems, leaving legacy operators behind.
             </h2>
           </div>
 
@@ -262,7 +262,7 @@ export function LandingPage() {
               </div>
               <h3 className="text-2xl font-medium text-stone-900 mb-4">Supply Planning & Orchestration</h3>
               <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-md">
-                AI-driven inventory allocation across your network. Dynamic reorder points. Safety stock that adjusts to real-time conditions — not last quarter's averages.
+                AI-driven inventory allocation across your network. Dynamic reorder points. Safety stock that adjusts to real-time conditions, not last quarter's averages.
               </p>
               <div className="space-y-3 text-sm text-stone-400">
                 <div className="flex items-center gap-3">
@@ -295,7 +295,7 @@ export function LandingPage() {
               </div>
               <h3 className="text-2xl font-medium text-stone-900 mb-4">Demand Forecasting with ML</h3>
               <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-md">
-                Machine learning models trained on weather patterns, macro indicators, and real-time sales data. Predict demand surges before they happen — stop forecasting with last year's weather.
+                Machine learning models trained on weather patterns, macro indicators, and real-time sales data. Predict demand surges before they happen. Stop forecasting with last year's weather.
               </p>
               <div className="space-y-3 text-sm text-stone-400">
                 <div className="flex items-center gap-3">
@@ -334,7 +334,7 @@ export function LandingPage() {
                   {
                     icon: <Cpu className="w-4 h-4 text-white/50" />,
                     title: 'Multi-Spoke Architecture',
-                    desc: 'Weather models, freight indices, raw material futures, supplier performance — each gets its own lane. They all feed into a unified forecast that tells you what\'s actually going to happen. And unlike black-box tools, you can see exactly why it made the call.',
+                    desc: 'Weather models, freight indices, raw material futures, supplier performance. Each gets its own lane. They all feed into a unified forecast that tells you what\'s actually going to happen. And unlike black-box tools, you can see exactly why it made the call.',
                   },
                   {
                     icon: <Zap className="w-4 h-4 text-white/50" />,
@@ -344,7 +344,7 @@ export function LandingPage() {
                   {
                     icon: <Leaf className="w-4 h-4 text-white/50" />,
                     title: 'Built to Eliminate Waste',
-                    desc: 'Supply chains over-order as a buffer against uncertainty. That\'s not a logistics problem — it\'s a forecasting and data extraction problem. Better predictions and cleaner procurement data mean less dead stock, fewer emergency shipments, and less working capital trapped in warehouses.',
+                    desc: 'Supply chains over-order as a buffer against uncertainty. That\'s not a logistics problem ,  it\'s a forecasting and data extraction problem. Better predictions and cleaner procurement data mean less dead stock, fewer emergency shipments, and less working capital trapped in warehouses.',
                   },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4">
@@ -401,7 +401,7 @@ export function LandingPage() {
             <span className="font-normal">for supply chain operators.</span>
           </h2>
           <p className="text-sm text-white/30 leading-relaxed text-center max-w-xl mx-auto mb-16">
-            We built Procept because the gap between having data and making decisions shouldn't require a PhD — or three weeks in Excel.
+            We built Procept because the gap between having data and making decisions shouldn't require a PhD or three weeks in Excel.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
@@ -434,7 +434,7 @@ export function LandingPage() {
 
           <div className="text-center max-w-xl mx-auto">
             <p className="text-sm text-white/30 leading-relaxed">
-              Procept exists because good forecasting shouldn't cost six figures or require a data engineering team. Better predictions. Less waste. Tools that let operations people actually operate — instead of fighting their ERP for three weeks every quarter.
+              Procept exists because good forecasting shouldn't cost six figures or require a data engineering team. Better predictions. Less waste. Tools that let operations people actually operate, instead of fighting their ERP for three weeks every quarter.
             </p>
           </div>
         </div>
