@@ -266,6 +266,23 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* ═══════════════ GPU BROKERING (HERO) ═══════════════ */}
+      <section className="relative overflow-hidden bg-black border-t border-white/[0.06]">
+        <img src="/gpus.jpeg" alt="GPUs" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="relative max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-48">
+          <p className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-4">GPU Brokering</p>
+          <h2 className="text-3xl md:text-6xl font-light text-white tracking-tight leading-tight max-w-3xl mb-6">
+            We broker your GPUs.<br />
+            <span className="font-normal">No more GPU surfing.</span>
+          </h2>
+          <p className="text-lg text-white/50 leading-relaxed max-w-2xl">
+            We search and automatically apply the best GPU deals, getting you the best price with complete transparency and contracts.
+          </p>
+        </div>
+      </section>
+
       {/* ═══════════════ TRAIN YOUR MODEL ═══════════════ */}
       <section className="relative bg-[#0f0f0f] py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -303,23 +320,6 @@ export function LandingPage() {
               We measure your evaluations, business outcomes, your customers, and ROI. You scale users, not API bills.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ GPU BROKERING (HERO) ═══════════════ */}
-      <section className="relative overflow-hidden bg-black border-t border-white/[0.06]">
-        <img src="/gpus.jpeg" alt="GPUs" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-        <div className="relative max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-48">
-          <p className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-4">GPU Brokering</p>
-          <h2 className="text-3xl md:text-6xl font-light text-white tracking-tight leading-tight max-w-3xl mb-6">
-            We broker your GPUs.<br />
-            <span className="font-normal">No more GPU surfing.</span>
-          </h2>
-          <p className="text-lg text-white/50 leading-relaxed max-w-2xl">
-            We search and automatically apply the best GPU deals, getting you the best price with complete transparency and contracts.
-          </p>
         </div>
       </section>
 

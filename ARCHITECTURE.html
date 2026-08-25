@@ -1,0 +1,416 @@
+<title>B2B Supply Chain Architecture</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-2: #eceff3;
+    --text: #171c23;
+    --text-muted: #5a6472;
+    --border: #dde2e8;
+    --border-strong: #c6cdd6;
+    --accent: #0e7490;
+    --accent-soft: rgba(14,116,144,0.10);
+    --cf: #c2570a;
+    --az: #0a6cc2;
+    --data: #0f766e;
+    --ai: #6d28d9;
+    --warn: #b45309;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1117;
+      --surface: #151b24;
+      --surface-2: #1c2430;
+      --text: #e8edf3;
+      --text-muted: #93a0b0;
+      --border: #2a3340;
+      --border-strong: #3a4554;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34,211,238,0.12);
+      --cf: #f6821f;
+      --az: #4da3ff;
+      --data: #2dd4bf;
+      --ai: #a78bfa;
+      --warn: #fbbf24;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1117;
+    --surface: #151b24;
+    --surface-2: #1c2430;
+    --text: #e8edf3;
+    --text-muted: #93a0b0;
+    --border: #2a3340;
+    --border-strong: #3a4554;
+    --accent: #22d3ee;
+    --accent-soft: rgba(34,211,238,0.12);
+    --cf: #f6821f;
+    --az: #4da3ff;
+    --data: #2dd4bf;
+    --ai: #a78bfa;
+    --warn: #fbbf24;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px 96px; }
+
+  /* ---------- Header ---------- */
+  header { padding: 64px 0 40px; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 14px; font-weight: 500;
+  }
+  h1 {
+    font-family: "Sora", sans-serif; font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.08;
+    letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance;
+  }
+  .lede { max-width: 640px; color: var(--text-muted); font-size: 16px; margin: 0; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px;
+  }
+  .meta-chip {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    color: var(--text-muted); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 12px; background: var(--surface);
+  }
+  .meta-chip b { color: var(--text); font-weight: 500; }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 8px;
+  }
+  .legend-item {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13px; color: var(--text-muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
+
+  /* ---------- Section headings ---------- */
+  h2 {
+    font-family: "Sora", sans-serif; font-weight: 600; font-size: 20px;
+    letter-spacing: -0.01em; margin: 56px 0 18px; text-wrap: balance;
+  }
+  h2 .num {
+    font-family: "IBM Plex Mono", monospace; color: var(--text-muted);
+    font-size: 13px; font-weight: 500; margin-right: 10px; letter-spacing: 0.04em;
+  }
+
+  /* ---------- Tiered diagram ---------- */
+  .diagram { margin-top: 12px; }
+  .tier { position: relative; padding: 18px 0; }
+  .tier + .tier { border-top: 1px dashed var(--border-strong); }
+
+  .tier-head {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;
+  }
+  .tier-tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px;
+    border-radius: 5px; white-space: nowrap;
+  }
+  .tier-title { font-weight: 600; font-size: 15px; }
+  .tier-sub { font-size: 13px; color: var(--text-muted); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 15px 16px; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .card.cf::before { background: var(--cf); }
+  .card.az::before { background: var(--az); }
+  .card.data::before { background: var(--data); }
+  .card.ai::before { background: var(--ai); }
+  .card.neutral::before { background: var(--border-strong); }
+
+  .card-name { font-weight: 600; font-size: 14px; margin: 0 0 2px; }
+  .card-role { font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px; }
+  .card-id {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--text-muted);
+    background: var(--surface-2); border-radius: 5px; padding: 3px 7px;
+    display: inline-block; margin: 0 0 8px; word-break: break-all;
+  }
+  .card .detail { font-size: 12.5px; color: var(--text); margin: 4px 0; }
+  .card .detail span { color: var(--text-muted); }
+
+  .badge {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; border-radius: 5px;
+    padding: 2px 7px; display: inline-block; vertical-align: middle;
+  }
+  .badge.secret { background: var(--accent-soft); color: var(--accent); }
+  .badge.unresolved { background: rgba(180,83,9,0.14); color: var(--warn); }
+  .badge.plaintext { background: rgba(180,83,9,0.14); color: var(--warn); }
+
+  .flow {
+    display: flex; align-items: center; gap: 14px; padding: 16px 4px;
+  }
+  .flow-arrow {
+    font-family: "IBM Plex Mono", monospace; color: var(--accent); font-size: 15px;
+    flex: 0 0 auto; letter-spacing: -0.05em;
+  }
+  .flow-text { font-size: 13.5px; color: var(--text-muted); }
+  .flow-text b { color: var(--text); font-weight: 600; }
+  .flow-num {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 5px; padding: 1px 6px;
+    flex: 0 0 auto; font-weight: 600;
+  }
+
+  /* ---------- Secrets table ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th, td { text-align: left; padding: 12px 16px; font-size: 13px; vertical-align: top; }
+  thead th {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 500;
+    border-bottom: 1px solid var(--border); background: var(--surface-2);
+  }
+  tbody tr + tr td { border-top: 1px solid var(--border); }
+  td.mono { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; white-space: nowrap; }
+  td.loc { color: var(--text-muted); }
+
+  .note {
+    border-left: 3px solid var(--accent); background: var(--accent-soft);
+    border-radius: 0 8px 8px 0; padding: 13px 16px; font-size: 13.5px; margin-top: 20px;
+  }
+  .note.warn { border-left-color: var(--warn); background: rgba(180,83,9,0.10); }
+  .note b { font-weight: 600; }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; font-family: "IBM Plex Mono", monospace; }
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">System Architecture</p>
+    <h1>B2B Supply Chain Dashboard</h1>
+    <p class="lede">A full-stack supply-chain console: a React SPA on the Cloudflare edge, an AI agent backend on Azure Container Apps, and Azure File Storage for the shared data corpus — stitched together by two request flows and a handful of secrets.</p>
+    <div class="meta">
+      <span class="meta-chip"><b>Frontend</b> React + Vite → Cloudflare Pages</span>
+      <span class="meta-chip"><b>Backend</b> Azure Container Apps</span>
+      <span class="meta-chip"><b>Data</b> Azure File Storage</span>
+      <span class="meta-chip"><b>Regions</b> eastus · eastus2</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="legend">
+    <span class="legend-item"><span class="dot" style="background:var(--cf)"></span> Cloudflare</span>
+    <span class="legend-item"><span class="dot" style="background:var(--az)"></span> Azure compute</span>
+    <span class="legend-item"><span class="dot" style="background:var(--data)"></span> Azure data</span>
+    <span class="legend-item"><span class="dot" style="background:var(--ai)"></span> External AI</span>
+  </div>
+
+  <h2>Components</h2>
+  <div class="diagram">
+
+    <!-- Tier 0: Client -->
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag" style="background:var(--surface-2);color:var(--text-muted)">Client</span>
+        <span class="tier-title">Browser</span>
+        <span class="tier-sub">users at procept.tech · mx.procept.tech</span>
+      </div>
+      <div class="cards">
+        <div class="card neutral">
+          <p class="card-name">Web app (React SPA)</p>
+          <p class="card-role">Dashboards, schedule, agent suite, daily brief</p>
+          <span class="card-id">https://procept.tech</span>
+          <p class="detail"><span>Stack</span> Vite · MUI · recharts · react-router</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tier 1: Cloudflare -->
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag" style="background:var(--cf);color:#fff">Cloudflare</span>
+        <span class="tier-title">Edge hosting + proxy</span>
+        <span class="tier-sub">account michaelvega8888@gmail.com</span>
+      </div>
+      <div class="cards">
+        <div class="card cf">
+          <p class="card-name">Pages — b2bsupplychaindashboard</p>
+          <p class="card-role">Static SPA, served from <code>dist/</code></p>
+          <span class="card-id">procept.tech · mx.procept.tech · *.pages.dev</span>
+          <p class="detail"><span>Build</span> vite build</p>
+        </div>
+        <div class="card cf">
+          <p class="card-name">Pages Function /api/azure/*</p>
+          <p class="card-role">Serverless proxy to Azure File Storage</p>
+          <span class="card-id">functions/api/azure/[[path]].ts</span>
+          <p class="detail"><span>Method</span> GET · PUT · DELETE</p>
+          <p class="detail"><span>Secret</span> <span class="badge secret">AZURE_SAS_URL</span></p>
+        </div>
+      </div>
+      <div class="flow">
+        <span class="flow-num">1</span>
+        <span class="flow-arrow">↕</span>
+        <span class="flow-text">Browser ⇄ Cloudflare Pages — <b>static assets over HTTPS</b></span>
+      </div>
+    </div>
+
+    <!-- Tier 2: Azure compute -->
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag" style="background:var(--az);color:#fff">Azure compute</span>
+        <span class="tier-title">AI agent backend</span>
+        <span class="tier-sub">resource group membrain · eastus2</span>
+      </div>
+      <div class="cards">
+        <div class="card az">
+          <p class="card-name">Container App — membrain-agent</p>
+          <p class="card-role">AI agent; the frontend calls it directly</p>
+          <span class="card-id">membrain-agent.jollygrass-e659853e.eastus2.azurecontainerapps.io</span>
+          <p class="detail"><span>Endpoint</span> /api/chat</p>
+          <p class="detail"><span>Env</span> <span class="badge plaintext">COMPOSIO_API_KEY</span></p>
+          <p class="detail"><span>Identity</span> none</p>
+        </div>
+        <div class="card az">
+          <p class="card-name">Container Registry — proceptregistry</p>
+          <p class="card-role">Holds the agent image (Basic, admin enabled)</p>
+          <span class="card-id">proceptregistry.azurecr.io/membrain-agent:latest</span>
+        </div>
+        <div class="card az">
+          <p class="card-name">Environment — membrain-env3</p>
+          <p class="card-role">Hosts the container app</p>
+          <span class="card-id">Microsoft.App/managedEnvironments</span>
+        </div>
+      </div>
+      <div class="flow">
+        <span class="flow-num">3</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-text">Browser → membrain-agent <b>/api/chat</b> (direct call, CORS allows procept.tech)</span>
+      </div>
+    </div>
+
+    <!-- Tier 3: Azure data -->
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag" style="background:var(--data);color:#fff">Azure data</span>
+        <span class="tier-title">Storage + ML</span>
+        <span class="tier-sub">resource group membrain · eastus</span>
+      </div>
+      <div class="cards">
+        <div class="card data">
+          <p class="card-name">Storage Account — proceptagent</p>
+          <p class="card-role">Shared data corpus via SAS</p>
+          <span class="card-id">proceptagent.file.core.windows.net / picoclaw-workspace</span>
+          <p class="detail"><span>Files</span> agent-tasks.json · emails.json · erp-data.json · onedrive.json · agent.md · rules_custom.md · demo-leads.json</p>
+        </div>
+        <div class="card data">
+          <p class="card-name">ML workspace — proceptmlworkspace</p>
+          <p class="card-role">Machine-learning subsystem</p>
+          <span class="card-id">proceptml (storage) · proceptmlworks1598191699 (Key Vault) · App Insights</span>
+        </div>
+      </div>
+      <div class="flow">
+        <span class="flow-num">2</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-text">Browser → CF Function → Azure File Storage — <b>read/write data files (SAS)</b></span>
+      </div>
+      <div class="flow">
+        <span class="flow-num">5</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-text">membrain-agent → Azure File Storage — <b>agent reads/writes the same corpus</b></span>
+      </div>
+    </div>
+
+    <!-- Tier 4: External AI -->
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag" style="background:var(--ai);color:#fff">External AI</span>
+        <span class="tier-title">Tools + model</span>
+        <span class="tier-sub">third-party SaaS</span>
+      </div>
+      <div class="cards">
+        <div class="card ai">
+          <p class="card-name">Composio</p>
+          <p class="card-role">Tool integrations for the agent</p>
+          <span class="card-id">authenticated via COMPOSIO_API_KEY</span>
+        </div>
+        <div class="card ai">
+          <p class="card-name">OpenRouter</p>
+          <p class="card-role">LLM provider</p>
+          <span class="card-id">key baked into the image build</span>
+          <p class="detail"><span>Location</span> Docker build ENV of membrain-agent</p>
+        </div>
+      </div>
+      <div class="flow">
+        <span class="flow-num">4</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-text">membrain-agent → Composio + OpenRouter — <b>tools &amp; model calls</b></span>
+      </div>
+    </div>
+
+  </div>
+
+  <h2><span class="num">Secrets</span>Where credentials live</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Credential</th><th>Home</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">AZURE_SAS_URL</td>
+          <td class="loc">Cloudflare Pages secret (production)</td>
+          <td><span class="badge secret">encrypted</span></td>
+        </tr>
+        <tr>
+          <td class="mono">COMPOSIO_API_KEY</td>
+          <td class="loc">Azure Container App env var</td>
+          <td><span class="badge plaintext">plaintext</span></td>
+        </tr>
+        <tr>
+          <td class="mono">proceptregistryazurecrio-proceptregistry</td>
+          <td class="loc">Azure Container App secret (ACR pull credential)</td>
+          <td><span class="badge secret">encrypted</span></td>
+        </tr>
+        <tr>
+          <td class="mono">OpenRouter API key</td>
+          <td class="loc">Baked into membrain-agent Docker image (build ENV)</td>
+          <td><span class="badge plaintext">in image</span></td>
+        </tr>
+        <tr>
+          <td class="mono">ACR admin (proceptregistry)</td>
+          <td class="loc">Container Registry — admin user enabled</td>
+          <td><span class="badge plaintext">enabled</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note warn">
+    <b>Three things worth tightening:</b> <code>COMPOSIO_API_KEY</code> is stored as a plaintext env var on the container app rather than an Azure secret; the OpenRouter key is baked into the image rather than a secret store; and the Key Vault (<code>proceptmlworks1598191699</code>) is RBAC-locked so the current account can't read it. None block the app today, but all are worth moving into a proper secret store.
+  </div>
+
+  <div class="note">
+    <b>OpenRouter key — located.</b> It's baked into the <code>membrain-agent</code> image as a build-time <code>ENV</code>. Since a key in an image layer is readable by anyone who can pull the image, it lives with the registry rather than a secret store — worth rotating if <code>proceptregistry</code> is shared.
+  </div>
+
+  <footer>
+    generated by Claude Code · 2026-08-24 · Cloudflare account ebb00e8cdc5ed232cb0410d7ff2618af · Azure subscription ae763c42-02bf-4248-a5df-a68302674956
+  </footer>
+
+</div>
