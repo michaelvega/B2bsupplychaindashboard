@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { createHashRouter } from 'react-router';
 import type { ImperativePanelHandle } from 'react-resizable-panels';
 import { LandingPage } from './pages/LandingPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 import { AgentSuite } from './pages/AgentSuite';
 import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
@@ -94,6 +95,10 @@ export const router = createHashRouter([
   {
     path: '/',
     element: <LandingPage />,
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPage />,
   },
   {
     path: '/demo',
