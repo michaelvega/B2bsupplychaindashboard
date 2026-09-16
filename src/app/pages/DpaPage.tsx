@@ -21,7 +21,7 @@ const SECTIONS: Section[] = [
     num: '01',
     heading: 'Definitions',
     paras: [
-      'This Data Processing Addendum ("DPA") forms part of the Master Services Agreement and/or any applicable SOWs, Terms of Service, or Order Forms (together, the "Agreement") between Procept Tech, Inc., a Delaware Corporation ("Procept") and the customer entity that has executed the Agreement ("Customer"). This DPA is an addendum to, and forms part of, the Agreement. It shall be effective and legally binding as of the date the Agreement is executed.',
+      'This Data Processing Addendum ("DPA") forms part of the Master Services Agreement and/or any applicable SOWs, Terms of Service, or Order Forms (together, the "Agreement") between Procept Technologies Corp., a Delaware Corporation ("Procept") and the customer entity that has executed the Agreement ("Customer"). This DPA is an addendum to, and forms part of, the Agreement. It shall be effective and legally binding as of the date the Agreement is executed.',
       'This DPA sets out the terms that apply when Personal Information is Processed by Procept under the Agreement. The purpose of the DPA is to ensure such Processing is conducted in accordance with applicable laws and with due respect for the rights and freedoms of individuals whose Personal Information are Processed.',
     ],
   },
@@ -211,7 +211,7 @@ export function DpaPage() {
           </Link>
           <div className="flex items-center gap-3">
             <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-70" />
-            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Tech</span>
+            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Technologies Corp.</span>
           </div>
         </div>
       </header>
@@ -220,16 +220,16 @@ export function DpaPage() {
       <main className="max-w-5xl mx-auto px-6 py-16">
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Data Processing Addendum</h1>
-          <p className="text-white/30 text-sm">Effective November 17, 2025</p>
+          <p className="text-white/30 text-sm">Effective September 16, 2026</p>
         </div>
 
         {/* Metadata block */}
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-12 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Effective Date', value: 'November 17, 2025' },
-            { label: 'Jurisdiction', value: 'Suffolk County, Massachusetts' },
-            { label: 'Governing Law', value: 'Commonwealth of Massachusetts' },
-            { label: 'Parties', value: 'Procept Tech, Inc. & Customer' },
+            { label: 'Effective Date', value: 'September 16, 2026' },
+            { label: 'Jurisdiction', value: 'New Castle County, Delaware' },
+            { label: 'Governing Law', value: 'State of Delaware' },
+            { label: 'Parties', value: 'Procept Technologies Corp. & Customer' },
           ].map(item => (
             <div key={item.label}>
               <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-1.5">{item.label}</p>
@@ -320,11 +320,13 @@ export function DpaPage() {
       {/* Footer */}
       <footer className="border-t border-white/[0.06] py-8 px-6">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-white/20">Copyright Procept Tech Inc. 2026. All rights reserved.</span>
+          <span className="text-xs text-white/20">Copyright Procept Technologies Corp. 2026. All rights reserved.</span>
           <div className="flex items-center gap-4 text-xs text-white/30">
             <Link to="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
             <span className="text-white/10">·</span>
             <Link to="/data-processing-addendum" className="hover:text-white/60 transition-colors">Data Processing Addendum</Link>
+            <span className="text-white/10">·</span>
+            <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms & Conditions</Link>
             <span className="text-white/10">·</span>
             <span className="hover:text-white/60 transition-colors cursor-pointer">Cookie Policy</span>
           </div>

@@ -5,6 +5,7 @@ import { LandingPage } from './pages/LandingPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { DpaPage } from './pages/DpaPage';
 import { ServiceDescriptionsPage } from './pages/ServiceDescriptionsPage';
+import { TermsPage } from './pages/TermsPage';
 import { AgentSuite } from './pages/AgentSuite';
 import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
@@ -109,6 +110,10 @@ export const router = createHashRouter([
   {
     path: '/plans',
     element: <ServiceDescriptionsPage />,
+  },
+  {
+    path: '/terms-of-service',
+    element: <TermsPage />,
   },
   {
     path: '/demo',

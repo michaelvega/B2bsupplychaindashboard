@@ -63,7 +63,7 @@ export function ServiceDescriptionsPage() {
           </Link>
           <div className="flex items-center gap-3">
             <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-70" />
-            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Tech</span>
+            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Technologies Corp.</span>
           </div>
         </div>
       </header>
@@ -77,7 +77,7 @@ export function ServiceDescriptionsPage() {
 
         {/* Intro */}
         <p className="text-sm text-white/50 leading-relaxed max-w-2xl mb-12">
-          Each Service Description below defines exactly what its subscription includes. These documents form part of the Procept Tech Terms of Service and are incorporated by reference.
+          Each Service Description below defines exactly what its subscription includes. These documents form part of the Procept Technologies Corp. Terms of Service and are incorporated by reference.
         </p>
 
         {/* Current plans */}
@@ -142,11 +142,13 @@ export function ServiceDescriptionsPage() {
       {/* Footer */}
       <footer className="border-t border-white/[0.06] py-8 px-6">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-white/20">Copyright Procept Tech Inc. 2026. All rights reserved.</span>
+          <span className="text-xs text-white/20">Copyright Procept Technologies Corp. 2026. All rights reserved.</span>
           <div className="flex items-center gap-4 text-xs text-white/30">
             <Link to="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
             <span className="text-white/10">·</span>
             <Link to="/data-processing-addendum" className="hover:text-white/60 transition-colors">Data Processing Addendum</Link>
+            <span className="text-white/10">·</span>
+            <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms & Conditions</Link>
             <span className="text-white/10">·</span>
             <span className="hover:text-white/60 transition-colors cursor-pointer">Cookie Policy</span>
           </div>

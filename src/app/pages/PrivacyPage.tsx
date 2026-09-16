@@ -31,7 +31,7 @@ const SECTIONS: { heading: string; body: string[] }[] = [
     heading: '4. Third-Party Sharing',
     body: [
       'We may share your information with service providers who perform services on our behalf, such as hosting providers, analytics services, and email delivery services. These providers are contractually obligated to protect your information.',
-      'We may disclose your information if required by law, legal process, or government request, or to protect the rights, property, or safety of Procept Tech, our users, or others.',
+      'We may disclose your information if required by law, legal process, or government request, or to protect the rights, property, or safety of Procept Technologies Corp., our users, or others.',
       'In the event of a merger, acquisition, or sale of assets, your information may be transferred as part of the transaction. We will notify you of any such change in ownership or control of your personal information.',
     ],
   },
@@ -90,7 +90,7 @@ export function PrivacyPage() {
           </Link>
           <div className="flex items-center gap-3">
             <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-70" />
-            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Tech</span>
+            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Technologies Corp.</span>
           </div>
         </div>
       </header>
@@ -99,16 +99,16 @@ export function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-6 py-16">
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Privacy Policy</h1>
-          <p className="text-white/30 text-sm">Last Updated July 14, 2026</p>
+          <p className="text-white/30 text-sm">Last Updated September 16, 2026</p>
         </div>
 
         {/* Metadata block */}
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-12 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Last Updated', value: 'July 14, 2026' },
+            { label: 'Last Updated', value: 'September 16, 2026' },
             { label: 'Jurisdiction', value: 'United States' },
-            { label: 'Governing Law', value: 'Commonwealth of Massachusetts' },
-            { label: 'Parties', value: 'Procept Tech, Inc. & Website Visitors' },
+            { label: 'Governing Law', value: 'State of Delaware' },
+            { label: 'Parties', value: 'Procept Technologies Corp. & Website Visitors' },
           ].map(item => (
             <div key={item.label}>
               <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-1.5">{item.label}</p>
@@ -129,7 +129,7 @@ export function PrivacyPage() {
               </div>
               {section.heading === '10. Contact Us' && (
                 <div className="mt-4 bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 space-y-1.5">
-                  <p className="text-sm text-white/60">Procept Tech, Inc.</p>
+                  <p className="text-sm text-white/60">Procept Technologies Corp.</p>
                   <p className="text-sm text-white/60">hello@procept.tech</p>
                   <p className="text-sm text-white/40">Attn: Privacy</p>
                 </div>
@@ -142,11 +142,11 @@ export function PrivacyPage() {
       {/* Footer */}
       <footer className="border-t border-white/[0.06] py-8 px-6">
         <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-white/20">Copyright Procept Tech Inc. 2026. All rights reserved.</span>
+          <span className="text-xs text-white/20">Copyright Procept Technologies Corp. 2026. All rights reserved.</span>
           <div className="flex items-center gap-4 text-xs text-white/30">
             <Link to="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
             <span className="text-white/10">·</span>
-            <span className="hover:text-white/60 transition-colors cursor-pointer">Terms & Conditions</span>
+            <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms & Conditions</Link>
             <span className="text-white/10">·</span>
             <span className="hover:text-white/60 transition-colors cursor-pointer">Cookie Policy</span>
           </div>
