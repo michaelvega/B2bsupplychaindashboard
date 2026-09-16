@@ -107,7 +107,7 @@ export const router = createHashRouter([
     element: <DpaPage />,
   },
   {
-    path: '/service-descriptions',
+    path: '/plans',
     element: <ServiceDescriptionsPage />,
   },
   {
