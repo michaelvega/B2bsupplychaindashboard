@@ -3,6 +3,8 @@ import { createHashRouter } from 'react-router';
 import type { ImperativePanelHandle } from 'react-resizable-panels';
 import { LandingPage } from './pages/LandingPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { DpaPage } from './pages/DpaPage';
+import { ServiceDescriptionsPage } from './pages/ServiceDescriptionsPage';
 import { AgentSuite } from './pages/AgentSuite';
 import { AgentFiles } from './pages/AgentFiles';
 import { Dashboard } from './pages/Dashboard';
@@ -99,6 +101,14 @@ export const router = createHashRouter([
   {
     path: '/privacy',
     element: <PrivacyPage />,
+  },
+  {
+    path: '/data-processing-addendum',
+    element: <DpaPage />,
+  },
+  {
+    path: '/service-descriptions',
+    element: <ServiceDescriptionsPage />,
   },
   {
     path: '/demo',
