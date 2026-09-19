@@ -61,6 +61,19 @@
   --color-cyan-500: #06B6D4;
   --color-cyan-600: #0891B2;
   --color-cyan-700: #0E7490;
+
+  /* Procept Marketing — Dark Terminal Palette */
+  --color-ink-950: #050505;
+  --color-ink-900: #0A0A0A;
+  --color-ink-850: #0F0F0F;
+  --color-ink-800: #141414;
+  --color-ink-700: #1C1C1C;
+  --color-term-300: #7DFFC1;
+  --color-term-400: #33FF99;
+  --color-term-500: #0FBF6F;
+  --color-term-950: #06281C;
+
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 @import 'tw-animate-css';
@@ -77,4 +90,11 @@
     linear-gradient(rgba(0,0,0,0.015) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+@utility bg-grid-pattern-dark {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
