@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { createHashRouter } from 'react-router';
+import { createBrowserRouter } from 'react-router';
 import type { ImperativePanelHandle } from 'react-resizable-panels';
 import { LandingPage } from './pages/LandingPage';
 import { PrivacyPage } from './pages/PrivacyPage';
@@ -94,7 +94,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const router = createHashRouter([
+export const router = createBrowserRouter([
   {
     path: '/',
     element: <LandingPage />,
