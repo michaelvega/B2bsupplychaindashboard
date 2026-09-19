@@ -1,10 +1,19 @@
-import { useState, useEffect } from 'react';
-import { ArrowRight, ArrowDown, Check, X, Mail, User, Building2, Gauge } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
+import { DemoModal } from '../components/marketing/DemoModal';
+import { ChatbotHero } from '../components/marketing/ChatbotHero';
+import { MarketingNav, scrollToSection } from '../components/marketing/MarketingNav';
+import { MarketingFooter } from '../components/marketing/MarketingFooter';
+import { SectionHeading } from '../components/marketing/SectionHeading';
+import { FigurePanel } from '../components/marketing/FigurePanel';
+import { TerminalBlock } from '../components/marketing/TerminalBlock';
+import { TelemetryHud } from '../components/marketing/TelemetryHud';
+import { Stat } from '../components/marketing/Stat';
+import { StatusChip } from '../components/marketing/StatusChip';
+import { Reveal } from '../components/marketing/Reveal';
+import { cn } from '../components/ui/utils';
 
 const HERO_VIDEO = '/city%20video.mp4';
-
-const IMG_TRAIN = 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1600&auto=format&fit=crop&q=85';
-const IMG_ROI = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&auto=format&fit=crop&q=85';
 
 const STATS = [
   { value: '96%', label: 'cheaper than public API providers.' },
@@ -12,350 +21,368 @@ const STATS = [
   { value: '10x', label: 'smaller and still more intelligent.' },
 ];
 
-function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [business, setBusiness] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [sending, setSending] = useState(false);
+/** Serif-italic accent word inside display headlines. */
+function Em({ children }: { children: React.ReactNode }) {
+  return <em className="font-serif italic font-normal">{children}</em>;
+}
 
-  useEffect(() => {
-    if (!open) { setName(''); setEmail(''); setBusiness(''); setSubmitted(false); }
-  }, [open]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
-    setSending(true);
-
-    // Store lead via Azure API
-    try {
-      const res = await fetch('/api/azure/demo-leads.json');
-      const existing = res.ok ? await res.json().catch(() => []) : [];
-      existing.push({ name: name.trim(), email: email.trim(), business: business.trim(), timestamp: new Date().toISOString() });
-      await fetch('/api/azure/demo-leads.json', { method: 'PUT', body: JSON.stringify(existing, null, 2) });
-    } catch (_) { /* silently continue */ }
-
-    // Open email client as reliable delivery
-    const subject = encodeURIComponent('Aegis Demo Request');
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nBusiness: ${business || 'N/A'}\n\nRequested demo access.`);
-    window.open(`mailto:sscarozzi@gmail.com?subject=${subject}&body=${body}`, '_blank');
-
-    setSending(false);
-    setSubmitted(true);
-  };
-
-  if (!open) return null;
-
+/** Mono checklist row with green square bullets. */
+function Checklist({ items }: { items: string[] }) {
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6" onClick={onClose}>
-      <div className="bg-[#141414] border border-white/[0.08] rounded-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
-        <div className="p-6 border-b border-white/[0.06] flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-medium text-white">Request Demo Access</h3>
-            <p className="text-xs text-white/30 mt-0.5">We'll get back to you within 24 hours.</p>
-          </div>
-          <button onClick={onClose} className="p-2 text-white/30 hover:text-white/60 transition-colors"><X className="w-4 h-4" /></button>
-        </div>
-
-        {submitted ? (
-          <div className="p-10 text-center">
-            <div className="w-14 h-14 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-5">
-              <Check className="w-6 h-6 text-white/60" />
-            </div>
-            <h3 className="text-lg font-medium text-white mb-2">Thank you.</h3>
-            <p className="text-sm text-white/30 leading-relaxed">Your demo request has been sent. Check your email for a confirmation. We'll be in touch shortly.</p>
-            <button onClick={onClose} className="mt-6 text-sm text-white/40 hover:text-white/70 transition-colors">Close</button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5 font-medium">Name</label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/20 transition-colors" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5 font-medium">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@company.com" required className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/20 transition-colors" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5 font-medium">Business</label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                <input type="text" value={business} onChange={e => setBusiness(e.target.value)} placeholder="Your company" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/20 transition-colors" />
-              </div>
-            </div>
-            <button type="submit" disabled={sending || !name.trim() || !email.trim()} className="w-full bg-white text-black font-medium py-3 rounded-lg text-sm hover:bg-white/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-              {sending ? 'Sending...' : 'Send Request'}
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
+    <ul className="space-y-2.5">
+      {items.map((item) => (
+        <li key={item} className="flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-white/60">
+          <span className="w-2 h-2 bg-term-400/80 shrink-0" />
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 }
 
-const DEFAULT_ASSISTANT = `Here's how Aegis could be used in your business:
-
-• We broker dedicated GPUs and self-host Aegis in your stack, so your agents loop, debate, and verify without an uncapped token meter.
-• We train a hyper-capable, 10x smaller model on your workflows, so it learns how your business actually works.
-• We measure evaluations, business outcomes, and ROI against your current providers.
-
-Tell me what your business does and I'll get specific.`;
-
-function chatbotReply(userText: string) {
-  const t = userText.trim();
-  return `Got it. ${t}
-
-Here's what that looks like with Aegis:
-
-• Own the compute: we broker GPUs behind the scenes and self-host, so you scale users, not API bills.
-• A model that learns you: it self-improves on your actual workflows, not a generic benchmark.
-• Measured in ROI: we track evaluations, business outcomes, and customer impact, and report savings against your current providers.
-
-Want me to dig into any of these?`;
-}
-
-function ChatbotHero() {
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
-    { role: 'assistant', content: DEFAULT_ASSISTANT },
-  ]);
-  const [input, setInput] = useState('');
-  const [thinking, setThinking] = useState(false);
-
-  const send = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text || thinking) return;
-    setMessages(m => [...m, { role: 'user', content: text }]);
-    setInput('');
-    setThinking(true);
-    setTimeout(() => {
-      setMessages(m => [...m, { role: 'assistant', content: chatbotReply(text) }]);
-      setThinking(false);
-    }, 800);
-  };
-
+/** HUD corner brackets for the hero frame. */
+function CornerBrackets() {
+  const corners = [
+    'top-0 left-0 border-t border-l',
+    'top-0 right-0 border-t border-r',
+    'bottom-0 left-0 border-b border-l',
+    'bottom-0 right-0 border-b border-r',
+  ] as const;
   return (
-    <div className="max-w-2xl mx-auto text-left">
-      <div className="bg-[#141414] border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
-        <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="text-xs text-white/60 font-medium">Aegis</span>
-          <span className="text-[10px] text-white/25">online</span>
-        </div>
-
-        <div className="max-h-96 overflow-y-auto p-6 space-y-4">
-          {messages.map((m, i) => (
-            <div key={i} className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
-              <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${m.role === 'user' ? 'bg-white text-black rounded-br-sm' : 'bg-white/[0.06] text-white/80 rounded-bl-sm'}`}>
-                {m.content}
-              </div>
-            </div>
-          ))}
-          {thinking && (
-            <div className="flex justify-start">
-              <div className="bg-white/[0.06] rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <form onSubmit={send} className="p-4 border-t border-white/[0.06] flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            placeholder="Ask Aegis about your business…"
-            className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-white/25 transition-colors"
-          />
-          <button type="submit" disabled={!input.trim() || thinking} className="px-5 py-2.5 bg-white text-black text-sm font-medium rounded-lg hover:bg-white/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-            Send
-          </button>
-        </form>
-      </div>
-    </div>
+    <>
+      {corners.map((pos) => (
+        <span key={pos} className={cn('absolute w-6 h-6 md:w-8 md:h-8 border-term-400/60 pointer-events-none', pos)} />
+      ))}
+    </>
   );
 }
 
 export function LandingPage() {
-  const [loaded, setLoaded] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
 
-  useEffect(() => { setLoaded(true); }, []);
-
   return (
-    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
+    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-ink-950" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
 
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
 
+      {/* ═══════════════ NAV ═══════════════ */}
+      <MarketingNav onRequestAccess={() => setDemoOpen(true)} />
+
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative h-screen w-full overflow-hidden bg-black">
+      <section id="top" className="relative min-h-screen w-full overflow-hidden bg-ink-950 flex flex-col">
         <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
           <source src={HERO_VIDEO} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-ink-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-transparent to-ink-950/60" />
+        <div className="absolute inset-0 bg-grid-pattern-dark opacity-60" />
 
-        <div className="absolute inset-0 flex flex-col justify-between p-10 md:p-16">
-          <div className={cn('transition-all duration-1000', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-            <div className="flex items-center gap-3">
-              <img src="/procept-logo-light.jpg" alt="Procept" className="w-8 h-8 rounded-lg object-cover ring-1 ring-white/20" />
-              <span className="text-white/70 text-xs tracking-[0.25em] uppercase font-medium">Procept</span>
-            </div>
-          </div>
+        <div className="relative flex-1 flex flex-col justify-center px-6 md:px-16 py-16">
+          <CornerBrackets />
+          <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.15fr,0.85fr] gap-12 items-center">
+            <div>
+              <div className="flex items-center gap-4 mb-8">
+                <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/50">Procept // Self-hosted AI infrastructure</p>
+                <StatusChip label="Online" />
+              </div>
 
-          <div className="flex-1 flex items-center">
-            <div className="max-w-6xl">
-              <h1 className={cn('text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 transition-all duration-1000 delay-200', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                Make your tech stack AGI-capable<br />
-                <span className="font-normal text-white/90">with AI that self-learns your business.</span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.05] mb-6">
+                Own your <Em>intelligence</Em>.<br />
+                Meter nothing<span className="text-term-400">.</span>
               </h1>
-              <p className={cn('text-white/60 text-base sm:text-lg leading-relaxed mb-8 transition-all duration-1000 delay-400 max-w-xl', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')} style={{ fontWeight: 500 }}>
-                A harness that lets you capture the capabilities of AGI before anyone else. Capture the tech before your market does.
+
+              <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
+                Procept is the fully maintained, self-hosted AI stack. We abstract away the GPUs, charge one flat
+                linear rate — no per-token pricing, ever — and run a multi-agent harness that improves your models
+                recursively.
               </p>
-              <div className={cn('flex items-center gap-4 transition-all duration-1000 delay-600', loaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-                <button onClick={() => setDemoOpen(true)} className="group flex items-center gap-3 px-8 py-4 bg-white text-black text-sm font-medium hover:bg-white/90 transition-all">
-                  Accelerate your business
+
+              <div className="flex flex-wrap items-center gap-4">
+                <button
+                  onClick={() => setDemoOpen(true)}
+                  className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+                >
+                  Request Access
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => scrollToSection('thesis')}
+                  className="flex items-center gap-3 px-8 py-4 border border-white/15 text-white font-mono text-xs tracking-[0.15em] uppercase hover:border-term-400/60 hover:text-term-300 transition-all"
+                >
+                  Read the Thesis
+                  <ArrowDown className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
-          </div>
 
-          <div className={cn('flex justify-center transition-all duration-1000 delay-800', loaded ? 'opacity-100' : 'opacity-0')}>
-            <div className="flex flex-col items-center gap-2 text-white/20">
-              <span className="text-[10px] tracking-[0.2em] uppercase">Scroll</span>
-              <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
+            <div className="hidden lg:block">
+              <Reveal delay={200}>
+                <ChatbotHero />
+              </Reveal>
             </div>
           </div>
         </div>
+
+        {/* Telemetry strip pinned to hero bottom */}
+        <div className="relative">
+          <TelemetryHud
+            items={[
+              { label: 'GPU ALLOC', value: '24×H100' },
+              { label: 'AGENT LOOPS', live: { base: 128401, step: 3 } },
+              { label: 'BILLING', value: 'FLAT' },
+              { label: 'TOKENS', value: 'UNMETERED' },
+              { label: 'EVALS', value: 'PASSING' },
+            ]}
+          />
+        </div>
       </section>
 
-      {/* ═══════════════ STATS / FACTS ═══════════════ */}
-      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+      {/* ═══════════════ STATS ═══════════════ */}
+      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
-            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">The Aegis Advantage</p>
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Telemetry — field data</p>
             <h2 className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-3xl">
-              Multi-agent systems don't just use tokens; they multiply them. If you are building a multi-agent startup on rented public APIs, your margins will collapse the second you hit scale.
+              The companies leaving the token economy are already here.
             </h2>
-          </div>
+          </Reveal>
 
-          <p className="text-sm font-medium text-white/40 mb-6">We are:</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            {STATS.map((stat, i) => (
-              <div key={i} className="bg-white/[0.03] border border-white/[0.06] p-6">
-                <div className="text-3xl font-normal text-white mb-2 tracking-tight">{stat.value}</div>
-                <p className="text-sm text-white/30 leading-relaxed">{stat.label}</p>
+          <Reveal delay={100}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+              {STATS.map((stat) => (
+                <Stat key={stat.value} value={stat.value} label={stat.label} />
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <div className="mt-14 space-y-2.5 font-mono text-[13px] text-white/50">
+              <p><span className="text-term-400">$</span> echo "Two companies asked us for open-source models this week."</p>
+              <p><span className="text-term-400">$</span> echo "We told our provider: no more per-token billing."</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ 01 / THESIS ═══════════════ */}
+      <section id="thesis" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+          <source src="/cargoships.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-ink-950/75" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-ink-950/50 to-ink-950/30" />
+        <div className="relative max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-44">
+          <Reveal>
+            <SectionHeading
+              num="01"
+              label="Thesis"
+              title={<>The gold rush is <Em>over</Em>.</>}
+              sub={
+                <>
+                  Everyone is panning someone else's tokens. The winners will run refineries.
+                  <br /><br />
+                  Blue Origin builds its own data centers. Frontier labs burn billions on GPT Astra. Token economics
+                  never close — margins collapse at exactly the moment you hit scale.
+                </>
+              }
+            />
+            <div className="mt-12">
+              <Checklist items={['OWNED COMPUTE', 'OWNED WEIGHTS', 'OWNED ECONOMICS']} />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ 02 / PROBLEM ═══════════════ */}
+      <section id="problem" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <SectionHeading
+              num="02"
+              label="Problem"
+              title={<>You can't trust what you can't <Em>open</Em>.</>}
+              sub={
+                <>
+                  Closed-source models gorging on private data made the distrust structural. Then the billing
+                  arrived: every provider charges per token, and per-usage billing puts a toll on every agent loop.
+                  Two companies asked us for open models this week — the market is moving.
+                </>
+              }
+            />
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-14">
+            <Reveal delay={100}>
+              <TerminalBlock
+                lines={[
+                  '$ procept billing --compare',
+                  '- provider_a    $0.015 / 1K tokens   × 10⁹ agents',
+                  '+ procept       $0.00 / token',
+                  '+ procept       $12,000 / month      FLAT',
+                  '✓ tokens unmetered · scales linearly with your business',
+                ]}
+              />
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="space-y-6">
+                <Checklist items={['OPEN — MODEL WEIGHTS ARE YOURS', 'METERED — NEVER', 'BILLED — ONE LINE ITEM']} />
+                <p className="text-sm text-white/30 font-mono leading-relaxed">
+                  // your agents loop thousands of times a day.
+                  <br />// your bill shouldn't notice.
+                </p>
               </div>
-            ))}
+            </Reveal>
           </div>
-
-          <p className="text-lg md:text-2xl font-light text-white/60 leading-relaxed max-w-3xl">
-            There is no one-size-fits-all solution for every business, unless you have models that can teach themselves how your business works.
-          </p>
         </div>
       </section>
 
-      {/* ═══════════════ GPU BROKERING (HERO) ═══════════════ */}
-      <section className="relative overflow-hidden bg-black border-t border-white/[0.06]">
-        <img src="/gpus.jpeg" alt="GPUs" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-        <div className="relative max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-48">
-          <p className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-4">GPU Brokering</p>
-          <h2 className="text-3xl md:text-6xl font-light text-white tracking-tight leading-tight max-w-3xl mb-6">
-            We broker your GPUs.<br />
-            <span className="font-normal">No more GPU surfing.</span>
-          </h2>
-          <p className="text-lg text-white/50 leading-relaxed max-w-2xl">
-            We search and automatically apply the best GPU deals, getting you the best price with complete transparency and contracts.
-          </p>
+      {/* ═══════════════ 03 / STACK ═══════════════ */}
+      <section id="stack" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <SectionHeading
+              num="03"
+              label="Stack"
+              title={<>One stack. Fully <Em>maintained</Em>.</>}
+              sub="Deploy on your metal or in your VPC. We operate it. You own the weights, the data, and the economics."
+            />
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
+            <Reveal delay={0}>
+              <FigurePanel fig="1" caption="SELF-HOSTED STACK" image="/procept-diagram.jpg" className="h-full">
+                <p className="text-sm text-white/50 leading-relaxed">
+                  Deploy on your metal or in your VPC. We maintain it — you own the weights. Your data never leaves
+                  your stack.
+                </p>
+              </FigurePanel>
+            </Reveal>
+            <Reveal delay={100}>
+              <FigurePanel fig="2" caption="GPU ABSTRACTION" image="/gpus.jpeg" className="h-full">
+                <p className="text-sm text-white/50 leading-relaxed">
+                  We broker and manage the GPUs behind the scenes. One contract, best price, complete transparency.
+                  No more GPU surfing.
+                </p>
+              </FigurePanel>
+            </Reveal>
+            <Reveal delay={0}>
+              <FigurePanel fig="3" caption="FLAT LINEAR RATE" className="h-full">
+                <div className="mb-5">
+                  <TerminalBlock
+                    title="procept — billing"
+                    lines={[
+                      '$ procept bill --current',
+                      '$12,000 / month      FLAT',
+                      '✓ no per-token pricing',
+                    ]}
+                  />
+                </div>
+                <p className="text-sm text-white/50 leading-relaxed">
+                  Cost scales linearly with your business — not your usage. One line item. Predictable forever.
+                </p>
+              </FigurePanel>
+            </Reveal>
+            <Reveal delay={100}>
+              <FigurePanel fig="4" caption="RSI MULTI-AGENT HARNESS" className="h-full">
+                <p className="text-sm text-white/50 leading-relaxed mb-5">
+                  Recursive self-improvement, engineered for guaranteed convergence. Your agents loop, debate, and
+                  verify with no uncapped token meter. 100% completion on the tasks you hand it.
+                </p>
+                <Checklist items={['AGENTS LOOP', 'AGENTS DEBATE', 'AGENTS VERIFY']} />
+              </FigurePanel>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ═══════════════ TRAIN YOUR MODEL ═══════════════ */}
-      <section className="relative bg-[#0f0f0f] py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Model Training</p>
-            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight leading-tight mb-6">
-              We train your model.<br />
-              <span className="font-normal">It learns how your business works.</span>
+      {/* ═══════════════ 04 / HARNESS ═══════════════ */}
+      <section id="harness" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+          <source src="/hero-factory.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-ink-950/80" />
+        <div className="absolute inset-0 bg-gradient-to-l from-ink-950/90 via-ink-950/60 to-ink-950/20" />
+        <div className="relative max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-44">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <Reveal>
+              <SectionHeading
+                num="04"
+                label="Harness"
+                title={<>Recursive. Convergent. <Em>Yours</Em>.</>}
+                sub="The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment — it keeps improving inside your stack, owned by you."
+              />
+            </Reveal>
+            <Reveal delay={150}>
+              <TerminalBlock
+                title="procept — harness"
+                lines={[
+                  '$ procept harness run --task onboard_finance --agents 8',
+                  '[loop 01/04] agents 8 · debate 23 · verdicts 19  ✓',
+                  '[loop 02/04] model v1.2 → eval 0.91  ✓',
+                  '[loop 03/04] model v1.3 → eval 0.95  ✓',
+                  '[loop 04/04] converged · 100% completion',
+                  '▸ deploying v1.3 to your stack… OWNED BY YOU',
+                ]}
+              />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 05 / METRICS ═══════════════ */}
+      <section id="metrics" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <SectionHeading
+              num="05"
+              label="Metrics"
+              title={<>People suck at evaluations. We measure <Em>outcomes</Em>.</>}
+              sub="Measuring, training, and evaluating models is genuinely hard — benchmarks lie. So Procept measures what your business actually cares about: the outcome."
+            />
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-14">
+            <Reveal delay={100}>
+              <FigurePanel fig="5" caption="UNMEASURED OUTPUT. DECOMMISSIONED." image="/ai slop.jpeg" imageClass="grayscale opacity-60" />
+            </Reveal>
+            <Reveal delay={200}>
+              <Checklist items={['EVAL SCORE', 'BUSINESS OUTCOME', 'CUSTOMER IMPACT', 'ROI VS INCUMBENT']} />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ FINAL CTA ═══════════════ */}
+      <section id="access" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+          <source src="/truck video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-ink-950/80" />
+        <div className="relative max-w-4xl mx-auto px-6 md:px-16 py-32 md:py-44 text-center">
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Access</p>
+            <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6">
+              Provision your <Em>stack</Em><span className="text-term-400">.</span>
             </h2>
-            <p className="text-lg text-white/40 leading-relaxed mb-6">
-              We handle your model training with AGI-capable techniques and a model that self-improves.
+            <p className="font-mono text-[11px] tracking-[0.25em] text-white/50 mb-10">
+              DEPLOY IN DAYS — OWN IT FOREVER — NO PER-TOKEN BILLING
             </p>
-            <p className="text-lg text-white/40 leading-relaxed">
-              We use recursive self-improvement, engineered for guaranteed convergence. 100% completion on any task you hand it.
+            <button
+              onClick={() => setDemoOpen(true)}
+              className="group inline-flex items-center gap-3 px-10 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+            >
+              Request Access
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <p className="mt-6 text-xs text-white/30">
+              Flat linear rate. Self-hosted. Fully maintained by Procept.
             </p>
-          </div>
-          <div className="relative overflow-hidden rounded-2xl aspect-[4/3]">
-            <img src={IMG_TRAIN} alt="AI model training" className="w-full h-full object-cover" />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ MEASURE YOUR ROI ═══════════════ */}
-      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] order-2 lg:order-1">
-            <img src={IMG_ROI} alt="ROI analytics" className="w-full h-full object-cover" />
-          </div>
-          <div className="order-1 lg:order-2">
-            <p className="text-[10px] tracking-[0.25em] uppercase text-white/30 mb-4">Measurement</p>
-            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight leading-tight mb-6">
-              We measure your ROI.
-            </h2>
-            <p className="text-lg text-white/40 leading-relaxed">
-              We measure your evaluations, business outcomes, your customers, and ROI. You scale users, not API bills.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ SELF-HOSTING ═══════════════ */}
-      <section className="relative bg-black py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center mx-auto mb-8 text-white/70">
-            <Gauge className="w-6 h-6" />
-          </div>
-          <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight leading-tight mb-6">
-            The world is turning to self-hosting<br />
-            <span className="font-normal">because of multi-agents.</span>
-          </h2>
-          <p className="text-lg text-white/40 leading-relaxed mb-10">
-            Do you really want to be the most behind?
-          </p>
-          <ChatbotHero />
+          </Reveal>
         </div>
       </section>
 
       {/* ═══════════════ FOOTER ═══════════════ */}
-      <footer className="bg-black border-t border-white/[0.06] py-8 px-6 md:px-16">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-50" />
-            <span className="text-xs text-white/20">Procept © 2026</span>
-          </div>
-          <p className="text-xs text-white/15">
-            Make your tech stack AGI-capable with AI that self-learns your business.
-          </p>
-        </div>
-      </footer>
+      <MarketingFooter onNavigate={scrollToSection} />
     </div>
   );
-}
-
-function cn(...classes: (string | boolean | undefined | null)[]): string {
-  return classes.filter(Boolean).join(' ');
 }
