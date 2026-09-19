@@ -1,5 +1,6 @@
-import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
+import { LegalPageLayout } from '../components/marketing/LegalPageLayout';
+import { LegalSection } from '../components/marketing/LegalSection';
 
 interface Section {
   num: string;
@@ -201,137 +202,56 @@ export function DpaPage() {
   const navItems = SECTIONS.filter(s => /^\d+$/.test(s.num)).map(s => ({ num: s.num, heading: s.heading }));
 
   return (
-    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black text-white" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
-      {/* Header */}
-      <header className="border-b border-white/[0.06] sticky top-0 bg-black/80 backdrop-blur-xl z-50">
-        <div className="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition-colors text-sm">
-            <ArrowLeft className="w-4 h-4" />
-            Back to home
-          </Link>
-          <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-70" />
-            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Technologies Corp.</span>
-          </div>
+    <LegalPageLayout
+      docId="DPA-2026-09-16"
+      title="Data Processing Addendum"
+      subtitle="EFFECTIVE: 2026-09-16"
+      wide
+      meta={[
+        { label: 'Effective Date', value: 'September 16, 2026' },
+        { label: 'Jurisdiction', value: 'New Castle County, Delaware' },
+        { label: 'Governing Law', value: 'State of Delaware' },
+        { label: 'Parties', value: 'Procept Technologies Corp. & Customer' },
+      ]}
+    >
+      {/* In this document */}
+      <div className="border border-white/[0.08] bg-ink-800 p-6 mb-12">
+        <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-4">In this document</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {navItems.map(item => (
+            <span key={item.num} className="font-mono text-[13px] text-white/50 hover:text-white/80 transition-colors cursor-pointer">
+              <span className="text-term-400">{item.num}</span> {item.heading}
+            </span>
+          ))}
         </div>
-      </header>
+      </div>
 
-      {/* Content */}
-      <main className="max-w-5xl mx-auto px-6 py-16">
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Data Processing Addendum</h1>
-          <p className="text-white/30 text-sm">Effective September 16, 2026</p>
-        </div>
+      {/* DPA sections */}
+      <div className="space-y-14">
+        {SECTIONS.map((section, i) => (
+          <LegalSection key={i} num={section.num} heading={section.heading} paras={section.paras} blocks={section.blocks} list={section.list} />
+        ))}
+      </div>
 
-        {/* Metadata block */}
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-12 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { label: 'Effective Date', value: 'September 16, 2026' },
-            { label: 'Jurisdiction', value: 'New Castle County, Delaware' },
-            { label: 'Governing Law', value: 'State of Delaware' },
-            { label: 'Parties', value: 'Procept Technologies Corp. & Customer' },
-          ].map(item => (
-            <div key={item.label}>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-1.5">{item.label}</p>
-              <p className="text-sm text-white/70 leading-snug">{item.value}</p>
+      {/* Definitions key block */}
+      <div className="mt-16 border border-white/[0.08] bg-ink-800 p-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-6">Key Definitions</p>
+        <div className="space-y-6">
+          {DEFINITIONS.map(def => (
+            <div key={def.term}>
+              <h3 className="font-mono text-xs text-white/80 tracking-wider mb-2">{def.term}</h3>
+              <p className="text-sm text-white/50 leading-relaxed">{def.text}</p>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* In this document */}
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-12">
-          <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-4">In this document</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {navItems.map(item => (
-              <span key={item.num} className="text-sm text-white/50 hover:text-white/80 transition-colors cursor-pointer">
-                {item.heading} <span className="text-white/20">· Section {item.num}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* DPA sections */}
-        <div className="space-y-14">
-          {SECTIONS.map((section, i) => (
-            <section key={i}>
-              <div className="flex items-baseline gap-4 mb-5">
-                <span className="text-white/20 font-mono text-sm tabular-nums shrink-0">{section.num}</span>
-                <h2 className="text-xl font-medium text-white">{section.heading}</h2>
-              </div>
-
-              {section.paras && (
-                <div className="space-y-4 mb-5">
-                  {section.paras.map((para, j) => (
-                    <p key={j} className="text-sm text-white/50 leading-relaxed">{para}</p>
-                  ))}
-                </div>
-              )}
-
-              {section.list && (
-                <ul className="space-y-2.5 mb-5">
-                  {section.list.map((item, j) => (
-                    <li key={j} className="flex items-start gap-3 text-sm text-white/50 leading-relaxed">
-                      <span className="w-1 h-1 rounded-full bg-white/30 mt-2 shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {section.blocks && (
-                <div className="space-y-6">
-                  {section.blocks.map((block, j) => (
-                    <div key={j}>
-                      <h3 className="text-sm font-medium text-white/80 mb-3">{block.sub}</h3>
-                      <div className="space-y-3">
-                        {block.paras.map((para, k) => (
-                          <p key={k} className="text-sm text-white/50 leading-relaxed">{para}</p>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          ))}
-        </div>
-
-        {/* Definitions key block */}
-        <div className="mt-16 bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8">
-          <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-6">Key Definitions</p>
-          <div className="space-y-6">
-            {DEFINITIONS.map(def => (
-              <div key={def.term}>
-                <h3 className="text-sm font-medium text-white/80 mb-2">{def.term}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{def.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Link to terms */}
-        <div className="mt-12 text-center">
-          <Link to="/privacy" className="text-sm text-white/40 hover:text-white/70 transition-colors">
-            View the Privacy Policy →
-          </Link>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-8 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-white/20">Copyright Procept Technologies Corp. 2026. All rights reserved.</span>
-          <div className="flex items-center gap-4 text-xs text-white/30">
-            <Link to="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
-            <span className="text-white/10">·</span>
-            <Link to="/data-processing-addendum" className="hover:text-white/60 transition-colors">Data Processing Addendum</Link>
-            <span className="text-white/10">·</span>
-            <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms & Conditions</Link>
-            <span className="text-white/10">·</span>
-            <span className="hover:text-white/60 transition-colors cursor-pointer">Cookie Policy</span>
-          </div>
-        </div>
-      </footer>
-    </div>
+      {/* Link to privacy */}
+      <div className="mt-12 text-center">
+        <Link to="/privacy" className="font-mono text-xs tracking-[0.2em] uppercase text-white/40 hover:text-term-300 transition-colors">
+          View the Privacy Policy →
+        </Link>
+      </div>
+    </LegalPageLayout>
   );
 }

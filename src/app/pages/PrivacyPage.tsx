@@ -1,5 +1,5 @@
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router';
+import { LegalPageLayout } from '../components/marketing/LegalPageLayout';
+import { LegalSection } from '../components/marketing/LegalSection';
 
 const SECTIONS: { heading: string; body: string[] }[] = [
   {
@@ -80,78 +80,32 @@ const SECTIONS: { heading: string; body: string[] }[] = [
 
 export function PrivacyPage() {
   return (
-    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-black text-white" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
-      {/* Header */}
-      <header className="border-b border-white/[0.06] sticky top-0 bg-black/80 backdrop-blur-xl z-50">
-        <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition-colors text-sm">
-            <ArrowLeft className="w-4 h-4" />
-            Back to home
-          </Link>
-          <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-md opacity-70" />
-            <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Procept Technologies Corp.</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-16">
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">Privacy Policy</h1>
-          <p className="text-white/30 text-sm">Last Updated September 16, 2026</p>
-        </div>
-
-        {/* Metadata block */}
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-12 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { label: 'Last Updated', value: 'September 16, 2026' },
-            { label: 'Jurisdiction', value: 'United States' },
-            { label: 'Governing Law', value: 'State of Delaware' },
-            { label: 'Parties', value: 'Procept Technologies Corp. & Website Visitors' },
-          ].map(item => (
-            <div key={item.label}>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-1.5">{item.label}</p>
-              <p className="text-sm text-white/70 leading-snug">{item.value}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Policy sections */}
-        <div className="space-y-12">
-          {SECTIONS.map((section, i) => (
-            <section key={i}>
-              <h2 className="text-xl font-medium text-white mb-4">{section.heading}</h2>
-              <div className="space-y-4">
-                {section.body.map((para, j) => (
-                  <p key={j} className="text-sm text-white/50 leading-relaxed">{para}</p>
-                ))}
+    <LegalPageLayout
+      docId="PRIVACY-POLICY"
+      title="Privacy Policy"
+      subtitle="EFFECTIVE: 2026-09-16"
+      meta={[
+        { label: 'Last Updated', value: 'September 16, 2026' },
+        { label: 'Jurisdiction', value: 'United States' },
+        { label: 'Governing Law', value: 'State of Delaware' },
+        { label: 'Parties', value: 'Procept Technologies Corp. & Website Visitors' },
+      ]}
+    >
+      <div className="space-y-12">
+        {SECTIONS.map((section, i) => (
+          <div key={i}>
+            <LegalSection heading={section.heading} paras={section.body} />
+            {section.heading === '10. Contact Us' && (
+              <div className="mt-4 border border-white/[0.08] bg-ink-800 p-5 space-y-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-3">CONTACT //</p>
+                <p className="text-sm text-white/60">Procept Technologies Corp.</p>
+                <p className="text-sm text-white/60">hello@procept.tech</p>
+                <p className="text-sm text-white/40">Attn: Privacy</p>
               </div>
-              {section.heading === '10. Contact Us' && (
-                <div className="mt-4 bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 space-y-1.5">
-                  <p className="text-sm text-white/60">Procept Technologies Corp.</p>
-                  <p className="text-sm text-white/60">hello@procept.tech</p>
-                  <p className="text-sm text-white/40">Attn: Privacy</p>
-                </div>
-              )}
-            </section>
-          ))}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-8 px-6">
-        <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-white/20">Copyright Procept Technologies Corp. 2026. All rights reserved.</span>
-          <div className="flex items-center gap-4 text-xs text-white/30">
-            <Link to="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
-            <span className="text-white/10">·</span>
-            <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms & Conditions</Link>
-            <span className="text-white/10">·</span>
-            <span className="hover:text-white/60 transition-colors cursor-pointer">Cookie Policy</span>
+            )}
           </div>
-        </div>
-      </footer>
-    </div>
+        ))}
+      </div>
+    </LegalPageLayout>
   );
 }
