@@ -74,6 +74,7 @@
   --color-term-950: #06281C;
 
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 @import 'tw-animate-css';
