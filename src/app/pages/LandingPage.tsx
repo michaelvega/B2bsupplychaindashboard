@@ -274,7 +274,7 @@ export function LandingPage() {
             <SectionHeading
               num="01"
               label="Stack"
-              title={<>One stack. Four <Em>stages</Em>.</>}
+              title={<>One stack, four <Em>products</Em>. Never leaves your Infrastructure.</>}
               sub="The RSI loop, end to end: data, training, inference, evaluation. Every stage fully maintained by Procept, on your stack."
             />
           </Reveal>
