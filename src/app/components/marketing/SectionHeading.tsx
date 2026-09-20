@@ -9,8 +9,8 @@ export function SectionHeading({
   align = 'left',
   className,
 }: {
-  num: string;
-  label: string;
+  num?: string;
+  label?: string;
   title: ReactNode;
   sub?: ReactNode;
   align?: 'left' | 'center';
@@ -19,9 +19,11 @@ export function SectionHeading({
   const centered = align === 'center';
   return (
     <div className={cn(centered && 'text-center', className)}>
-      <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">
-        {num} / {label}
-      </p>
+      {(num || label) && (
+        <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">
+          {num} / {label}
+        </p>
+      )}
       <h2 className={cn('text-3xl md:text-5xl font-light text-white tracking-tight leading-[1.15] max-w-3xl', centered && 'mx-auto')}>
         {title}
       </h2>

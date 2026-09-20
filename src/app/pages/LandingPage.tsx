@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { DemoModal } from '../components/marketing/DemoModal';
@@ -6,7 +6,6 @@ import { MarketingNav, scrollToSection } from '../components/marketing/Marketing
 import { MarketingFooter } from '../components/marketing/MarketingFooter';
 import { SectionHeading } from '../components/marketing/SectionHeading';
 import { FigurePanel } from '../components/marketing/FigurePanel';
-import { TerminalBlock } from '../components/marketing/TerminalBlock';
 import { NetworkBackdrop } from '../components/marketing/NetworkBackdrop';
 import { CursorGfx } from '../components/marketing/CursorGfx';
 import { CodeBackdrop } from '../components/marketing/CodeBackdrop';
@@ -96,29 +95,90 @@ function Em({ children }: { children: ReactNode }) {
   return <em className="font-serif italic font-normal">{children}</em>;
 }
 
-const BUILD_ISSUES = [
-  { title: 'Zero ROI', text: 'Tech teams often lack specialized skills to properly train models and manage architecture, and see no ROI from self-hosting.' },
-  { title: 'Open Burden', text: 'There is a market gap in connecting open-source models with GPU hardware, so teams must procure individually.' },
-  { title: 'Custom Architecture', text: 'In-house infrastructure risks massive capital overhead and talent scarcity.' },
-];
+/**
+ * One problem slide. The header label and the stats crossfade between the
+ * market's current multi-agent economics (THE PROBLEM) and Procept's
+ * numbers (THE SOLUTION). Both phases stay mounted and stack on the same
+ * grid cell so the block sizes to the taller phase; opacity swaps every 5s.
+ */
+function ProblemSlide() {
+  const [phase, setPhase] = useState<'problem' | 'solution'>('problem');
 
-const RENT_ISSUES = [
-  { title: 'Exponential Costs', text: 'Charged by the token; scales poorly for massive multi-agent workloads.' },
-  { title: 'Zero Control', text: 'Surrender system visibility, diagnostics, and data pipelines to external vendors.' },
-  { title: 'Glue Code', text: 'Connect a bunch of pieces with fragile APIs and rigid models.' },
-];
+  useEffect(() => {
+    const id = setInterval(() => setPhase((p) => (p === 'problem' ? 'solution' : 'problem')), 5000);
+    return () => clearInterval(id);
+  }, []);
 
-/** Mono checklist row with green square bullets. */
-function Checklist({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-2.5">
-      {items.map((item) => (
-        <li key={item} className="flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-white/60">
-          <span className="w-2 h-2 bg-term-400/80 shrink-0" />
-          {item}
-        </li>
-      ))}
-    </ul>
+    <div className="relative border border-white/[0.08] bg-ink-950">
+      <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
+        {/* Header label rotates with the phase */}
+        <div className="grid">
+          <span
+            aria-hidden={phase !== 'problem'}
+            className={cn(
+              'col-start-1 row-start-1 font-mono text-[10px] tracking-[0.2em] text-term-400 transition-all duration-700',
+              phase === 'problem' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+            )}
+          >
+            THE PROBLEM
+          </span>
+          <span
+            aria-hidden={phase !== 'solution'}
+            className={cn(
+              'col-start-1 row-start-1 font-mono text-[10px] tracking-[0.2em] text-term-400 transition-all duration-700',
+              phase === 'solution' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
+            )}
+          >
+            THE SOLUTION
+          </span>
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+      </div>
+
+      <div className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <p className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight">
+          Gain the benefits of <Em>self hosting</Em>, with none of the challenges/engineering overhead.
+        </p>
+
+        <div className="grid">
+          {/* Market today */}
+          <div
+            aria-hidden={phase !== 'problem'}
+            className={cn(
+              'col-start-1 row-start-1 transition-all duration-700',
+              phase === 'problem' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+            )}
+          >
+            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4">
+              Multi-agent systems, currently
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Stat value="15-150x" label="the cost. More expensive to run while consistently underperforming." />
+              <Stat value="4-220x" label="the tokens consumed compared to single-agent systems." />
+            </div>
+          </div>
+
+          {/* With Procept */}
+          <div
+            aria-hidden={phase !== 'solution'}
+            className={cn(
+              'col-start-1 row-start-1 transition-all duration-700',
+              phase === 'solution' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+            )}
+          >
+            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 mb-4">With Procept</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Stat value="96%" label="cheaper than public API providers." />
+              <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
+              <div className="sm:col-span-2">
+                <Stat value="3% the size" label="still more intelligent." />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -250,51 +310,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══════════════ STATS / FIELD DATA ═══════════════ */}
-      <section id="field-data" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
-        <div className="relative z-50 max-w-6xl mx-auto">
-          {/* Poster: figure left, title inline to its right, stats around it */}
-          <div className="relative lg:h-[680px]">
-            {/* Top label */}
-            <Reveal delay={100} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-0">
-              <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400">No more token-based billing</p>
-            </Reveal>
-
-            {/* Vertical gradient hairlines */}
-            <div className="hidden lg:block absolute left-6 top-1/2 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-term-400/50 to-transparent" />
-            <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-term-400/50 to-transparent" />
-
-            {/* Figure, left side, cutout flush against the edge */}
-            <div className="relative w-fit self-start lg:absolute lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:self-auto">
-              <img
-                src="/inspo/image-copy.png"
-                alt="Procept figure"
-                className="relative w-64 md:w-72 lg:w-[22rem]"
-              />
-              {/* Fade the top and bottom edges into black */}
-              <div className="absolute inset-x-0 top-0 h-24 md:h-28 bg-gradient-to-b from-ink-950 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-24 md:h-28 bg-gradient-to-t from-ink-950 to-transparent" />
-            </div>
-
-            {/* Text structured around the figure */}
-            <div className="relative mt-10 flex flex-col items-center gap-8 lg:mt-0 lg:absolute lg:inset-0 lg:block">
-              <Reveal delay={0} className="w-full lg:w-auto lg:absolute lg:left-[26rem] lg:right-8 lg:top-1/2 lg:-translate-y-1/2">
-                <h2 className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-xl">
-                  The world of multi-agents demands charges based on business outcomes, not model usage.
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
-                  <Stat value="96%" label="cheaper than public API providers." />
-                  <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
-                  <Stat value="10x" label="smaller and still more intelligent." />
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ MARKET ═══════════════ */}
-      <section className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+      {/* ═══════════════ PROBLEM SLIDE ═══════════════ */}
+      <section id="problem" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
         {/* Rotated strings image as the section backdrop, above the code layer */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-center">
           <img
@@ -306,191 +323,56 @@ export function LandingPage() {
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">The agentic AI market</p>
-            <h2 className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-3xl">
-              Build your own, or <Em>rent</Em> someone else's.
-            </h2>
-            <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed max-w-2xl">
-              But companies lack the ability to properly build multi-agent architecture and train models, resulting
-              in agent failures, exponential costs, unnecessary hiring, and wasted engineering resources.
-            </p>
+            <ProblemSlide />
           </Reveal>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-14">
-            {/* Build your own */}
-            <Reveal delay={0}>
-              <div className="relative border border-white/[0.08] bg-ink-950 h-full">
-                <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-term-400">19% OF COMPANIES</span>
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">BUILD YOUR OWN</span>
-                </div>
-                <div className="p-6">
-                  <p className="text-sm text-white/50 leading-relaxed mb-6">
-                    Source GPUs + train your own models + manage architecture + continue to upgrade when new models
-                    come out + run evaluations.
-                  </p>
-                  <div className="space-y-5">
-                    {BUILD_ISSUES.map((issue) => (
-                      <div key={issue.title}>
-                        <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 mb-1.5">{issue.title}</p>
-                        <p className="text-sm text-white/50 leading-relaxed">{issue.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Rent models */}
-            <Reveal delay={100}>
-              <div className="relative border border-white/[0.08] bg-ink-950 h-full">
-                <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-term-400">81% OF COMPANIES</span>
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">RENT MODELS</span>
-                </div>
-                <div className="p-6">
-                  <p className="text-sm text-white/50 leading-relaxed mb-6">
-                    Using commercial AI platforms (OpenAI, Claude) to run complex operations.
-                  </p>
-                  <div className="space-y-5">
-                    {RENT_ISSUES.map((issue) => (
-                      <div key={issue.title}>
-                        <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 mb-1.5">{issue.title}</p>
-                        <p className="text-sm text-white/50 leading-relaxed">{issue.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <Reveal delay={0}>
-              <Stat value="53%" label="of the $10.8B agentic AI market, multi-agent systems make up a growing share." />
-            </Reveal>
-            <Reveal delay={100}>
-              <Stat value="15-150x" label="the cost. More expensive to run while consistently underperforming." />
-            </Reveal>
-            <Reveal delay={200}>
-              <Stat value="4-220x" label="the tokens consumed compared to single-agent systems." />
-            </Reveal>
-          </div>
         </div>
       </section>
 
       {/* ═══════════════ 04 / HARNESS ═══════════════ */}
       <section id="harness" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
-        {/* Wall image behind the section content, above the code layer; pushed left, fading out on the right */}
+        {/* Wires image behind the section content, above the code layer; pushed left, fading out on the right */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-start">
-          <img src="/inspo/wall.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-45" />
+          <img src="/inspo/wires.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-70" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#050505_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-44">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <Reveal>
               <SectionHeading
-                num="02"
-                label="Harness"
                 title={<>Recursive. Convergent. <Em>Yours</Em>.</>}
-                sub="The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment. It keeps improving inside your stack, owned by you."
               />
             </Reveal>
             <Reveal delay={150}>
-              <TerminalBlock
-                title="procept harness"
-                lines={[
-                  '$ procept harness run --task onboard_finance --agents 8',
-                  '[loop 01/04] agents 8 · debate 23 · verdicts 19  ✓',
-                  '[loop 02/04] model v1.2 → eval 0.91  ✓',
-                  '[loop 03/04] model v1.3 → eval 0.95  ✓',
-                  '[loop 04/04] converged · 100% completion',
-                  '▸ deploying v1.3 to your stack… OWNED BY YOU',
-                ]}
-              />
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ 03 / PROBLEM ═══════════════ */}
-      <section id="problem" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
-        <div className="relative z-50 max-w-6xl mx-auto">
-          <Reveal>
-            <div className="flex flex-col lg:flex-row lg:items-center gap-8">
-              <SectionHeading
-                num="03"
-                label="Problem"
-                title={<>You can't trust what you can't <Em>open</Em>.</>}
-                sub={
-                  <>
-                    Closed-source models gorging on private data made the distrust structural. Then the billing
-                    arrived: every provider charges per token, and per-usage billing puts a toll on every agent loop.
-                    Two companies asked us for open models this week. The market is moving.
-                  </>
-                }
-                className="flex-1"
-              />
-              {/* Line fading from the word "open" into the open image */}
-              <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
-                <div className="flex-1 h-px bg-gradient-to-r from-term-400/70 via-term-400/30 to-term-400/10" />
-                <img
-                  src="/inspo/open.png"
-                  alt=""
-                  className="w-44 md:w-52 h-auto"
-                  style={{
-                    maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)',
-                  }}
-                />
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-14">
-            <Reveal delay={100}>
-              <TerminalBlock
-                lines={[
-                  '$ procept billing --compare',
-                  '- provider_a    $0.015 / 1K tokens   × 10⁹ agents',
-                  '+ procept       $0.00 / token',
-                  '+ procept       $12,000 / month      FLAT',
-                  '✓ tokens unmetered · scales linearly with your business',
-                ]}
-              />
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="space-y-6">
-                <Checklist items={['OPEN · MODEL WEIGHTS ARE YOURS', 'METERED · NEVER', 'BILLED · ONE LINE ITEM']} />
-                <p className="text-sm text-white/30 font-mono leading-relaxed">
-                  // your agents loop thousands of times a day.
-                  <br />// your bill shouldn't notice.
-                </p>
-              </div>
+              <p className="text-base md:text-lg text-white/60 leading-relaxed max-w-xl">
+                The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment. It
+                keeps improving inside your stack, owned by you.
+              </p>
             </Reveal>
           </div>
         </div>
       </section>
 
       {/* ═══════════════ FINAL CTA ═══════════════ */}
-      <section id="access" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
-        <div className="relative z-50 max-w-4xl mx-auto px-6 md:px-16 py-32 md:py-44 text-center">
+      <section id="access" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06] min-h-[85vh] md:min-h-[90vh] flex flex-col">
+        {/* Mountain image anchored to the bottom; its black sky melts into the section */}
+        <div className="absolute inset-x-0 bottom-0 z-[45] pointer-events-none">
+          <img
+            src="/inspo/mountain_high.png"
+            alt=""
+            className="w-full h-[52vh] md:h-[62vh] object-cover object-center opacity-90"
+          />
+          <div className="absolute inset-x-0 top-0 h-24 md:h-36 bg-gradient-to-b from-ink-950 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-ink-950 to-transparent" />
+        </div>
+
+        {/* Text block, top left */}
+        <div className="relative z-50 max-w-6xl mx-auto w-full px-6 md:px-16 pt-32 md:pt-44 pb-44 md:pb-56">
           <Reveal>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Access</p>
-            <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6">
-              Provision your <Em>stack</Em><span className="text-term-400">.</span>
+            <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 max-w-2xl">
+              Provision your <Em>journey</Em><span className="text-term-400">.</span>
             </h2>
-            <p className="font-mono text-[11px] tracking-[0.25em] text-white/50 mb-10">
-              DEPLOY IN DAYS · OWN IT FOREVER · NO PER-TOKEN BILLING
-            </p>
-            <button
-              onClick={() => setDemoOpen(true)}
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
-            >
-              Request Access
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <p className="mt-6 text-xs text-white/30">
+            <p className="text-sm text-white/30">
               Flat linear rate. Self-hosted. Fully maintained by Procept.
             </p>
           </Reveal>

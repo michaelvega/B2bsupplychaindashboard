@@ -8,10 +8,12 @@ const CODE_IMAGES = [
 ];
 
 /**
- * Collage of repeated code screenshots behind the whole site (z-0).
+ * Collage of repeated code screenshots layered over the whole site.
  * Revealed only while the mouse moves: a small horizontal ellipse trails
- * the cursor and shows the code through the gaps between panels, then
- * closes back up when the mouse stops.
+ * the cursor and shows the code over the page content, then closes back
+ * up when the mouse stops. Sits above all page content (z-80, below the
+ * cursor dot and modals) so images under the circle dim to ~10% opacity
+ * while the code layer shows at ~90%.
  */
 export function CodeBackdrop() {
   const layerRef = useRef<HTMLDivElement>(null);
@@ -62,7 +64,7 @@ export function CodeBackdrop() {
   return (
     <div
       ref={layerRef}
-      className="fixed inset-0 z-40 pointer-events-none"
+      className="fixed inset-0 z-[80] pointer-events-none"
       style={{
         maskImage: 'radial-gradient(ellipse 0px 0px at -500px -500px, black, transparent)',
         WebkitMaskImage: 'radial-gradient(ellipse 0px 0px at -500px -500px, black, transparent)',

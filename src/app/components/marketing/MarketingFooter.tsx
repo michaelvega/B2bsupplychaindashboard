@@ -55,9 +55,16 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             <li>
               <a href="mailto:hello@procept.tech" className="text-sm text-white/40 hover:text-white transition-colors">Contact</a>
             </li>
-            {/* Placeholders, replace with real profile URLs */}
-            <li><span className="text-sm text-white/40 cursor-default" title="Coming soon">GitHub</span></li>
-            <li><span className="text-sm text-white/40 cursor-default" title="Coming soon">LinkedIn</span></li>
+            <li>
+              <a
+                href="https://www.linkedin.com/company/procept-tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-white/40 hover:text-white transition-colors"
+              >
+                LinkedIn
+              </a>
+            </li>
           </ul>
         </div>
 
