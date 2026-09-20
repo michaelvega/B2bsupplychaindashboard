@@ -205,7 +205,7 @@ export function LandingPage() {
       </section>
 
       {/* ═══════════════ STATS / FIELD DATA ═══════════════ */}
-      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+      <section id="field-data" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Telemetry — field data</p>
@@ -214,11 +214,12 @@ export function LandingPage() {
             </h2>
           </Reveal>
 
-          <div className="relative mt-16">
+          {/* Poster: figure in the middle, everything else structured around it */}
+          <div className="relative mt-20 lg:h-[640px]">
             {/* Acid wash backdrop */}
             <div className="absolute inset-0 pointer-events-none">
               <div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full opacity-30 blur-3xl"
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[44rem] h-[44rem] rounded-full opacity-30 blur-3xl"
                 style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.4) 0%, rgba(180,255,58,0.18) 35%, rgba(125,255,193,0.06) 55%, transparent 72%)' }}
               />
               <div
@@ -226,58 +227,68 @@ export function LandingPage() {
                 style={{ background: 'radial-gradient(circle, rgba(180,255,58,0.5), transparent 70%)' }}
               />
               <div
-                className="absolute right-1/4 bottom-1/5 w-80 h-80 rounded-full opacity-15 blur-3xl"
+                className="absolute right-1/4 bottom-1/4 w-80 h-80 rounded-full opacity-15 blur-3xl"
                 style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.5), transparent 70%)' }}
               />
             </div>
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] items-center gap-12 lg:gap-16">
-              {/* Left stats */}
-              <Reveal delay={0}>
-                <div className="space-y-10">
-                  <Stat value="96%" label="cheaper than public API providers." />
-                  <Stat value="10x" label="smaller and still more intelligent." />
-                </div>
-              </Reveal>
-
-              {/* Center figure — number in the middle, acid-wash glow */}
-              <Reveal delay={150}>
-                <div className="relative mx-auto">
-                  <div
-                    className="absolute inset-0 -m-10 rounded-full blur-2xl opacity-40"
-                    style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.45), transparent 70%)' }}
-                  />
-                  <img
-                    src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
-                    alt="Procept figure"
-                    className="relative w-56 md:w-72 mix-blend-screen"
-                  />
-                </div>
-              </Reveal>
-
-              {/* Right stats */}
-              <Reveal delay={300}>
-                <div className="space-y-10">
-                  <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
-                  <TerminalBlock
-                    title="procept — billing"
-                    lines={[
-                      '$ procept bill --current',
-                      '$12,000 / month      FLAT',
-                    ]}
-                  />
-                </div>
-              </Reveal>
+            {/* Vertical side phrases */}
+            <div className="hidden lg:block absolute left-2 top-1/2 -translate-y-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-term-300/40 [writing-mode:vertical-rl]">
+              Multi-agent systems are here.
+            </div>
+            <div className="hidden lg:block absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-term-300/40 [writing-mode:vertical-rl]">
+              Meter nothing. Meter nothing.
             </div>
 
-            {/* Echo lines */}
-            <Reveal delay={200}>
-              <div className="mt-16 space-y-2.5 font-mono text-[13px] text-white/50 max-w-2xl mx-auto text-center">
-                <p><span className="text-term-400">$</span> echo "Two companies asked us for open-source models this week."</p>
-                <p><span className="text-term-400">$</span> echo "We told our provider: no more per-token billing."</p>
-              </div>
-            </Reveal>
+            {/* Center figure */}
+            <div className="relative mx-auto w-fit lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
+              <div
+                className="absolute inset-0 -m-10 rounded-full blur-2xl opacity-40"
+                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.45), transparent 70%)' }}
+              />
+              <img
+                src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
+                alt="Procept figure"
+                className="relative w-52 md:w-64 lg:w-72 mix-blend-screen"
+              />
+            </div>
+
+            {/* Text structured around the figure */}
+            <div className="relative mt-10 flex flex-col items-center gap-8 lg:mt-0 lg:block">
+              <Reveal delay={0} className="lg:absolute lg:left-12 lg:top-6 lg:max-w-[240px]">
+                <Stat value="96%" label="cheaper than public API providers." />
+              </Reveal>
+              <Reveal delay={100} className="lg:absolute lg:right-12 lg:top-10 lg:max-w-[240px]">
+                <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
+              </Reveal>
+              <Reveal delay={200} className="lg:absolute lg:left-12 lg:bottom-8 lg:max-w-[240px]">
+                <Stat value="10x" label="smaller and still more intelligent." />
+              </Reveal>
+              <Reveal delay={300} className="w-full max-w-xs lg:absolute lg:right-12 lg:bottom-4 lg:max-w-[260px]">
+                <TerminalBlock
+                  title="procept — billing"
+                  lines={[
+                    '$ procept bill --current',
+                    '$12,000 / month      FLAT',
+                  ]}
+                />
+              </Reveal>
+              <Reveal delay={150} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-0">
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/30">NO PER-TOKEN BILLING</p>
+              </Reveal>
+              <Reveal delay={250} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:bottom-0">
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400/60">FLAT LINEAR RATE — DEPLOY IN DAYS</p>
+              </Reveal>
+            </div>
           </div>
+
+          {/* Echo lines */}
+          <Reveal delay={200}>
+            <div className="mt-16 space-y-2.5 font-mono text-[13px] text-white/50 max-w-2xl mx-auto text-center">
+              <p><span className="text-term-400">$</span> echo "Two companies asked us for open-source models this week."</p>
+              <p><span className="text-term-400">$</span> echo "We told our provider: no more per-token billing."</p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
