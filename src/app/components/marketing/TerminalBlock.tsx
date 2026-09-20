@@ -1,5 +1,5 @@
 /** Terminal-style code block: traffic-light squares, mono lines, diff coloring. */
-export function TerminalBlock({ lines, title = 'procept — zsh' }: { lines: string[]; title?: string }) {
+export function TerminalBlock({ lines, title = 'procept zsh' }: { lines: string[]; title?: string }) {
   const renderLine = (line: string) => {
     const t = line.trimStart();
     let className = 'text-white/70';

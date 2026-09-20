@@ -12,7 +12,7 @@ const PRODUCT_ITEMS = [
 /** Footer shared by the landing page and legal pages. */
 export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: string) => void }) {
   return (
-    <footer className="bg-ink-950 border-t border-white/[0.06]">
+    <footer className="relative z-50 bg-ink-950 border-t border-white/[0.06]">
       <div className="max-w-6xl mx-auto px-6 md:px-16 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
@@ -55,7 +55,7 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             <li>
               <a href="mailto:hello@procept.tech" className="text-sm text-white/40 hover:text-white transition-colors">Contact</a>
             </li>
-            {/* Placeholders — replace with real profile URLs */}
+            {/* Placeholders, replace with real profile URLs */}
             <li><span className="text-sm text-white/40 cursor-default" title="Coming soon">GitHub</span></li>
             <li><span className="text-sm text-white/40 cursor-default" title="Coming soon">LinkedIn</span></li>
           </ul>

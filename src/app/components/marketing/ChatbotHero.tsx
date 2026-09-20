@@ -47,7 +47,7 @@ export function ChatbotHero({ className }: { className?: string }) {
         <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-term-400 animate-pulse shadow-[0_0_12px_rgba(51,255,153,0.6)]" />
           <span className="font-mono text-[11px] tracking-[0.2em] text-white/60 font-medium">AEGIS</span>
-          <span className="font-mono text-[10px] text-white/25">— OPERATIONAL ASSISTANT</span>
+          <span className="font-mono text-[10px] text-white/25">· OPERATIONAL ASSISTANT</span>
           <span className="ml-auto font-mono text-[10px] text-term-400">online</span>
         </div>
 

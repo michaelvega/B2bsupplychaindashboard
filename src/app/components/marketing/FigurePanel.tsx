@@ -14,6 +14,7 @@ export function FigurePanel({
   caption,
   image,
   imageClass,
+  fadeBottom = false,
   children,
   className,
 }: {
@@ -21,6 +22,7 @@ export function FigurePanel({
   caption: string;
   image?: string;
   imageClass?: string;
+  fadeBottom?: boolean;
   children?: ReactNode;
   className?: string;
 }) {
@@ -40,6 +42,9 @@ export function FigurePanel({
         <div className="relative aspect-[16/10] overflow-hidden">
           <img src={image} alt={caption} className={cn('w-full h-full object-cover', imageClass)} />
           <div className="absolute inset-0 bg-ink-950/40" />
+          {fadeBottom && (
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-900 to-transparent" />
+          )}
         </div>
       )}
       {children && <div className="p-6">{children}</div>}
