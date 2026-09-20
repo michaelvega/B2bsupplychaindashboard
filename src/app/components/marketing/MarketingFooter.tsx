@@ -1,5 +1,4 @@
 import { Link } from 'react-router';
-import { StatusChip } from './StatusChip';
 import { scrollToSection } from './MarketingNav';
 
 const PRODUCT_ITEMS = [
@@ -20,10 +19,9 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             <img src="/procept-logo-light.jpg" alt="Procept" className="w-7 h-7 rounded-sm object-cover ring-1 ring-white/20" />
             <span className="font-mono text-xs tracking-[0.3em] uppercase text-white/80 font-medium">Procept</span>
           </div>
-          <p className="text-sm text-white/40 leading-relaxed mb-4">
+          <p className="text-sm text-white/40 leading-relaxed">
             The fully maintained, self-hosted AI stack.
           </p>
-          <StatusChip label="All systems operational" />
         </div>
 
         {/* Product */}
