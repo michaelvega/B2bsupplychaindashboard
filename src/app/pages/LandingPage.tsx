@@ -208,7 +208,6 @@ export function LandingPage() {
       <section id="field-data" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Telemetry — field data</p>
             <h2 className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight max-w-3xl">
               The companies leaving the token economy are already here.
             </h2>
@@ -216,6 +215,11 @@ export function LandingPage() {
 
           {/* Poster: figure in the middle, everything else structured around it */}
           <div className="relative mt-16 lg:h-[640px]">
+            {/* Top label */}
+            <Reveal delay={100} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-0">
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400">Telemetry — field data</p>
+            </Reveal>
+
             {/* Vertical side phrases */}
             <div className="hidden lg:block absolute left-2 top-1/2 -translate-y-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-term-300/40 [writing-mode:vertical-rl]">
               Multi-agent systems are here.
