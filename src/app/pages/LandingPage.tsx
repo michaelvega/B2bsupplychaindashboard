@@ -228,8 +228,8 @@ export function LandingPage() {
               Meter nothing. Meter nothing.
             </div>
 
-            {/* Center figure */}
-            <div className="relative mx-auto w-fit lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
+            {/* Figure — left side, cutout flush against the edge */}
+            <div className="relative w-fit self-start lg:absolute lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:self-auto">
               <img
                 src="/inspo%20pics/image%20copy.png"
                 alt="Procept figure"
@@ -239,23 +239,19 @@ export function LandingPage() {
 
             {/* Text structured around the figure */}
             <div className="relative mt-10 flex flex-col items-center gap-8 lg:mt-0 lg:absolute lg:inset-0 lg:block">
-              <Reveal delay={0} className="lg:absolute lg:left-12 lg:top-6 lg:max-w-[240px]">
-                <Stat value="96%" label="cheaper than public API providers." />
-              </Reveal>
-              <Reveal delay={100} className="lg:absolute lg:right-12 lg:top-10 lg:max-w-[240px]">
-                <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
-              </Reveal>
-              <Reveal delay={200} className="lg:absolute lg:left-12 lg:bottom-8 lg:max-w-[240px]">
-                <Stat value="10x" label="smaller and still more intelligent." />
-              </Reveal>
-              <Reveal delay={300} className="w-full max-w-xs lg:absolute lg:right-12 lg:bottom-4 lg:max-w-[260px]">
-                <TerminalBlock
-                  title="procept — billing"
-                  lines={[
-                    '$ procept bill --current',
-                    '$12,000 / month      FLAT',
-                  ]}
-                />
+              <Reveal delay={0} className="w-full lg:w-auto lg:absolute lg:left-[20rem] lg:right-8 lg:top-1/2 lg:-translate-y-1/2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <Stat value="96%" label="cheaper than public API providers." />
+                  <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
+                  <Stat value="10x" label="smaller and still more intelligent." />
+                  <TerminalBlock
+                    title="procept — billing"
+                    lines={[
+                      '$ procept bill --current',
+                      '$12,000 / month      FLAT',
+                    ]}
+                  />
+                </div>
               </Reveal>
               <Reveal delay={250} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:bottom-0">
                 <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400/60">FLAT LINEAR RATE — DEPLOY IN DAYS</p>
