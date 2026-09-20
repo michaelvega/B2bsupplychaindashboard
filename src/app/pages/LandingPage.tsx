@@ -215,23 +215,7 @@ export function LandingPage() {
           </Reveal>
 
           {/* Poster: figure in the middle, everything else structured around it */}
-          <div className="relative mt-20 lg:h-[640px]">
-            {/* Acid wash backdrop */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[44rem] h-[44rem] rounded-full opacity-30 blur-3xl"
-                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.4) 0%, rgba(180,255,58,0.18) 35%, rgba(125,255,193,0.06) 55%, transparent 72%)' }}
-              />
-              <div
-                className="absolute left-1/3 top-1/4 w-72 h-72 rounded-full opacity-15 blur-3xl"
-                style={{ background: 'radial-gradient(circle, rgba(180,255,58,0.5), transparent 70%)' }}
-              />
-              <div
-                className="absolute right-1/4 bottom-1/4 w-80 h-80 rounded-full opacity-15 blur-3xl"
-                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.5), transparent 70%)' }}
-              />
-            </div>
-
+          <div className="relative mt-16 lg:h-[640px]">
             {/* Vertical side phrases */}
             <div className="hidden lg:block absolute left-2 top-1/2 -translate-y-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-term-300/40 [writing-mode:vertical-rl]">
               Multi-agent systems are here.
@@ -243,13 +227,13 @@ export function LandingPage() {
             {/* Center figure */}
             <div className="relative mx-auto w-fit lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
               <div
-                className="absolute inset-0 -m-10 rounded-full blur-2xl opacity-40"
-                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.45), transparent 70%)' }}
+                className="absolute inset-0 -m-8 rounded-full blur-2xl opacity-25"
+                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.4), transparent 70%)' }}
               />
               <img
                 src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
                 alt="Procept figure"
-                className="relative w-52 md:w-64 lg:w-72 mix-blend-screen"
+                className="relative w-52 md:w-64 lg:w-72"
               />
             </div>
 
@@ -272,9 +256,6 @@ export function LandingPage() {
                     '$12,000 / month      FLAT',
                   ]}
                 />
-              </Reveal>
-              <Reveal delay={150} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-0">
-                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/30">NO PER-TOKEN BILLING</p>
               </Reveal>
               <Reveal delay={250} className="hidden lg:block lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:bottom-0">
                 <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400/60">FLAT LINEAR RATE — DEPLOY IN DAYS</p>
