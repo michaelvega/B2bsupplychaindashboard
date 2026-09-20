@@ -110,7 +110,7 @@ function ProblemSlide() {
   }, []);
 
   return (
-    <div className="relative border border-white/[0.08] bg-ink-950">
+    <div className="relative border border-white/[0.08] bg-ink-950/80">
       <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
         {/* Header label rotates with the phase */}
         <div className="grid">
@@ -312,14 +312,14 @@ export function LandingPage() {
 
       {/* ═══════════════ PROBLEM SLIDE ═══════════════ */}
       <section id="problem" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
-        {/* Rotated strings image as the section backdrop, above the code layer */}
-        <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-center">
+        {/* City2 image behind the slide, rotated 90°, mostly black and white */}
+        <div className="absolute inset-0 z-[45] pointer-events-none">
           <img
-            src="/inspo/strings-rotated.png"
+            src="/inspo/city2-rotated.png"
             alt=""
-            className="max-h-full max-w-full object-contain grayscale opacity-45"
+            className="w-full h-full object-cover object-center opacity-70 grayscale contrast-110"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#0A0A0A_90%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0A0A0A_75%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
@@ -335,15 +335,15 @@ export function LandingPage() {
           <img src="/inspo/wires.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-70" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#050505_100%)]" />
         </div>
-        <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-44">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <Reveal>
+        <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-28 pb-48 md:pt-36 md:pb-60">
+          <div className="relative lg:min-h-[240px] space-y-10 lg:space-y-0">
+            <Reveal className="lg:absolute lg:top-0 lg:left-0">
               <SectionHeading
-                title={<>Recursive. Convergent. <Em>Yours</Em>.</>}
+                title={<>Recursive. Convergent.<br /><Em>Yours</Em>.</>}
               />
             </Reveal>
-            <Reveal delay={150}>
-              <p className="text-base md:text-lg text-white/60 leading-relaxed max-w-xl">
+            <Reveal delay={150} className="lg:absolute lg:bottom-0 lg:right-0 lg:w-[56%]">
+              <p className="text-base md:text-lg text-white/60 leading-relaxed">
                 The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment. It
                 keeps improving inside your stack, owned by you.
               </p>
