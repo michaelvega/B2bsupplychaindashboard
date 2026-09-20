@@ -13,7 +13,7 @@ import { Stat } from '../components/marketing/Stat';
 import { Reveal } from '../components/marketing/Reveal';
 import { cn } from '../components/ui/utils';
 
-const HERO_VIDEO = '/city%20video.mp4';
+const HERO_VIDEO = '/cityscape-rotated.mp4';
 
 interface StackStage {
   fig: string;
