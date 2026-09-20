@@ -16,12 +16,6 @@ import { cn } from '../components/ui/utils';
 
 const HERO_VIDEO = '/city%20video.mp4';
 
-const STATS = [
-  { value: '96%', label: 'cheaper than public API providers.' },
-  { value: '95%', label: 'our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%.' },
-  { value: '10x', label: 'smaller and still more intelligent.' },
-];
-
 interface StackStage {
   fig: string;
   caption: string;
@@ -160,15 +154,6 @@ export function LandingPage() {
                 Meter nothing<span className="text-term-400">.</span>
               </h1>
 
-              {/* Number figure — right below the title */}
-              <div className="mb-8 flex justify-center lg:justify-start">
-                <img
-                  src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
-                  alt="Procept — multi-agent systems are here"
-                  className="w-48 md:w-56 opacity-90 drop-shadow-[0_0_40px_rgba(51,255,153,0.15)]"
-                />
-              </div>
-
               <p className="font-mono text-sm md:text-base tracking-[0.2em] uppercase text-term-300 mb-4">
                 Multi-agent systems are here.
               </p>
@@ -219,8 +204,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══════════════ STATS ═══════════════ */}
-      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+      {/* ═══════════════ STATS / FIELD DATA ═══════════════ */}
+      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Telemetry — field data</p>
@@ -229,20 +214,70 @@ export function LandingPage() {
             </h2>
           </Reveal>
 
-          <Reveal delay={100}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
-              {STATS.map((stat) => (
-                <Stat key={stat.value} value={stat.value} label={stat.label} />
-              ))}
+          <div className="relative mt-16">
+            {/* Acid wash backdrop */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full opacity-30 blur-3xl"
+                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.4) 0%, rgba(180,255,58,0.18) 35%, rgba(125,255,193,0.06) 55%, transparent 72%)' }}
+              />
+              <div
+                className="absolute left-1/3 top-1/4 w-72 h-72 rounded-full opacity-15 blur-3xl"
+                style={{ background: 'radial-gradient(circle, rgba(180,255,58,0.5), transparent 70%)' }}
+              />
+              <div
+                className="absolute right-1/4 bottom-1/5 w-80 h-80 rounded-full opacity-15 blur-3xl"
+                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.5), transparent 70%)' }}
+              />
             </div>
-          </Reveal>
 
-          <Reveal delay={200}>
-            <div className="mt-14 space-y-2.5 font-mono text-[13px] text-white/50">
-              <p><span className="text-term-400">$</span> echo "Two companies asked us for open-source models this week."</p>
-              <p><span className="text-term-400">$</span> echo "We told our provider: no more per-token billing."</p>
+            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] items-center gap-12 lg:gap-16">
+              {/* Left stats */}
+              <Reveal delay={0}>
+                <div className="space-y-10">
+                  <Stat value="96%" label="cheaper than public API providers." />
+                  <Stat value="10x" label="smaller and still more intelligent." />
+                </div>
+              </Reveal>
+
+              {/* Center figure — number in the middle, acid-wash glow */}
+              <Reveal delay={150}>
+                <div className="relative mx-auto">
+                  <div
+                    className="absolute inset-0 -m-10 rounded-full blur-2xl opacity-40"
+                    style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.45), transparent 70%)' }}
+                  />
+                  <img
+                    src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
+                    alt="Procept figure"
+                    className="relative w-56 md:w-72 mix-blend-screen"
+                  />
+                </div>
+              </Reveal>
+
+              {/* Right stats */}
+              <Reveal delay={300}>
+                <div className="space-y-10">
+                  <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
+                  <TerminalBlock
+                    title="procept — billing"
+                    lines={[
+                      '$ procept bill --current',
+                      '$12,000 / month      FLAT',
+                    ]}
+                  />
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
+
+            {/* Echo lines */}
+            <Reveal delay={200}>
+              <div className="mt-16 space-y-2.5 font-mono text-[13px] text-white/50 max-w-2xl mx-auto text-center">
+                <p><span className="text-term-400">$</span> echo "Two companies asked us for open-source models this week."</p>
+                <p><span className="text-term-400">$</span> echo "We told our provider: no more per-token billing."</p>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
