@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { DemoModal } from '../components/marketing/DemoModal';
 import { ChatbotHero } from '../components/marketing/ChatbotHero';
@@ -21,8 +22,76 @@ const STATS = [
   { value: '10x', label: 'smaller and still more intelligent.' },
 ];
 
+interface StackStage {
+  fig: string;
+  caption: string;
+  num: string;
+  title: string;
+  desc: string;
+  bullets: string[];
+  cta: string;
+  image?: string;
+}
+
+/** The RSI loop, in four stages — Prime Intellect-style numbered figures. */
+const STACK_STAGES: StackStage[] = [
+  {
+    fig: '1',
+    caption: 'DATA GENERATION',
+    num: '01',
+    title: 'Human-review-level data, for any task',
+    desc: 'We automatically generate human-reviewed-level data for any task — connected straight to your data sources.',
+    bullets: [
+      'Human-review-level quality, generated automatically',
+      'Connect your data sources — we handle the ingestion',
+      'Your workflows, not scraped benchmarks',
+    ],
+    cta: 'Generate Data',
+  },
+  {
+    fig: '2',
+    caption: 'CONTAINERIZED RSI',
+    num: '02',
+    title: 'Your RSI model, containerized',
+    desc: 'We containerize your RSI model so it trains for a specific task — in your stack, owned by you.',
+    bullets: [
+      'One container per task',
+      'Trains for the specific task you hand it',
+      'Recursive self-improvement, guaranteed convergence',
+    ],
+    cta: 'Train a Model',
+  },
+  {
+    fig: '3',
+    caption: 'DEDICATED INFERENCE',
+    num: '03',
+    title: 'Brokered GPUs, dedicated inference',
+    desc: 'We broker the cheapest GPUs for you at that moment — dedicated inference, no GPU surfing.',
+    bullets: [
+      'Cheapest GPUs, brokered in real time',
+      'Dedicated capacity — nothing shared',
+      'One contract, complete transparency',
+    ],
+    cta: 'Find GPUs',
+    image: '/gpus.jpeg',
+  },
+  {
+    fig: '4',
+    caption: 'EVALUATIONS',
+    num: '04',
+    title: 'Watch it self-improve',
+    desc: 'Evaluations that measure what matters. Watch your model train and self-improve over time.',
+    bullets: [
+      'Live eval scores, loop by loop',
+      'Business outcomes, not vanity benchmarks',
+      'ROI measured against your incumbents',
+    ],
+    cta: 'Run Evals',
+  },
+];
+
 /** Serif-italic accent word inside display headlines. */
-function Em({ children }: { children: React.ReactNode }) {
+function Em({ children }: { children: ReactNode }) {
   return <em className="font-serif italic font-normal">{children}</em>;
 }
 
@@ -243,54 +312,38 @@ export function LandingPage() {
             <SectionHeading
               num="03"
               label="Stack"
-              title={<>One stack. Fully <Em>maintained</Em>.</>}
-              sub="Deploy on your metal or in your VPC. We operate it. You own the weights, the data, and the economics."
+              title={<>One stack. Four <Em>stages</Em>.</>}
+              sub="The RSI loop, end to end: data, training, inference, evaluation. Every stage fully maintained by Procept — on your stack."
             />
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
-            <Reveal delay={0}>
-              <FigurePanel fig="1" caption="SELF-HOSTED STACK" image="/procept-diagram.jpg" className="h-full">
-                <p className="text-sm text-white/50 leading-relaxed">
-                  Deploy on your metal or in your VPC. We maintain it — you own the weights. Your data never leaves
-                  your stack.
-                </p>
-              </FigurePanel>
-            </Reveal>
-            <Reveal delay={100}>
-              <FigurePanel fig="2" caption="GPU ABSTRACTION" image="/gpus.jpeg" className="h-full">
-                <p className="text-sm text-white/50 leading-relaxed">
-                  We broker and manage the GPUs behind the scenes. One contract, best price, complete transparency.
-                  No more GPU surfing.
-                </p>
-              </FigurePanel>
-            </Reveal>
-            <Reveal delay={0}>
-              <FigurePanel fig="3" caption="FLAT LINEAR RATE" className="h-full">
-                <div className="mb-5">
-                  <TerminalBlock
-                    title="procept — billing"
-                    lines={[
-                      '$ procept bill --current',
-                      '$12,000 / month      FLAT',
-                      '✓ no per-token pricing',
-                    ]}
-                  />
-                </div>
-                <p className="text-sm text-white/50 leading-relaxed">
-                  Cost scales linearly with your business — not your usage. One line item. Predictable forever.
-                </p>
-              </FigurePanel>
-            </Reveal>
-            <Reveal delay={100}>
-              <FigurePanel fig="4" caption="RSI MULTI-AGENT HARNESS" className="h-full">
-                <p className="text-sm text-white/50 leading-relaxed mb-5">
-                  Recursive self-improvement, engineered for guaranteed convergence. Your agents loop, debate, and
-                  verify with no uncapped token meter. 100% completion on the tasks you hand it.
-                </p>
-                <Checklist items={['AGENTS LOOP', 'AGENTS DEBATE', 'AGENTS VERIFY']} />
-              </FigurePanel>
-            </Reveal>
+            {STACK_STAGES.map((stage, i) => (
+              <Reveal key={stage.fig} delay={(i % 2) * 100}>
+                <FigurePanel fig={stage.fig} caption={stage.caption} image={stage.image} className="h-full">
+                  <div className="flex items-baseline gap-4 mb-3">
+                    <span className="font-mono text-2xl font-medium text-term-400 tabular-nums">{stage.num}</span>
+                    <h3 className="text-xl font-light text-white tracking-tight">{stage.title}</h3>
+                  </div>
+                  <p className="text-sm text-white/50 leading-relaxed mb-5">{stage.desc}</p>
+                  <ul className="space-y-2 mb-7">
+                    {stage.bullets.map((bullet, j) => (
+                      <li key={j} className="font-mono text-[12px] text-white/50 leading-relaxed">
+                        <span className="text-term-500 mr-2">{stage.num.replace(/^0/, '')}.{j + 1}</span>
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => setDemoOpen(true)}
+                    className="inline-flex items-center gap-2 border border-white/15 px-4 py-2 font-mono text-[11px] tracking-[0.15em] uppercase text-white hover:border-term-400/60 hover:text-term-300 transition-all"
+                  >
+                    {stage.cta}
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </FigurePanel>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
