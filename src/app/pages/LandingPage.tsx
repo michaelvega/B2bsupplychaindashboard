@@ -231,7 +231,7 @@ export function LandingPage() {
             {/* Center figure */}
             <div className="relative mx-auto w-fit lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
               <img
-                src="/inspo%20pics/image.png"
+                src="/inspo%20pics/image%20copy.png"
                 alt="Procept figure"
                 className="relative w-44 md:w-52 lg:w-60"
               />
