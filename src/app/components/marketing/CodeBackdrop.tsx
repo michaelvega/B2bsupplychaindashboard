@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 
 const CODE_IMAGES = [
-  '/inspo%20pics/code1.png',
-  '/inspo%20pics/code2.png',
-  '/inspo%20pics/code4.png',
-  '/inspo%20pics/code5.png',
+  '/inspo/code1.png',
+  '/inspo/code2.png',
+  '/inspo/code4.png',
+  '/inspo/code5.png',
 ];
 
 /**

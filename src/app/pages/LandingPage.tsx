@@ -36,7 +36,7 @@ const STACK_STAGES: StackStage[] = [
     caption: 'DATA GENERATION',
     num: '01',
     title: 'Human-review-level data, for any task',
-    image: '/inspo%20pics/hands.png',
+    image: '/inspo/hands.png',
     desc: 'We automatically generate human-reviewed-level data for any task, connected straight to your data sources.',
     bullets: [
       'Human-review-level quality, generated automatically',
@@ -50,7 +50,7 @@ const STACK_STAGES: StackStage[] = [
     caption: 'CONTAINERIZED RSI',
     num: '02',
     title: 'Your RSI model, containerized',
-    image: '/inspo%20pics/squares.png',
+    image: '/inspo/squares.png',
     desc: 'We containerize your RSI model so it trains for a specific task. In your stack, owned by you.',
     bullets: [
       'One container per task',
@@ -71,14 +71,14 @@ const STACK_STAGES: StackStage[] = [
       'One contract, complete transparency',
     ],
     cta: 'Find GPUs',
-    image: '/inspo%20pics/gpu.png',
+    image: '/inspo/gpu.png',
   },
   {
     fig: '4',
     caption: 'EVALUATIONS',
     num: '04',
     title: 'Watch it self-improve',
-    image: '/inspo%20pics/summit.png',
+    image: '/inspo/summit.png',
     imageClass: 'object-[50%_20%]',
     fadeBottom: true,
     desc: 'Evaluations that measure what matters. Watch your model train and self-improve over time.',
@@ -267,7 +267,7 @@ export function LandingPage() {
             {/* Figure, left side, cutout flush against the edge */}
             <div className="relative w-fit self-start lg:absolute lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:self-auto">
               <img
-                src="/inspo%20pics/image%20copy.png"
+                src="/inspo/image-copy.png"
                 alt="Procept figure"
                 className="relative w-64 md:w-72 lg:w-[22rem]"
               />
@@ -298,7 +298,7 @@ export function LandingPage() {
         {/* Rotated strings image as the section backdrop, above the code layer */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-center">
           <img
-            src="/inspo%20pics/strings-rotated.png"
+            src="/inspo/strings-rotated.png"
             alt=""
             className="max-h-full max-w-full object-contain grayscale opacity-45"
           />
@@ -383,7 +383,7 @@ export function LandingPage() {
       <section id="harness" className="relative overflow-hidden bg-ink-950 border-t border-white/[0.06]">
         {/* Wall image behind the section content, above the code layer; pushed left, fading out on the right */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-start">
-          <img src="/inspo%20pics/wall.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-45" />
+          <img src="/inspo/wall.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-45" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#050505_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-32 md:py-44">
@@ -435,7 +435,7 @@ export function LandingPage() {
               <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
                 <div className="flex-1 h-px bg-gradient-to-r from-term-400/70 via-term-400/30 to-term-400/10" />
                 <img
-                  src="/inspo%20pics/open.png"
+                  src="/inspo/open.png"
                   alt=""
                   className="w-44 md:w-52 h-auto"
                   style={{
