@@ -230,14 +230,10 @@ export function LandingPage() {
 
             {/* Center figure */}
             <div className="relative mx-auto w-fit lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
-              <div
-                className="absolute inset-0 -m-8 rounded-full blur-2xl opacity-25"
-                style={{ background: 'radial-gradient(circle, rgba(51,255,153,0.4), transparent 70%)' }}
-              />
               <img
-                src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
+                src="/inspo%20pics/image.png"
                 alt="Procept figure"
-                className="relative w-52 md:w-64 lg:w-72"
+                className="relative w-44 md:w-52 lg:w-60"
               />
             </div>
 

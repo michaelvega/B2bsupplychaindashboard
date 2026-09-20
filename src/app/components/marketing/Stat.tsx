@@ -1,10 +1,10 @@
 export function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="border border-white/[0.08] bg-ink-900 p-8 hover:border-term-400/40 transition-colors">
-      <div className="font-mono text-5xl md:text-6xl font-medium text-term-300 tracking-tight mb-4 tabular-nums">
+    <div className="border border-white/25 bg-neutral-800/80 p-6">
+      <div className="font-mono text-4xl md:text-5xl font-medium text-white tracking-tight mb-3 tabular-nums">
         {value}
       </div>
-      <p className="text-sm text-white/40 leading-relaxed">{label}</p>
+      <p className="text-sm text-white/50 leading-relaxed">{label}</p>
     </div>
   );
 }
