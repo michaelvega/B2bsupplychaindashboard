@@ -235,6 +235,9 @@ export function LandingPage() {
                 alt="Procept figure"
                 className="relative w-44 md:w-52 lg:w-60"
               />
+              {/* Fade the top and bottom edges into black */}
+              <div className="absolute inset-x-0 top-0 h-20 md:h-24 bg-gradient-to-b from-ink-950 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-20 md:h-24 bg-gradient-to-t from-ink-950 to-transparent" />
             </div>
 
             {/* Text structured around the figure */}
