@@ -155,10 +155,23 @@ export function LandingPage() {
                 <StatusChip label="Online" />
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.05] mb-6">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.05] mb-8">
                 Own your <Em>intelligence</Em>.<br />
                 Meter nothing<span className="text-term-400">.</span>
               </h1>
+
+              {/* Number figure — right below the title */}
+              <div className="mb-8 flex justify-center lg:justify-start">
+                <img
+                  src="/inspo%20pics/8d50617ca1e874b1711f33cd5f3e2b24.jpg"
+                  alt="Procept — multi-agent systems are here"
+                  className="w-48 md:w-56 opacity-90 drop-shadow-[0_0_40px_rgba(51,255,153,0.15)]"
+                />
+              </div>
+
+              <p className="font-mono text-sm md:text-base tracking-[0.2em] uppercase text-term-300 mb-4">
+                Multi-agent systems are here.
+              </p>
 
               <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
                 Procept is the fully maintained, self-hosted AI stack. We abstract away the GPUs, charge one flat
