@@ -242,7 +242,7 @@ export function LandingPage() {
             </div>
 
             {/* Text structured around the figure */}
-            <div className="relative mt-10 flex flex-col items-center gap-8 lg:mt-0 lg:block">
+            <div className="relative mt-10 flex flex-col items-center gap-8 lg:mt-0 lg:absolute lg:inset-0 lg:block">
               <Reveal delay={0} className="lg:absolute lg:left-12 lg:top-6 lg:max-w-[240px]">
                 <Stat value="96%" label="cheaper than public API providers." />
               </Reveal>
