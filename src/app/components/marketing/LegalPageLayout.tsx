@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router';
+import { DemoModal } from './DemoModal';
 import { MarketingFooter } from './MarketingFooter';
+import { MarketingNav } from './MarketingNav';
 
-/** Shared chrome for all legal pages: sticky header, title block, metadata grid, footer. */
+/** Shared chrome for all legal pages: landing toolbar, title block, metadata grid, footer. */
 export function LegalPageLayout({
   docId,
   title,
@@ -19,22 +20,13 @@ export function LegalPageLayout({
   wide?: boolean;
   children: ReactNode;
 }) {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
     <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-ink-950 text-white" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
-      {/* Header */}
-      <header className="border-b border-white/[0.06] sticky top-0 bg-ink-950/80 backdrop-blur-xl z-50">
-        <div className={`mx-auto px-6 py-6 flex items-center justify-between ${wide ? 'max-w-5xl' : 'max-w-3xl'}`}>
-          <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-term-300 transition-colors font-mono text-xs tracking-[0.2em] uppercase">
-            <ArrowLeft className="w-4 h-4" />
-            00 / Home
-          </Link>
-          <div className="flex items-center gap-3">
-            <img src="/procept-logo-light.jpg" alt="Procept" className="w-6 h-6 rounded-sm opacity-70" />
-            <span className="text-white/40 font-mono text-xs tracking-[0.2em] uppercase hidden sm:inline">Procept Technologies Corp.</span>
-          </div>
-          <span className="font-mono text-xs tracking-[0.2em] text-term-400 uppercase hidden md:inline">DOC://{docId}</span>
-        </div>
-      </header>
+      {/* Toolbar, same as the landing page; logo links home */}
+      <MarketingNav onRequestAccess={() => setDemoOpen(true)} logoTo="/" />
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
 
       {/* Content */}
       <main className={`mx-auto px-6 py-16 ${wide ? 'max-w-5xl' : 'max-w-3xl'}`}>

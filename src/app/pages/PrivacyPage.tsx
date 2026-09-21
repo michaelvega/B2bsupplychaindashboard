@@ -5,9 +5,9 @@ const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: '1. Information We Collect',
     body: [
-      'We collect information that you provide directly to us, including your name, email address, company name, and any other information you submit through our website, demo request forms, or communications with our team.',
-      'We automatically collect certain technical information when you visit our website, including your IP address, browser type, device information, pages visited, time spent on pages, referring URLs, and other usage data through cookies and similar technologies.',
-      'If you use our platform, we collect data related to your account, including configuration settings, uploaded documents, and usage patterns necessary to provide our services.',
+      'Website & Communications: We collect information that you provide directly to us, including your name, email address, company name, and any other information you submit through our website, demo request forms, or communications with our team. We automatically collect certain technical information when you visit our website, including your IP address, browser type, device information, pages visited, time spent on pages, referring URLs, and other usage data through cookies and similar technologies.',
+      'Procept Hosted Platform: If you use our fully hosted multi-tenant platform, we collect data related to your account, including configuration settings, uploaded documents, and usage patterns necessary to provide our services.',
+      'Procept Enterprise (BYOC) Deployments: If you deploy Procept via our Bring Your Own Cloud (BYOC) enterprise architecture, Procept does not ingest, host, or collect your proprietary documents or training data. In these deployments, your data remains entirely within your secure infrastructure, and our data processing is strictly governed by your specific Master Services Agreement (MSA) and Data Processing Addendum (DPA).',
     ],
   },
   {
