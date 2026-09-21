@@ -175,7 +175,7 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
               );
             }
 
-            // Parent item — expandable via Collapsible, default open if active child
+            // Parent item: expandable via Collapsible, default open if active child
             const ParentIcon = item.icon;
             const active = isParentActive(item);
 

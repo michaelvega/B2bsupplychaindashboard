@@ -117,7 +117,7 @@ export function Settings() {
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-[1400px] mx-auto space-y-6">
 
-          {/* Locally Added Dataset — new */}
+          {/* Locally Added Dataset, new */}
           <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <div className="flex items-center gap-2.5">

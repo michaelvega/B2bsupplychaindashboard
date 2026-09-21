@@ -4,7 +4,8 @@ import type { ImperativePanelHandle } from 'react-resizable-panels';
 import { LandingPage } from './pages/LandingPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { DpaPage } from './pages/DpaPage';
-import { ServiceDescriptionsPage } from './pages/ServiceDescriptionsPage';
+import { PlansPage } from './pages/PlansPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { TermsPage } from './pages/TermsPage';
 import { AgentSuite } from './pages/AgentSuite';
 import { AgentFiles } from './pages/AgentFiles';
@@ -109,7 +110,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/plans',
-    element: <ServiceDescriptionsPage />,
+    element: <PlansPage />,
   },
   {
     path: '/terms-of-service',
@@ -186,5 +187,9 @@ export const router = createBrowserRouter([
         <DailyBrief />
       </Layout>
     ),
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);

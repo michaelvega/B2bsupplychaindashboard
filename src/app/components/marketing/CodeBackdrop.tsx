@@ -11,9 +11,9 @@ const CODE_IMAGES = [
  * Collage of repeated code screenshots behind the site's boxes and text.
  * Revealed only while the mouse moves: a flat horizontal ellipse trails
  * the cursor and shows the code through the empty areas of the page, then
- * closes back up when the mouse stops. Sits at z-40 — above the bare
+ * closes back up when the mouse stops. Sits at z-40, above the bare
  * section backgrounds but below every panel, image and text layer
- * (z-45/50) — so the circle only ever appears where nothing is drawn.
+ * (z-45/50), so the circle only ever appears where nothing is drawn.
  */
 export function CodeBackdrop() {
   const layerRef = useRef<HTMLDivElement>(null);

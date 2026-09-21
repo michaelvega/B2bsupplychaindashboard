@@ -432,7 +432,7 @@ export function AssistantPanel({ collapsed, onToggleCollapse }: AssistantPanelPr
           </div>
         )}
 
-        {/* Chat History Dropdown — boxed */}
+        {/* Chat History Dropdown, boxed */}
         {historyOpen && (
           <div className="border-t border-gray-200/60 px-3 py-3 bg-white/80">
             <div className="border border-gray-200/80 rounded-xl shadow-sm overflow-hidden bg-white">
@@ -728,7 +728,7 @@ export function AssistantPanel({ collapsed, onToggleCollapse }: AssistantPanelPr
             </>
           )}
 
-          {/* Thinking indicator — Claude-style */}
+          {/* Thinking indicator, Claude-style */}
           {showThinking && <ThinkingDots />}
 
           <div ref={messagesEndRef} className="h-2" />

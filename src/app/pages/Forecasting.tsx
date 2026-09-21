@@ -300,7 +300,7 @@ export function Forecasting() {
                   <div className="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2.5">
                     <Gauge className="w-4 h-4 text-gray-500" />
                     <h2 className="text-sm font-semibold text-gray-800">
-                      Inventory Forecast — {includedFactories.map(f => f.name).join(', ')}
+                      Inventory Forecast: {includedFactories.map(f => f.name).join(', ')}
                     </h2>
                   </div>
                   <div className="p-4 h-[320px]">
