@@ -161,7 +161,7 @@ export function PlansPage() {
           </div>
 
           <Reveal>
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/30 text-center mt-16">
+            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 text-center mt-16">
               FLAT LINEAR RATE · SELF-HOSTED · FULLY MAINTAINED BY PROCEPT
             </p>
           </Reveal>
