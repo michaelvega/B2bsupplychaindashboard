@@ -29,7 +29,7 @@ const SERVICES: RockService[] = [
     title: 'Open-Source Models',
     desc: 'Open-weight models implemented in your environment. You own the weights. We handle the engineering.',
     rock: '/rocks/rock-1.png',
-    rockClass: 'w-40 md:w-48',
+    rockClass: 'w-48 md:w-60',
     rotate: '-rotate-3',
   },
   {
@@ -37,7 +37,7 @@ const SERVICES: RockService[] = [
     title: 'SLM Compression',
     desc: 'Small language models compressed to the task. A fraction of the size, still more intelligent.',
     rock: '/rocks/rock-2.png',
-    rockClass: 'w-16 md:w-20',
+    rockClass: 'w-10 md:w-12',
     rotate: 'rotate-6',
   },
   {
@@ -45,7 +45,7 @@ const SERVICES: RockService[] = [
     title: 'Inference & Brokering',
     desc: 'Cheapest GPUs brokered in real time. Dedicated inference, no GPU surfing.',
     rock: '/rocks/rock-3.png',
-    rockClass: 'w-44 md:w-52',
+    rockClass: 'w-44 md:w-56',
     rotate: '-rotate-2',
   },
   {
@@ -53,7 +53,7 @@ const SERVICES: RockService[] = [
     title: 'Recursive Self-Improvement',
     desc: 'Your model trains, evaluates, and improves. Loop after loop, inside your stack.',
     rock: '/rocks/rock-4.png',
-    rockClass: 'w-48 md:w-56',
+    rockClass: 'w-48 md:w-60',
     rotate: 'rotate-4',
   },
   {
@@ -61,7 +61,7 @@ const SERVICES: RockService[] = [
     title: 'Custom Data Generation',
     desc: 'Human-review-level data for any task, generated automatically and connected to your sources.',
     rock: '/rocks/rock-5.png',
-    rockClass: 'w-56 md:w-64',
+    rockClass: 'w-56 md:w-72',
     rotate: '-rotate-4',
   },
   {
@@ -69,44 +69,16 @@ const SERVICES: RockService[] = [
     title: 'Evaluations & Metrics',
     desc: 'Live eval scores and business outcomes, tracked loop by loop. No vanity benchmarks.',
     rock: '/rocks/rock-6.png',
-    rockClass: 'w-48 md:w-56',
+    rockClass: 'w-48 md:w-64',
     rotate: 'rotate-3',
   },
 ];
 
-/** One rock with its caption block; text alternates sides, rocks stack as a cairn. */
-function RockRow({ service, side }: { service: RockService; side: 'left' | 'right' }) {
-  const text = (
-    <div className={cn('max-w-xs', side === 'left' ? 'lg:text-right lg:justify-self-end' : 'lg:justify-self-start')}>
-      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400 mb-2">{service.num} // {service.title}</p>
-      <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
-    </div>
-  );
+/** Text anchor positions (%), matching each rock's place in the original photo stack. */
+const ROCK_TOPS = [12, 16, 28, 42, 62, 86];
 
-  return (
-    <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-4 lg:gap-10 -mt-6 lg:-mt-14 first:mt-0">
-      {/* Text column, side depends on alternation */}
-      <div className={cn('order-2 lg:order-none mx-auto lg:mx-0 lg:max-w-none w-full max-w-sm', side === 'right' && 'lg:order-last')}>
-        {text}
-      </div>
-
-      {/* Rock */}
-      <img
-        src={service.rock}
-        alt={service.title}
-        className={cn(
-          'order-1 justify-self-center select-none transition-transform duration-500 hover:rotate-0',
-          service.rockClass,
-          service.rotate,
-        )}
-        draggable={false}
-      />
-
-      {/* Empty grid cell on the other side (keeps the rock centered) */}
-      <div className={cn('hidden lg:block', side === 'right' && 'lg:order-first')} />
-    </div>
-  );
-}
+/** Horizontal offset from the stack center (px at 880px tall), from the photo. */
+const ROCK_DX = [25, -59, -1, -17, 20, -2];
 
 export function PlansPage() {
   const [demoOpen, setDemoOpen] = useState(false);
@@ -133,13 +105,59 @@ export function PlansPage() {
             </p>
           </Reveal>
 
-          {/* The cairn: one rock per service, text beside each rock */}
-          <div className="max-w-4xl mx-auto">
-            {SERVICES.map((service, i) => (
-              <Reveal key={service.num} delay={i * 60}>
-                <RockRow service={service} side={i % 2 === 0 ? 'left' : 'right'} />
+          {/* Mobile: simple stacked list, rock above its text */}
+          <div className="lg:hidden space-y-16">
+            {SERVICES.map((service) => (
+              <Reveal key={service.num}>
+                <div className="flex flex-col items-center text-center gap-6">
+                  <img
+                    src={service.rock}
+                    alt={service.title}
+                    className={cn('select-none drop-shadow-[0_14px_18px_rgba(0,0,0,0.5)]', service.rockClass, service.rotate)}
+                    draggable={false}
+                  />
+                  <div className="max-w-xs">
+                    <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400 mb-2">{service.num} // {service.title}</p>
+                    <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
+                  </div>
+                </div>
               </Reveal>
             ))}
+          </div>
+
+          {/* Desktop: the cairn exactly as stacked in the rocks.png photo, text off to the sides */}
+          <div className="hidden lg:block relative h-[880px] max-w-4xl mx-auto">
+            <Reveal className="absolute inset-0">
+              {SERVICES.map((service, i) => {
+                const side = i % 2 === 0 ? 'left' : 'right';
+                return (
+                  <div key={service.num}>
+                    {/* Rock, at its photo position; grows on hover */}
+                    <img
+                      src={service.rock}
+                      alt={service.title}
+                      className={cn(
+                        'absolute left-1/2 -translate-x-1/2 -translate-y-1/2 select-none transition-transform duration-300 hover:scale-110 hover:z-10 drop-shadow-[0_18px_24px_rgba(0,0,0,0.5)]',
+                        service.rockClass,
+                      )}
+                      style={{ top: `${ROCK_TOPS[i]}%`, marginLeft: `${ROCK_DX[i]}px` }}
+                      draggable={false}
+                    />
+                    {/* Text pushed off to the side, grows on hover */}
+                    <div
+                      className={cn(
+                        'absolute w-[300px] -translate-y-1/2 transition-transform duration-300 hover:scale-105',
+                        side === 'left' ? 'left-0 text-right origin-right' : 'right-0 text-left origin-left',
+                      )}
+                      style={{ top: `${ROCK_TOPS[i]}%` }}
+                    >
+                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400 mb-2">{service.num} // {service.title}</p>
+                      <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </Reveal>
           </div>
 
           <Reveal>
