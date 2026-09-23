@@ -75,6 +75,7 @@
 
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-display: 'Space Grotesk', 'Instrument Sans', sans-serif;
 }
 
 @import 'tw-animate-css';

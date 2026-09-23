@@ -31,8 +31,9 @@ export function MarketingNav({
         <div className="flex items-center gap-6">
           <nav className="flex items-center gap-5">
             <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
+              href="https://github.com/samcarozzi/proceptdocs"
+              target="_blank"
+              rel="noreferrer"
               className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
             >
               Docs
@@ -43,13 +44,12 @@ export function MarketingNav({
             >
               Plans
             </Link>
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
+            <Link
+              to="/blog"
               className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
             >
               Blog
-            </a>
+            </Link>
           </nav>
 
           <button

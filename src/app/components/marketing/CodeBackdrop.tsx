@@ -14,6 +14,7 @@ const CODE_IMAGES = [
  * closes back up when the mouse stops. Sits at z-40, above the bare
  * section backgrounds but below every panel, image and text layer
  * (z-45/50), so the circle only ever appears where nothing is drawn.
+ * Suppressed while the cursor is over the nav toolbar band.
  */
 export function CodeBackdrop() {
   const layerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,12 @@ export function CodeBackdrop() {
       lastMove = now;
       const speed = Math.hypot(e.clientX - lastPos.x, e.clientY - lastPos.y) / dt;
       lastPos = { x: e.clientX, y: e.clientY };
+      // The nav toolbar band (MarketingNav, h-14) is transparent; keep the
+      // reveal closed while the cursor is over it.
+      if (e.clientY < 56) {
+        target.r = 0;
+        return;
+      }
       target.x = e.clientX;
       target.y = e.clientY;
       target.r = Math.min(150, 55 + speed * 28);

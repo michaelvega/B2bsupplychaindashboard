@@ -5,6 +5,8 @@ import { LandingPage } from './pages/LandingPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { DpaPage } from './pages/DpaPage';
 import { PlansPage } from './pages/PlansPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogPostPage } from './pages/BlogPostPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { TermsPage } from './pages/TermsPage';
 import { AgentSuite } from './pages/AgentSuite';
@@ -111,6 +113,14 @@ export const router = createBrowserRouter([
   {
     path: '/plans',
     element: <PlansPage />,
+  },
+  {
+    path: '/blog',
+    element: <BlogPage />,
+  },
+  {
+    path: '/blog/:slug',
+    element: <BlogPostPage />,
   },
   {
     path: '/terms-of-service',

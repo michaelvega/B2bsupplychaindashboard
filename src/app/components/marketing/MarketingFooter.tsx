@@ -51,6 +51,9 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
           <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-4">Company</p>
           <ul className="space-y-2.5">
             <li>
+              <Link to="/blog" className="text-sm text-white/40 hover:text-white transition-colors">Blog</Link>
+            </li>
+            <li>
               <a href="mailto:hello@procept.tech" className="text-sm text-white/40 hover:text-white transition-colors">Contact</a>
             </li>
             <li>

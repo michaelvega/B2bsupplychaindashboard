@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { DemoModal } from '../components/marketing/DemoModal';
@@ -96,43 +96,17 @@ function Em({ children }: { children: ReactNode }) {
 }
 
 /**
- * One problem slide. The header label and the stats crossfade between the
- * market's current multi-agent economics (THE PROBLEM) and Procept's
- * numbers (THE SOLUTION). Both phases stay mounted and stack on the same
- * grid cell so the block sizes to the taller phase; opacity swaps every 5s.
+ * One solution slide. Procept's numbers against the market, static:
+ * no problem phase, no rotation.
  */
-function ProblemSlide() {
-  const [phase, setPhase] = useState<'problem' | 'solution'>('problem');
-
-  useEffect(() => {
-    const id = setInterval(() => setPhase((p) => (p === 'problem' ? 'solution' : 'problem')), 5000);
-    return () => clearInterval(id);
-  }, []);
-
+function SolutionSlide() {
   return (
     <div className="relative border border-white/[0.08] bg-ink-950/80">
       <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
-        {/* Header label rotates with the phase */}
-        <div className="grid">
-          <span
-            aria-hidden={phase !== 'problem'}
-            className={cn(
-              'col-start-1 row-start-1 font-mono text-[10px] tracking-[0.2em] text-term-400 transition-all duration-700',
-              phase === 'problem' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
-            )}
-          >
-            THE PROBLEM
-          </span>
-          <span
-            aria-hidden={phase !== 'solution'}
-            className={cn(
-              'col-start-1 row-start-1 font-mono text-[10px] tracking-[0.2em] text-term-400 transition-all duration-700',
-              phase === 'solution' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
-            )}
-          >
-            THE SOLUTION
-          </span>
-        </div>
+        <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-term-400">
+          <span className="w-1 h-1 bg-term-400" />
+          THE SOLUTION
+        </span>
         <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
       </div>
 
@@ -141,40 +115,81 @@ function ProblemSlide() {
           Gain the benefits of <Em>self hosting</Em>, with none of the challenges/engineering overhead.
         </p>
 
-        <div className="grid">
-          {/* Market today */}
-          <div
-            aria-hidden={phase !== 'problem'}
-            className={cn(
-              'col-start-1 row-start-1 transition-all duration-700',
-              phase === 'problem' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-            )}
-          >
-            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4">
-              Multi-agent systems, currently
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Stat value="15-150x" label="the cost. More expensive to run while consistently underperforming." />
-              <Stat value="4-220x" label="the tokens consumed compared to single-agent systems." />
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 mb-4">With Procept</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Stat value="96%" label="cheaper than public API providers." />
+            <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
+            <div className="sm:col-span-2">
+              <Stat value="3% the size" label="still more intelligent." />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          {/* With Procept */}
-          <div
-            aria-hidden={phase !== 'solution'}
-            className={cn(
-              'col-start-1 row-start-1 transition-all duration-700',
-              phase === 'solution' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-            )}
-          >
-            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 mb-4">With Procept</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Stat value="96%" label="cheaper than public API providers." />
-              <Stat value="95%" label="our ARC-AGI 3 score. We are 65% better than Claude, which scored 30%." />
-              <div className="sm:col-span-2">
-                <Stat value="3% the size" label="still more intelligent." />
-              </div>
-            </div>
+/** Swiss-style stat cell: hairline rules, oversized light numeral, mono index. */
+function SwissStatCell({ n, value, label }: { n: string; value: string; label: string }) {
+  return (
+    <div className="relative group h-full border-b border-r border-white/10 bg-ink-950/40 p-5 md:p-6 transition-colors hover:bg-ink-950/70">
+      {/* Green rule across the top */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-term-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+      <div className="flex items-center justify-between mb-5">
+        <span className="font-mono text-[10px] tracking-[0.25em] text-white/30">{n}</span>
+        <span className="w-1.5 h-1.5 bg-term-400/70" />
+      </div>
+      <div className="text-4xl xl:text-5xl font-light text-white tracking-tight tabular-nums leading-none mb-4">
+        {value}
+      </div>
+      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40 leading-relaxed">{label}</p>
+    </div>
+  );
+}
+
+/**
+ * Top-of-page problem slide: enterprise AI infrastructure is broken,
+ * set as a swiss stat table (hairline rules, oversized numerals).
+ * Static and problem-only, no solution phase.
+ */
+function ProblemSlideTop() {
+  const problemStats = [
+    { n: '01', value: '15-150x', label: 'the cost. More expensive to run while consistently underperforming.' },
+    { n: '02', value: '4-220x', label: 'the tokens consumed compared to single-agent systems.' },
+    { n: '03', value: '67%', label: 'of the total cost of ownership is operating it. Less than a third is the initial build.' },
+    { n: '04', value: '46%', label: 'of enterprises cite "system integration" (building the plumbing) as their #1 barrier to adoption.' },
+    { n: '05', value: '42%', label: 'point to data access and data quality.' },
+    { n: '06', value: '40%', label: 'identify security and compliance concerns.' },
+  ];
+
+  return (
+    <div className="relative border border-white/[0.08] bg-ink-950/80">
+      <CornerBrackets />
+
+      {/* Header bar */}
+      <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
+        <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-term-400">
+          <span className="w-1 h-1 bg-term-400" />
+          THE PROBLEM
+        </span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+      </div>
+
+      {/* Headline left, swiss stat table right */}
+      <div className="relative p-8 md:p-12 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-center">
+        <p className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight">
+          Enterprise AI infrastructure is <Em>broken</Em>, talent is scarce, and security risks halt deployments.
+        </p>
+
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4">
+            Enterprise AI, currently
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-l border-white/10">
+            {problemStats.map((s) => (
+              <SwissStatCell key={s.n} {...s} />
+            ))}
           </div>
         </div>
       </div>
@@ -266,6 +281,16 @@ export function LandingPage() {
 
       </section>
 
+      {/* ═══════════════ PROBLEM SLIDE / TOP ═══════════════ */}
+      <section id="problem-top" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+        <div className="absolute inset-0 z-[45] pointer-events-none bg-grid-pattern-dark opacity-30" />
+        <div className="relative z-50 max-w-6xl mx-auto">
+          <Reveal>
+            <ProblemSlideTop />
+          </Reveal>
+        </div>
+      </section>
+
       {/* ═══════════════ 01 / STACK ═══════════════ */}
       <section id="stack" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
         <NetworkBackdrop />
@@ -323,7 +348,7 @@ export function LandingPage() {
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
-            <ProblemSlide />
+            <SolutionSlide />
           </Reveal>
         </div>
       </section>
