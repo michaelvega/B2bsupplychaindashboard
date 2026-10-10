@@ -13,6 +13,18 @@ export interface BlogPost {
 
 export const POSTS: BlogPost[] = [
   {
+    slug: 'cognitive-induction-graphs',
+    num: '002',
+    title: 'Cognitive Induction Graphs',
+    accent: 'the infrastructure that teaches agents to learn',
+    date: 'OCT 10 2026',
+    author: 'PROCEPT',
+    readTime: '12 MIN',
+    tags: ['COGNITIVE INDUCTION', 'MULTI-AGENT', 'CONTINUAL LEARNING'],
+    excerpt:
+      'Agents that cannot learn from their mistakes are just expensive lego. We introduce Cognitive Induction Graphs, an infrastructure layer that compiles every prompt, tool call, and trajectory into one optimizable graph.',
+  },
+  {
     slug: 'enterprise-ai-at-scale-2026',
     num: '001',
     title: 'How the Enterprise is Deploying AI at Scale in 2026',
