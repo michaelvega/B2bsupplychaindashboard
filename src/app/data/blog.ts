@@ -16,7 +16,7 @@ export const POSTS: BlogPost[] = [
     slug: 'cognitive-induction-graphs',
     num: '002',
     title: 'Cognitive Induction Graphs',
-    accent: 'the infrastructure that teaches agents to learn',
+    accent: 'compiles every prompt, tool call, and trajectory into one optimizable graph',
     date: 'OCT 10 2026',
     author: 'PROCEPT',
     readTime: '12 MIN',
