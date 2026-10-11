@@ -16,13 +16,13 @@ export const POSTS: BlogPost[] = [
     slug: 'cognitive-induction-graphs',
     num: '002',
     title: 'Cognitive Induction Graphs',
-    accent: 'compiles every prompt, tool call, and trajectory into one optimizable graph',
+    accent: 'compiles every prompt, tool call, and workflow into one optimizable graph',
     date: 'OCT 10 2026',
     author: 'PROCEPT',
     readTime: '12 MIN',
     tags: ['COGNITIVE INDUCTION', 'MULTI-AGENT', 'CONTINUAL LEARNING'],
     excerpt:
-      'Agents that cannot learn from their mistakes are just expensive lego. We introduce Cognitive Induction Graphs, an infrastructure layer that compiles every prompt, tool call, and trajectory into one optimizable graph.',
+      'Agents that cannot learn from their mistakes are just expensive lego. We introduce Cognitive Induction Graphs, an infrastructure layer that compiles every prompt, tool call, and workflow into one optimizable graph.',
   },
   {
     slug: 'enterprise-ai-at-scale-2026',

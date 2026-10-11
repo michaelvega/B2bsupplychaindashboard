@@ -51,7 +51,7 @@ const TLDR = [
   },
   {
     label: 'The architectural novelty',
-    body: 'A Cognitive Induction Graph compiles every prompt, tool call, protocol route, and agent trajectory into a single optimizable compute graph (the agentic analog of a CUDA graph), so we optimize the whole workflow instead of isolated examples.',
+    body: 'A Cognitive Induction Graph compiles every prompt, tool call, protocol route, and agent workflow into a single optimizable compute graph, so we optimize the whole workflow instead of isolated examples.',
   },
   {
     label: 'The solution',
@@ -84,7 +84,7 @@ const PILLARS = [
     body: 'Holistic trace context unlocks evaluation feedback loops with immediate impact, bypassing the manual intervention pipelines that normally sit between “something went wrong” and “something got fixed.”',
   },
   {
-    name: 'Execution Trajectory Optimization',
+    name: 'Execution Workflow Optimization',
     body: 'Analyzing the most heavily trafficked and efficient sub-graphs surfaces structural edits, for example swapping a probabilistic LLM formatting call for a deterministic, low-compute microservice.',
   },
 ];
@@ -206,6 +206,8 @@ export function CigPostPage() {
               caption="Procept Foundry: the full console"
               image="/blog/banner.jpg"
               imageClass="object-cover"
+              header={false}
+              overlay={false}
             />
           </Reveal>
         </div>
@@ -282,12 +284,55 @@ export function CigPostPage() {
         </div>
       </section>
 
-      {/* ═══════════════ RECURSIVE SELF IMPROVEMENT ═══════════════ */}
+      {/* ═══════════════ LANGCHAIN COMPARISON ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
               num="01"
+              label="The Competitive Landscape"
+              title={
+                <>
+                  Where LangChain and <em className="font-serif italic">LoRA</em> stop
+                </>
+              }
+              sub="The two dominant approaches today are static orchestration and static fine-tuning. Neither one learns."
+            />
+          </Reveal>
+
+          <div className="mt-14 max-w-2xl space-y-7">
+            <Reveal>
+              <p className="text-white/55 leading-relaxed">
+                LangChain is the most popular way to build an agent today, and it solves a real problem: it gives you
+                the lego blocks to wire prompts, tools, and models together. But LangChain orchestrates. It does not
+                learn. Every chain is a snapshot, hand-tuned by an engineer, and it breaks the moment the world
+                changes.
+              </p>
+            </Reveal>
+            <Reveal>
+              <p className="text-white/55 leading-relaxed">
+                LoRA solves a different slice of the problem: it fine-tunes the model itself. But LoRA compresses the
+                right answers into the weights, and it still cannot see the whole workflow, only the examples you hand
+                it.
+              </p>
+            </Reveal>
+            <Reveal>
+              <p className="text-white/55 leading-relaxed">
+                Procept Foundry replaces both. Where LangChain gives you static chains, Foundry gives you a graph that
+                rewrites itself. Where LoRA bakes in answers, Recursive Self-Improvement solves for the rubric. The
+                model stays frozen, and the system gets smarter with every run.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ RECURSIVE SELF IMPROVEMENT ═══════════════ */}
+      <section className="relative border-t border-white/[0.06]">
+        <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
+          <Reveal>
+            <SectionHeading
+              num="02"
               label="Recursive Self-Improvement"
               title={
                 <>
@@ -304,7 +349,7 @@ export function CigPostPage() {
                 LoRA is compression, not learning
               </h3>
               <p className="mt-4 text-white/55 leading-relaxed">
-                LoRA is compression because it just bakes the right answers into the model’s memory. Once the
+                LoRA is the leading way to customize a model today, but it is compression, not learning: it just bakes the right answers into the model’s memory. Once the
                 problem constraints are handed over via supervised labels, LoRA converts semantic targets into the
                 model’s latent feature space, solves for optimal pathways through the feed-forward layers, and
                 outputs condensed weights. It is a lossy, surjective
@@ -329,33 +374,17 @@ export function CigPostPage() {
               </p>
             </Reveal>
 
-            <Reveal>
-              <div className="border border-white/[0.08] bg-white/[0.02] px-6 py-6">
-                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-4">
-                  Lemma 1 // Semantic-to-Latent Surjection
-                </p>
-                <p className="font-serif italic text-lg md:text-xl text-white/90 leading-relaxed">
-                  Every semantic construct in natural language possesses a surjectively lossy but approximate
-                  representation within the latent feature space of a language model’s attention heads.
-                </p>
-              </div>
-            </Reveal>
 
             <Reveal>
               <p className="text-base text-white/55 leading-relaxed">
-                By this lemma, a dynamically generated, unsupervised rubric acts as a highly effective feature-space
-                projection. When we prepend it as a system prompt, it dynamically alters the attention gradients of
-                the frozen model, effectively mimicking a weight update while keeping the high-dimensional
-                representation of natural language that you need to solve variables you have never seen before.
+                A dynamically generated, unsupervised rubric acts as a highly effective feature-space projection. When
+                we prepend it as a system prompt, it dynamically alters the attention gradients of the frozen model,
+                effectively mimicking a weight update while keeping the high-dimensional representation of natural
+                language that you need to solve variables you have never seen before, replacing the need for GPUs.
               </p>
               <p className="mt-4 text-base text-white/55 leading-relaxed">
                 In other words: we train a model to solve for the rubric, not the right answer, and then we convert
                 those learned weights into text in the system prompt. The model stays frozen. The rule travels.
-              </p>
-              <p className="mt-4 text-base text-white/55 leading-relaxed">
-                There is a practical upshot. Through Recursive Self-Improvement, we train models and fine-tune better
-                than LoRA, with no GPU required, for any model, even closed-weight ones. The rubric lives in the
-                system prompt, so the technique works on models you cannot fine-tune at all.
               </p>
             </Reveal>
 
@@ -379,33 +408,24 @@ export function CigPostPage() {
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
-              num="02"
+              num="03"
               label="Cognitive Induction Graphs"
               title={
                 <>
                   Cognitive induction <em className="font-serif italic">graphs</em>
                 </>
               }
-              sub="A single rubric is powerful. But to learn across an entire enterprise, you need the whole graph: every operation, tool call, and trajectory in one place."
+              sub="A single rubric is powerful. But to learn across an entire enterprise, you need the whole graph: every operation, tool call, and workflow in one place."
             />
           </Reveal>
 
           <div className="mt-14 max-w-2xl space-y-7">
             <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                The CUDA analogy
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                In high-performance computing, a CUDA compute graph stores a sequence of bottom-up GPU operations and
-                their memory dependencies before execution. By parsing the entire graph at once, the driver traces the
-                execution paths, identifies hardware bottlenecks, and optimizes the overarching kernel dispatch. CUDA
-                wins because it sees the whole program, not one kernel at a time.
-              </p>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                A Cognitive Induction Graph does the same for agents. It compiles agentic operations (prompts, tool
+              <p className="text-white/55 leading-relaxed">
+                A Cognitive Induction Graph compiles agentic operations (prompts, tool
                 invocations, protocol routing, and user validations) into a unified topological structure, then
                 derives semantic gradients across the entire workflow. That ultimately lets us perform optimization
-                over the whole corpus of data operations, tool calls, and agent trajectories, and solve for the
+                over the whole corpus of data operations, tool calls, and agent workflows, and solve for the
                 user’s goals directly.
               </p>
             </Reveal>
@@ -416,18 +436,22 @@ export function CigPostPage() {
                 caption="A live toy CIG in the middle of the console"
                 image="/blog/toyCIG.jpg"
                 imageClass="object-cover"
+                header={false}
+                overlay={false}
               />
             </Reveal>
 
             <Reveal>
               <FigurePanel
                 fig="02"
-                caption="An agent trajectory, unrolled into a directed acyclic graph"
+                caption="An agent workflow, unrolled into a directed acyclic graph"
                 image="/blog/unrolledDAG.jpg"
                 imageClass="object-contain"
+                header={false}
+                overlay={false}
               >
                 <p className="text-white/55 leading-relaxed">
-                  This is what Procept Foundry does for you. Every agent trajectory, every prompt, tool call, and
+                  This is what Procept Foundry does for you. Every agent workflow, every prompt, tool call, and
                   branch, gets unrolled into a single directed acyclic graph, so the whole run is inspectable and
                   optimizable end to end.
                 </p>
@@ -476,7 +500,7 @@ export function CigPostPage() {
                   <p className="text-white/60 leading-relaxed">
                     In one enterprise implementation we saw a 27% reduction in bugs. But the more interesting result
                     came from the programs that were <em className="text-white/80">not</em> failing: because the CIG
-                    exposes the full trajectory, we were able to extrapolate a rubric for customer success and upsell,
+                    exposes the full workflow, we were able to extrapolate a rubric for customer success and upsell,
                     and train our agents to optimize toward those objectives too.
                   </p>
                   <p className="mt-4 text-white/50 leading-relaxed text-sm">
@@ -495,7 +519,7 @@ export function CigPostPage() {
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
-              num="03"
+              num="04"
               label="The Math"
               title={
                 <>
@@ -566,7 +590,7 @@ export function CigPostPage() {
                   <span className="font-serif italic text-white/80">∇</span>
                   <sub>G</sub>
                   <span className="font-serif italic text-white/80">𝒞</span> is the topological gradient of
-                  the dominant execution trajectories, derived by aggregating full-context traces to find which paths
+                  the dominant execution workflows, derived by aggregating full-context traces to find which paths
                   yield the highest downstream success across the network.
                 </p>
                 <p>
@@ -684,9 +708,8 @@ export function CigPostPage() {
               <span className="text-term-400">.</span>
             </h2>
             <p className="mt-7 text-white/60 max-w-2xl leading-relaxed">
-              The Cognitive Induction Graph is a foundational architecture for multi-agent systems. By mirroring the
-              holistic optimization strategies of hardware compute graphs, it aggregates end-to-end traces to expose
-              bottlenecks, map the optimal execution trajectories, and provide the overarching context required for
+              The Cognitive Induction Graph is a foundational architecture for multi-agent systems. It aggregates end-to-end traces to expose
+              bottlenecks, map the optimal execution workflows, and provide the overarching context required for
               safe, continuous experimentation.
             </p>
             <p className="mt-5 text-white/60 max-w-2xl leading-relaxed">

@@ -15,6 +15,8 @@ export function FigurePanel({
   image,
   imageClass,
   fadeBottom = false,
+  header = true,
+  overlay = true,
   children,
   className,
 }: {
@@ -23,6 +25,8 @@ export function FigurePanel({
   image?: string;
   imageClass?: string;
   fadeBottom?: boolean;
+  header?: boolean;
+  overlay?: boolean;
   children?: ReactNode;
   className?: string;
 }) {
@@ -34,14 +38,16 @@ export function FigurePanel({
           className={cn('absolute w-4 h-4 border-term-400/60 opacity-40 group-hover:opacity-100 transition-opacity', pos)}
         />
       ))}
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-2.5">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-term-400">FIG.{fig}</span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">{caption}</span>
-      </div>
+      {header && (
+        <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-2.5">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-term-400">FIG.{fig}</span>
+          <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">{caption}</span>
+        </div>
+      )}
       {image && (
         <div className="relative aspect-[16/10] overflow-hidden">
           <img src={image} alt={caption} className={cn('w-full h-full object-cover', imageClass)} />
-          <div className="absolute inset-0 bg-ink-950/40" />
+          {overlay && <div className="absolute inset-0 bg-ink-950/40" />}
           {fadeBottom && (
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-900 to-transparent" />
           )}
