@@ -155,12 +155,10 @@ function SwissStatCell({ n, value, label }: { n: string; value: string; label: s
  */
 function ProblemSlideTop() {
   const problemStats = [
-    { n: '01', value: '15-150x', label: 'the cost. More expensive to run while consistently underperforming.' },
-    { n: '02', value: '4-220x', label: 'the tokens consumed compared to single-agent systems.' },
-    { n: '03', value: '67%', label: 'of the total cost of ownership is operating it. Less than a third is the initial build.' },
-    { n: '04', value: '46%', label: 'of enterprises cite "system integration" (building the plumbing) as their #1 barrier to adoption.' },
-    { n: '05', value: '42%', label: 'point to data access and data quality.' },
-    { n: '06', value: '40%', label: 'identify security and compliance concerns.' },
+    { n: '01', value: '40%', label: 'cost reduction forfeited today by enterprises that fail to deploy multi-agent AI.' },
+    { n: '02', value: '75%', label: 'faster executions, forfeited for the same reason.' },
+    { n: '03', value: '18%', label: 'of enterprises have tried deploying multi-agent AI.' },
+    { n: '04', value: '87%', label: 'of those that tried, fail.' },
   ];
 
   return (
