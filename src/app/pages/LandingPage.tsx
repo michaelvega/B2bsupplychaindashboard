@@ -133,7 +133,7 @@ function SolutionSlide() {
 /** A fact inside the problem statement: green, bold, slightly oversized. */
 function Fact({ children }: { children: ReactNode }) {
   return (
-    <span className="font-display font-bold text-term-500 tabular-nums text-[1.15em] leading-none">
+    <span className="font-display font-bold text-term-300 tabular-nums text-[1.15em] leading-none">
       {children}
     </span>
   );
@@ -165,7 +165,7 @@ function WhyBody({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         i % 2 === 1 ? (
-          <strong key={i} className="font-semibold text-term-500">
+          <strong key={i} className="font-semibold text-term-300">
             {part}
           </strong>
         ) : (
@@ -178,35 +178,33 @@ function WhyBody({ text }: { text: string }) {
 
 /**
  * Top-of-page problem slide: enterprise AI infrastructure is broken.
- * Light theme per the design inspiration: green header band, white body,
- * green text, one directed sentence with the facts made to stand out.
+ * One directed sentence, with the facts made to stand out.
  */
 function ProblemSlideTop() {
   return (
-    <div className="relative border border-ink-950/10 bg-white">
-      <CornerBrackets light />
+    <div className="relative border border-white/[0.08] bg-ink-950/80">
+      <CornerBrackets />
 
-      {/* Header band, green like the inspiration's accent band */}
-      <div className="flex items-baseline justify-between bg-term-500 px-5 py-2.5">
-        <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-term-950 font-medium">
-          <span className="w-1 h-1 bg-term-950" />
+      {/* Header bar */}
+      <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-2.5">
+        <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-term-400">
+          <span className="w-1 h-1 bg-term-400" />
           THE PROBLEM
         </span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-term-950/70">MULTI-AGENT ECONOMICS</span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
       </div>
 
       {/* Headline left, the sentence right */}
       <div className="relative p-8 md:p-12 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-center">
-        <p className="text-2xl md:text-4xl font-light text-term-950 tracking-tight leading-tight">
-          Enterprise AI infrastructure is <Em className="text-term-500">broken</Em>, talent is scarce, and security
-          risks halt deployments.
+        <p className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight">
+          Enterprise AI infrastructure is <Em>broken</Em>, talent is scarce, and security risks halt deployments.
         </p>
 
         <div>
-          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-950/60 mb-6">
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-6">
             Enterprise AI, currently
           </p>
-          <p className="text-xl md:text-2xl font-light text-term-950/80 leading-relaxed">
+          <p className="text-xl md:text-2xl font-light text-white/75 leading-relaxed">
             Today, enterprises that fail to deploy multi-agent AI actively forfeit a <Fact>40%</Fact> cost reduction
             and <Fact>75%</Fact> faster executions. Yet, only <Fact>18%</Fact> of enterprises have tried, and out of
             those <Fact>87%</Fact> fail.
@@ -217,8 +215,8 @@ function ProblemSlideTop() {
   );
 }
 
-/** HUD corner brackets for the hero frame. Light tone for white slides. */
-function CornerBrackets({ light = false }: { light?: boolean }) {
+/** HUD corner brackets for the hero frame. */
+function CornerBrackets() {
   const corners = [
     'top-0 left-0 border-t border-l',
     'top-0 right-0 border-t border-r',
@@ -228,14 +226,7 @@ function CornerBrackets({ light = false }: { light?: boolean }) {
   return (
     <>
       {corners.map((pos) => (
-        <span
-          key={pos}
-          className={cn(
-            'absolute w-6 h-6 md:w-8 md:h-8 pointer-events-none',
-            light ? 'border-term-500' : 'border-term-400/60',
-            pos
-          )}
-        />
+        <span key={pos} className={cn('absolute w-6 h-6 md:w-8 md:h-8 border-term-400/60 pointer-events-none', pos)} />
       ))}
     </>
   );
@@ -309,16 +300,8 @@ export function LandingPage() {
       </section>
 
       {/* ═══════════════ PROBLEM SLIDE / TOP ═══════════════ */}
-      <section id="problem-top" className="relative bg-white py-24 md:py-32 px-6 md:px-16 border-t border-ink-950/10 overflow-hidden">
-        {/* Light tech image behind the slide, barely there */}
-        <div className="absolute inset-0 z-[45] pointer-events-none">
-          <img
-            src="/designinspo/techimage1.jpg"
-            alt=""
-            className="w-full h-full object-cover opacity-[0.16]"
-          />
-          <div className="absolute inset-0 bg-white/55" />
-        </div>
+      <section id="problem-top" className="relative bg-ink-900 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+        <div className="absolute inset-0 z-[45] pointer-events-none bg-grid-pattern-dark opacity-30" />
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
             <ProblemSlideTop />
@@ -327,34 +310,34 @@ export function LandingPage() {
       </section>
 
       {/* ═══════════════ WHY ═══════════════ */}
-      <section id="why" className="relative bg-white py-24 md:py-32 px-6 md:px-16 border-t border-ink-950/10 overflow-hidden">
-        {/* Warm mosaic behind the section, fading out to the right */}
+      <section id="why" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+        {/* Mosaic image behind the section, dark and faint */}
         <div className="absolute inset-0 z-[45] pointer-events-none">
           <img
             src="/designinspo/mosaicimage.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-[0.14]"
+            className="w-full h-full object-cover opacity-[0.12] grayscale"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0.75)_55%,rgba(255,255,255,0.35)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,rgba(5,5,5,0.7)_60%,rgba(5,5,5,0.35)_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-500 mb-6">Why // The problem</p>
-            <h2 className="text-4xl md:text-6xl font-light text-term-950 tracking-tight leading-[1.05] mb-16">
-              Why<span className="text-term-500">?</span>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-6">Why // The problem</p>
+            <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.05] mb-16">
+              Why<span className="text-term-400">?</span>
             </h2>
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {WHY_POINTS.map((point, i) => (
               <Reveal key={point.num} delay={i * 80}>
-                <div className="h-full border border-ink-950/10 bg-white/70 backdrop-blur-sm p-6 md:p-8 hover:border-term-500/60 transition-colors">
+                <div className="h-full border border-white/[0.08] bg-ink-950/70 p-6 md:p-8 hover:border-term-400/40 transition-colors">
                   <div className="flex items-center justify-between mb-6">
-                    <span className="font-mono text-[11px] tracking-[0.25em] text-term-500">{point.num}</span>
-                    <span className="w-1.5 h-1.5 bg-term-500" />
+                    <span className="font-mono text-[11px] tracking-[0.25em] text-term-400">{point.num}</span>
+                    <span className="w-1.5 h-1.5 bg-term-400/70" />
                   </div>
-                  <h3 className="text-lg font-medium text-term-950 tracking-tight mb-3">{point.title}</h3>
-                  <p className="text-sm leading-relaxed text-term-950/70">
+                  <h3 className="text-lg font-medium text-white tracking-tight mb-3">{point.title}</h3>
+                  <p className="text-sm leading-relaxed text-white/50">
                     <WhyBody text={point.body} />
                   </p>
                 </div>
