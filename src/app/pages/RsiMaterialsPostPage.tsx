@@ -70,7 +70,7 @@ export function RsiMaterialsPostPage() {
 
       {/* ═══════════════ THE PAPER ═══════════════ */}
       <article className="relative border-t border-white/[0.06]">
-        <div className="relative z-50 max-w-3xl mx-auto px-6 md:px-10 pt-14 md:pt-16 pb-20 md:pb-28">
+        <div className="relative z-50 max-w-2xl mx-auto px-6 md:px-10 pt-14 md:pt-16 pb-20 md:pb-28">
           <Reveal>
             <Link
               to="/blog"
@@ -104,25 +104,25 @@ export function RsiMaterialsPostPage() {
           <Reveal>
             <Section num="1" title="Problem Statement" />
             <div className="space-y-5">
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 The construction of an atomistic model is a first step in any materials simulation. Recently, large
                 language models (LLMs) provide a flexible way to generate atomistic models directly from textual
                 chemical descriptions, enabling rapid exploration of materials space without requiring a
                 structure-specific pipeline.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 However, autoregressive generation is challenging for complex structures because the model must
                 maintain chemical validity, stoichiometry, periodic connectivity, and physically reasonable geometry
                 across long sequences of lattice and coordinate tokens.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 This limitation is especially severe for complex materials systems such as layered two-dimensional
                 perovskites, where flexible organic spacers must be packed consistently with an extended inorganic
                 B-X framework. Small errors during generation can accumulate into malformed structure files, broken
                 corner-sharing networks, incorrect organic placement, or steric clashes at organic-inorganic
                 interfaces.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 Our preliminary study well-demonstrates these issues. We used the frontier GPT-5.6-sol to generate ten
                 structures of 2D hybrid perovskites by providing the molecular structure of the organic cations and
                 inorganic compositions. Some of the structures exhibited overlapping or extremely close atoms between
@@ -130,7 +130,7 @@ export function RsiMaterialsPostPage() {
                 generated structures had the correct crystallographic space groups when compared to the ground truth
                 structures.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 These failures can cause severe problems during downstream atomistic simulations such as density
                 functional theory (DFT) calculations, including unstable geometry relaxation, numerical divergence,
                 and excessive computational costs to reach convergence. Improving the reliability of LLM-generated
@@ -143,7 +143,7 @@ export function RsiMaterialsPostPage() {
           {/* 2 Research Question */}
           <Reveal>
             <Section num="2" title="Research Question" />
-            <p className="font-academic text-lg md:text-xl italic leading-[1.7] text-white/80 md:text-justify">
+            <p className="font-academic text-lg md:text-[21px] italic leading-[1.7] text-white/90 md:text-justify">
               Can physics-guided recursive self-improvement (RSI) teach an LLM to generate 2D hybrid perovskite
               structures that are physically coherent and simulation-ready?
             </p>
@@ -153,7 +153,7 @@ export function RsiMaterialsPostPage() {
           <Reveal>
             <Section num="3" title="Related Work" />
             <div className="space-y-5">
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 Machine learning has increasingly been applied to crystal structure generation. Earlier approaches
                 relied primarily on graph-based and diffusion-based representations of periodic materials (e.g.,
                 CDVAE; Xie et al., 2021). More recently, crystal structure generation has been formulated as a
@@ -162,14 +162,14 @@ export function RsiMaterialsPostPage() {
                 al., 2023; Song, 2025). However, autoregressive coordinate generation is sensitive to accumulated
                 errors across long sequences.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 Two-dimensional hybrid organic-inorganic perovskites are a particularly challenging case due to their
                 extended inorganic B-X octahedral networks and flexible organic spacer molecules (Marchenko et al.,
                 2020). Generated structures must ultimately be validated through atomistic simulation like DFT
                 (Kresse &amp; Furthmüller, 1996), but machine-learned interatomic potentials (MLIPs) like CHGNet
                 provide a lower-cost alternative for screening and relaxation (Deng et al., 2023).
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 Recursive self-improvement provides a complementary strategy. The Self-Taught Reasoner (STaR) showed
                 that language models can improve through repeated cycles of generation, verification, and fine-tuning
                 on successful samples (Zelikman et al., 2022). This work investigates whether physically grounded
@@ -183,13 +183,13 @@ export function RsiMaterialsPostPage() {
           <Reveal>
             <Section num="4" title="Proposed Method" />
             <div className="space-y-5">
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 We will use a frozen LLM (Qwen 3 bonsai 2 27B) to recursively self-improve at one-shot generation for
                 atomic molecular models. Specifically, we employ an automatic prompt optimization technique with 200
                 original atomic models to learn constraints and a generalizable inductive taxonomy so that the LLM can
                 experiment and verify its own work.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 The training steps will involve analyzing the 200 original goldset datapoints to draft inductive rule
                 criteria. After this first pass, we begin iteration. We will have the LLM generate 100 one-shot
                 samples of atomic models. For those that fail (e.g., crashes, blank, or physically impossible models),
@@ -197,7 +197,7 @@ export function RsiMaterialsPostPage() {
                 potentially failed, and a proposal agent will propose new rules to edit the previous taxonomy. The
                 model will iteratively try again with these new rules, looping until success is achieved.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 Currently, Claude Code with Sonnet bottoms out acceptance at less than 5% for 1-shot generation on
                 average. We will target a 25% eventual acceptance rate for a given atomic model, converging after a
                 maximum of 60 turns to pass generation as valid models.
@@ -209,12 +209,12 @@ export function RsiMaterialsPostPage() {
           <Reveal>
             <Section num="5" title="Evaluation Plan" />
             <div className="space-y-5">
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 We will evaluate whether recursive self-improvement (RSI) improves the generation of valid 2D hybrid
                 perovskite POSCARs. The primary baseline is one-shot generation from the original model prior to RSI,
                 compared with models after successive RSI iterations.
               </p>
-              <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+              <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                 The main metric is the valid POSCAR generation rate, determined by checks for parseability, correct
                 stoichiometry and charge balance, preservation of the input organic cation, a continuous 2D
                 corner-sharing B-X network, and absence of severe steric clashes. Using experimentally reported
@@ -230,7 +230,7 @@ export function RsiMaterialsPostPage() {
             <Section num="6" title="Preregistration" />
             <ul className="space-y-5">
               {PREREGISTRATION.map((item) => (
-                <li key={item.label} className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+                <li key={item.label} className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
                   <span className="font-bold text-white">{item.label}:</span> {item.body}
                 </li>
               ))}
@@ -240,7 +240,7 @@ export function RsiMaterialsPostPage() {
           {/* 7 Compute Requirements */}
           <Reveal>
             <Section num="7" title="Compute Requirements" />
-            <p className="font-academic text-[15px] md:text-base leading-[1.85] text-white/75 md:text-justify">
+            <p className="font-academic text-base md:text-[17px] font-[450] leading-[1.8] text-white/85 md:text-justify">
               A Qwen 3 bonsai 2 27B can run on 12 GB of VRAM + KV cache, fitting comfortably on one L40 or A100 GPU.
               The entire project is estimated to take around 5 million tokens across many epochs of the 200-model
               golden set. At 150 tok/s on an L40, this would take approximately 9 hours in total over the coming
@@ -255,8 +255,8 @@ export function RsiMaterialsPostPage() {
             <ol className="space-y-4">
               {REFERENCES.map((ref, i) => (
                 <li key={ref} className="flex gap-4">
-                  <span className="font-academic text-[14px] text-white/35 tabular-nums shrink-0">[{i + 1}]</span>
-                  <span className="font-academic text-[14px] leading-[1.75] text-white/60">{ref}</span>
+                  <span className="font-academic text-[15px] text-white/40 tabular-nums shrink-0">[{i + 1}]</span>
+                  <span className="font-academic text-[15px] leading-[1.75] text-white/70">{ref}</span>
                 </li>
               ))}
             </ol>
