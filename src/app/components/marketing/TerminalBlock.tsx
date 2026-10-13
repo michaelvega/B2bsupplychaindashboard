@@ -15,7 +15,7 @@ export function TerminalBlock({ lines, title = 'procept zsh' }: { lines: string[
         <span className="w-2.5 h-2.5 bg-term-400/80" />
         <span className="w-2.5 h-2.5 bg-white/20" />
         <span className="w-2.5 h-2.5 bg-white/10" />
-        <span className="ml-3 font-mono text-[11px] text-white/30 tracking-wider">{title}</span>
+        <span className="ml-3 font-mono text-[11px] text-[#636363]/70 tracking-wider">{title}</span>
       </div>
       <div className="p-5 md:p-6 font-mono text-[13px] leading-relaxed whitespace-pre overflow-x-auto">
         {lines.map((line, i) => (

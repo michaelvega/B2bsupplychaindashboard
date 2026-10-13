@@ -101,14 +101,14 @@ export function BlogPostPage() {
             alt=""
             className="w-full h-full object-contain object-right-bottom opacity-40 grayscale contrast-125"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,transparent_55%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0D0F0D_0%,transparent_55%)]" />
         </div>
 
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-16 md:pt-20 pb-16 md:pb-24">
           <Reveal>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-white/40 hover:text-term-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Blog / Index
@@ -125,17 +125,17 @@ export function BlogPostPage() {
 
             <h1 className="mt-8 font-display font-semibold uppercase tracking-tight leading-[1.08] text-white text-3xl md:text-5xl xl:text-6xl max-w-4xl">
               {post.title}{' '}
-              <em className="font-serif italic font-normal normal-case text-white/60">({post.accent})</em>
+              <em className="font-serif italic font-normal normal-case text-[#636363]">({post.accent})</em>
             </h1>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-white/40">
+            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80">
               <span>{post.author}</span>
-              <span className="text-white/20">/</span>
+              <span className="text-[#636363]/60">/</span>
               <span>{post.readTime} READ</span>
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-0.5 border border-white/15 text-white/50"
+                  className="font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-0.5 border border-white/15 text-[#636363]"
                 >
                   {tag}
                 </span>
@@ -202,7 +202,7 @@ export function BlogPostPage() {
               <p className="font-serif italic text-3xl md:text-5xl text-white leading-tight max-w-3xl">
                 Guardrails merely ask; governance decides.
               </p>
-              <p className="mt-7 font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">
+              <p className="mt-7 font-mono text-[10px] tracking-[0.25em] uppercase text-[#636363]/80">
                 The core tension of 2026 agent deployment
               </p>
             </div>
@@ -234,18 +234,18 @@ export function BlogPostPage() {
                   <h2 className="font-display text-xl md:text-2xl font-medium uppercase tracking-tight text-white leading-[1.15]">
                     {takeaway.title}
                   </h2>
-                  <p className="text-white/60 leading-relaxed">{takeaway.lead}</p>
+                  <p className="text-[#636363] leading-relaxed">{takeaway.lead}</p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                     {takeaway.stats.map((stat) => (
                       <div key={stat.value} className="border border-white/[0.08] bg-white/[0.02] p-4">
                         <p className="font-mono text-2xl text-term-300 tabular-nums">{stat.value}</p>
-                        <p className="mt-2 text-xs text-white/50 leading-relaxed">{stat.label}</p>
+                        <p className="mt-2 text-xs text-[#636363] leading-relaxed">{stat.label}</p>
                       </div>
                     ))}
                   </div>
 
-                  <p className="text-white/60 leading-relaxed">{takeaway.body}</p>
+                  <p className="text-[#636363] leading-relaxed">{takeaway.body}</p>
                 </div>
               </div>
             </Reveal>
@@ -273,7 +273,7 @@ export function BlogPostPage() {
               Stop paying the <em className="font-serif italic font-normal normal-case">plumbing tax</em>
               <span className="text-term-400">.</span>
             </h2>
-            <p className="mt-7 text-white/60 max-w-2xl leading-relaxed">
+            <p className="mt-7 text-[#636363] max-w-2xl leading-relaxed">
               The era of hacking together fragile AI scripts has ended. To survive the shift to agentic workflows in
               2026, organizations must stop paying the plumbing tax. By separating the underlying infrastructure from
               the intelligence, and ensuring agents execute within secure, self-correcting sandboxes, engineering
@@ -290,7 +290,7 @@ export function BlogPostPage() {
               </Link>
               <button
                 onClick={() => setDemoOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+                className="inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:text-term-400 transition-all"
               >
                 Request Access
                 <ArrowRight className="w-3.5 h-3.5" />

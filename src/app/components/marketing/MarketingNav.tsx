@@ -34,19 +34,19 @@ export function MarketingNav({
               href="https://github.com/samcarozzi/proceptdocs"
               target="_blank"
               rel="noreferrer"
-              className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
+              className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363] hover:text-white transition-colors"
             >
               Docs
             </a>
             <Link
               to="/plans"
-              className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
+              className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363] hover:text-white transition-colors"
             >
               Plans
             </Link>
             <Link
               to="/blog"
-              className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
+              className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363] hover:text-white transition-colors"
             >
               Blog
             </Link>

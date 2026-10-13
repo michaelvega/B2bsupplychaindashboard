@@ -33,7 +33,7 @@ export function LegalPageLayout({
         <div className="mb-12">
           <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">DOC // {docId}</p>
           <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">{title}</h1>
-          <p className="text-white/30 font-mono text-xs tracking-wider">{subtitle}</p>
+          <p className="text-[#636363]/70 font-mono text-xs tracking-wider">{subtitle}</p>
         </div>
 
         {/* Metadata block */}

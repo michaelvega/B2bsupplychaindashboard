@@ -74,7 +74,7 @@ export function RsiMaterialsPostPage() {
           <Reveal>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-white/40 hover:text-term-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Blog / Index
@@ -255,7 +255,7 @@ export function RsiMaterialsPostPage() {
             <ol className="space-y-4">
               {REFERENCES.map((ref, i) => (
                 <li key={ref} className="flex gap-4">
-                  <span className="font-academic text-[15px] text-white/40 tabular-nums shrink-0">[{i + 1}]</span>
+                  <span className="font-academic text-[15px] text-[#636363]/80 tabular-nums shrink-0">[{i + 1}]</span>
                   <span className="font-academic text-[15px] leading-[1.75] text-white/70">{ref}</span>
                 </li>
               ))}
@@ -267,7 +267,7 @@ export function RsiMaterialsPostPage() {
             <div className="mt-16 pt-8 border-t border-white/[0.08] flex items-center justify-between">
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-white/40 hover:text-term-300 transition-colors"
+                className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 All Transmissions

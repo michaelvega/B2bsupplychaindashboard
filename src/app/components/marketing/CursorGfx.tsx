@@ -56,7 +56,7 @@ export function CursorGfx() {
   return (
     <div
       ref={dotRef}
-      className="fixed top-0 left-0 z-[95] w-2 h-2 bg-term-400 rounded-full pointer-events-none shadow-[0_0_14px_rgba(51,255,153,0.7)]"
+      className="fixed top-0 left-0 z-[95] w-2 h-2 bg-term-400 rounded-full pointer-events-none shadow-[0_0_14px_rgba(123,137,111,0.7)]"
     />
   );
 }

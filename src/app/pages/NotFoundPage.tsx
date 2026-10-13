@@ -33,7 +33,7 @@ export function NotFoundPage() {
           <h1 className="text-6xl md:text-8xl font-light text-white tracking-tight leading-[1.02] mb-8">
             Not <Em>found</Em>.
           </h1>
-          <p className="font-mono text-[11px] tracking-[0.2em] text-white/40 leading-relaxed mb-10">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-[#636363]/80 leading-relaxed mb-10">
             // the path you requested is not in the stack.
           </p>
           <Link

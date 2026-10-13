@@ -126,14 +126,14 @@ export function CigPostPage() {
             alt=""
             className="w-full h-full object-contain object-right-bottom opacity-40 grayscale contrast-125"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,transparent_55%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0D0F0D_0%,transparent_55%)]" />
         </div>
 
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-16 md:pt-20 pb-16 md:pb-24">
           <Reveal>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-white/40 hover:text-term-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Blog / Index
@@ -150,17 +150,17 @@ export function CigPostPage() {
 
             <h1 className="mt-8 font-display font-semibold uppercase tracking-tight leading-[1.08] text-white text-3xl md:text-5xl xl:text-6xl max-w-4xl">
               {post.title}{' '}
-              <em className="font-serif italic font-normal normal-case text-white/60">({post.accent})</em>
+              <em className="font-serif italic font-normal normal-case text-[#636363]">({post.accent})</em>
             </h1>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-white/40">
+            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80">
               <span>{post.author}</span>
-              <span className="text-white/20">/</span>
+              <span className="text-[#636363]/60">/</span>
               <span>{post.readTime} READ</span>
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-0.5 border border-white/15 text-white/50"
+                  className="font-mono text-[10px] tracking-[0.2em] uppercase px-2 py-0.5 border border-white/15 text-[#636363]"
                 >
                   {tag}
                 </span>
@@ -490,20 +490,20 @@ export function CigPostPage() {
               <div className="col-span-12 md:col-span-7 space-y-5">
                 <Reveal>
                   <p className="font-display text-5xl md:text-6xl text-term-300 tabular-nums leading-none">27%</p>
-                  <p className="mt-2 font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">
+                  <p className="mt-2 font-mono text-[10px] tracking-[0.25em] uppercase text-[#636363]/80">
                     reduction in shipped bugs
                   </p>
                 </Reveal>
               </div>
               <div className="col-span-12 md:col-span-5">
                 <Reveal delay={80}>
-                  <p className="text-white/60 leading-relaxed">
+                  <p className="text-[#636363] leading-relaxed">
                     In one enterprise implementation we saw a 27% reduction in bugs. But the more interesting result
                     came from the programs that were <em className="text-white/80">not</em> failing: because the CIG
                     exposes the full workflow, we were able to extrapolate a rubric for customer success and upsell,
                     and train our agents to optimize toward those objectives too.
                   </p>
-                  <p className="mt-4 text-white/50 leading-relaxed text-sm">
+                  <p className="mt-4 text-[#636363] leading-relaxed text-sm">
                     The same graph that stops a failure also discovers what a healthy, high-value conversation looks
                     like. Learning and growth become the same optimization problem.
                   </p>
@@ -627,7 +627,7 @@ export function CigPostPage() {
           </div>
 
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/40 mb-6">
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#636363]/80 mb-6">
               Benchmark // Procept CIG vs. Google RRSI, frozen Qwen 3 Bonsai-2 27B
             </p>
           </Reveal>
@@ -637,13 +637,13 @@ export function CigPostPage() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-white/[0.08]">
-                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                       Benchmark
                     </th>
-                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                       Baseline (No Opt)
                     </th>
-                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                    <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                       Google RRSI
                     </th>
                     <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 px-5 py-4">
@@ -655,8 +655,8 @@ export function CigPostPage() {
                   {RESULTS.map((row) => (
                     <tr key={row.benchmark} className="border-b border-white/[0.06] last:border-b-0">
                       <td className="px-5 py-4 text-white/70">{row.benchmark}</td>
-                      <td className="px-5 py-4 font-mono text-white/40 tabular-nums">{row.baseline}</td>
-                      <td className="px-5 py-4 font-mono text-white/40 tabular-nums">{row.rssi}</td>
+                      <td className="px-5 py-4 font-mono text-[#636363]/80 tabular-nums">{row.baseline}</td>
+                      <td className="px-5 py-4 font-mono text-[#636363]/80 tabular-nums">{row.rssi}</td>
                       <td className="px-5 py-4 font-mono text-term-300 tabular-nums">{row.cig}</td>
                     </tr>
                   ))}
@@ -707,12 +707,12 @@ export function CigPostPage() {
               Turn your user actions into <em className="font-serif italic font-normal normal-case">company IP</em>
               <span className="text-term-400">.</span>
             </h2>
-            <p className="mt-7 text-white/60 max-w-2xl leading-relaxed">
+            <p className="mt-7 text-[#636363] max-w-2xl leading-relaxed">
               The Cognitive Induction Graph is a foundational architecture for multi-agent systems. It aggregates end-to-end traces to expose
               bottlenecks, map the optimal execution workflows, and provide the overarching context required for
               safe, continuous experimentation.
             </p>
-            <p className="mt-5 text-white/60 max-w-2xl leading-relaxed">
+            <p className="mt-5 text-[#636363] max-w-2xl leading-relaxed">
               Paired with Recursive Self-Improvement, it bypasses the surjective dimensionality reduction of
               traditional parameter updates and demonstrates that robust, generalizable learning can happen entirely at
               the infrastructure level. Your agents stop being lego pieces. They become a foundry, learning from every
@@ -729,7 +729,7 @@ export function CigPostPage() {
               </Link>
               <button
                 onClick={() => setDemoOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+                className="inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:text-term-400 transition-all"
               >
                 Request Access
                 <ArrowRight className="w-3.5 h-3.5" />

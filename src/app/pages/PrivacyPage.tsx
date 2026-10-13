@@ -98,9 +98,9 @@ export function PrivacyPage() {
             {section.heading === '10. Contact Us' && (
               <div className="mt-4 border border-white/[0.08] bg-ink-800 p-5 space-y-1.5">
                 <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-3">CONTACT //</p>
-                <p className="text-sm text-white/60">Procept Technologies Corp.</p>
-                <p className="text-sm text-white/60">hello@procept.tech</p>
-                <p className="text-sm text-white/40">Attn: Privacy</p>
+                <p className="text-sm text-[#636363]">Procept Technologies Corp.</p>
+                <p className="text-sm text-[#636363]">hello@procept.tech</p>
+                <p className="text-sm text-[#636363]/80">Attn: Privacy</p>
               </div>
             )}
           </div>

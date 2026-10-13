@@ -8,7 +8,7 @@ export function Stat({ value, label }: { value: string; label: string }) {
       <div className="font-mono text-4xl md:text-5xl font-medium text-white tracking-tight mb-3 tabular-nums">
         {value}
       </div>
-      <p className="text-sm text-white/50 leading-relaxed">{label}</p>
+      <p className="text-sm text-[#636363] leading-relaxed">{label}</p>
     </div>
   );
 }

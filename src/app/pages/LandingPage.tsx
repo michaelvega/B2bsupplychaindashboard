@@ -107,7 +107,7 @@ function SolutionSlide() {
           <span className="w-1 h-1 bg-term-400" />
           THE SOLUTION
         </span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-[#636363]/70">MULTI-AGENT ECONOMICS</span>
       </div>
 
       <div className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -191,7 +191,7 @@ function ProblemSlideTop() {
           <span className="w-1 h-1 bg-term-400" />
           THE PROBLEM
         </span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-[#636363]/70">MULTI-AGENT ECONOMICS</span>
       </div>
 
       {/* Headline left, the sentence right */}
@@ -201,7 +201,7 @@ function ProblemSlideTop() {
         </p>
 
         <div>
-          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-6">
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 mb-6">
             Enterprise AI, currently
           </p>
           <p className="text-xl md:text-2xl font-light text-white/75 leading-relaxed">
@@ -258,13 +258,13 @@ export function LandingPage() {
           <CornerBrackets />
           <div className="max-w-6xl mx-auto w-full">
             <div>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/50 mb-8">Procept Technologies Corp.</p>
+              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#636363] mb-8">Procept Technologies Corp.</p>
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.05] mb-8 max-w-4xl">
                 Driving the world's transition to <Em>AGI</Em><span className="text-term-400">.</span>
               </h1>
 
-              <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
+              <p className="text-[#636363] text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
                 We make frontier intelligence effortless to deploy and transform breakthrough research into industry
                 value.
               </p>
@@ -272,7 +272,7 @@ export function LandingPage() {
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => setDemoOpen(true)}
-                  className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+                  className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:text-term-400 transition-all"
                 >
                   Request Access
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -289,7 +289,7 @@ export function LandingPage() {
               {/* Backed by */}
               <div className="relative inline-flex items-center px-8 py-3 border border-white/15 mt-10 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
-                <span className="relative font-mono text-xs md:text-sm tracking-[0.25em] uppercase text-white/60">
+                <span className="relative font-mono text-xs md:text-sm tracking-[0.25em] uppercase text-[#636363]">
                   Backed by Georgia Tech <span className="text-white/25">|</span> NVIDIA
                 </span>
               </div>
@@ -318,7 +318,7 @@ export function LandingPage() {
             alt=""
             className="w-full h-full object-cover opacity-[0.12] grayscale"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,rgba(5,5,5,0.7)_60%,rgba(5,5,5,0.35)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0D0F0D_0%,rgba(13,15,13,0.7)_60%,rgba(13,15,13,0.35)_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
@@ -337,7 +337,7 @@ export function LandingPage() {
                     <span className="w-1.5 h-1.5 bg-term-400/70" />
                   </div>
                   <h3 className="text-lg font-medium text-white tracking-tight mb-3">{point.title}</h3>
-                  <p className="text-sm leading-relaxed text-white/50">
+                  <p className="text-sm leading-relaxed text-[#636363]">
                     <WhyBody text={point.body} />
                   </p>
                 </div>
@@ -368,10 +368,10 @@ export function LandingPage() {
                     <span className="font-mono text-2xl font-medium text-term-400 tabular-nums">{stage.num}</span>
                     <h3 className="text-xl font-light text-white tracking-tight">{stage.title}</h3>
                   </div>
-                  <p className="text-sm text-white/50 leading-relaxed mb-5">{stage.desc}</p>
+                  <p className="text-sm text-[#636363] leading-relaxed mb-5">{stage.desc}</p>
                   <ul className="space-y-2 mb-7">
                     {stage.bullets.map((bullet, j) => (
-                      <li key={j} className="font-mono text-[12px] text-white/50 leading-relaxed">
+                      <li key={j} className="font-mono text-[12px] text-[#636363] leading-relaxed">
                         <span className="text-term-500 mr-2">{stage.num.replace(/^0/, '')}.{j + 1}</span>
                         {bullet}
                       </li>
@@ -400,7 +400,7 @@ export function LandingPage() {
             alt=""
             className="w-full h-full object-cover object-center opacity-70 grayscale contrast-110"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0A0A0A_75%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0D0F0D_75%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
@@ -414,7 +414,7 @@ export function LandingPage() {
         {/* Wires image behind the section content, above the code layer; pushed left, fading out on the right */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-start">
           <img src="/inspo/wires.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-70" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#050505_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#0D0F0D_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-28 pb-48 md:pt-36 md:pb-60">
           <div className="relative lg:min-h-[240px] space-y-10 lg:space-y-0">
@@ -424,7 +424,7 @@ export function LandingPage() {
               />
             </Reveal>
             <Reveal delay={150} className="lg:absolute lg:bottom-0 lg:right-0 lg:w-[56%]">
-              <p className="text-base md:text-lg text-white/60 leading-relaxed">
+              <p className="text-base md:text-lg text-[#636363] leading-relaxed">
                 The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment. It
                 keeps improving inside your stack, owned by you.
               </p>
@@ -453,7 +453,7 @@ export function LandingPage() {
             <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 max-w-2xl">
               Provision your <Em>journey</Em><span className="text-term-400">.</span>
             </h2>
-            <p className="text-sm text-white/30">
+            <p className="text-sm text-[#636363]/70">
               Flat linear rate. Self-hosted. Fully maintained by Procept.
             </p>
           </Reveal>

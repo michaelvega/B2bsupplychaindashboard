@@ -19,7 +19,7 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             <img src="/procept-logo-light.jpg" alt="Procept" className="w-7 h-7 rounded-sm object-cover ring-1 ring-white/20" />
             <span className="font-mono text-xs tracking-[0.3em] uppercase text-white/80 font-medium">Procept</span>
           </div>
-          <p className="text-sm text-white/40 leading-relaxed">
+          <p className="text-sm text-[#636363]/80 leading-relaxed">
             The fully maintained, self-hosted AI stack.
           </p>
         </div>
@@ -31,13 +31,13 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             {PRODUCT_ITEMS.map((item) =>
               onNavigate ? (
                 <li key={item.label}>
-                  <button onClick={() => onNavigate(item.id)} className="text-sm text-white/40 hover:text-white transition-colors">
+                  <button onClick={() => onNavigate(item.id)} className="text-sm text-[#636363]/80 hover:text-white transition-colors">
                     {item.label}
                   </button>
                 </li>
               ) : (
                 <li key={item.label}>
-                  <Link to="/" className="text-sm text-white/40 hover:text-white transition-colors">
+                  <Link to="/" className="text-sm text-[#636363]/80 hover:text-white transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -51,17 +51,17 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
           <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-4">Company</p>
           <ul className="space-y-2.5">
             <li>
-              <Link to="/blog" className="text-sm text-white/40 hover:text-white transition-colors">Blog</Link>
+              <Link to="/blog" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Blog</Link>
             </li>
             <li>
-              <a href="mailto:hello@procept.tech" className="text-sm text-white/40 hover:text-white transition-colors">Contact</a>
+              <a href="mailto:hello@procept.tech" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Contact</a>
             </li>
             <li>
               <a
                 href="https://www.linkedin.com/company/procept-tech/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-white/40 hover:text-white transition-colors"
+                className="text-sm text-[#636363]/80 hover:text-white transition-colors"
               >
                 LinkedIn
               </a>
@@ -73,19 +73,19 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
         <div>
           <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-4">Legal</p>
           <ul className="space-y-2.5">
-            <li><Link to="/privacy" className="text-sm text-white/40 hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/terms-of-service" className="text-sm text-white/40 hover:text-white transition-colors">Terms of Service</Link></li>
-            <li><Link to="/data-processing-addendum" className="text-sm text-white/40 hover:text-white transition-colors">Data Processing Addendum</Link></li>
-            <li><Link to="/plans" className="text-sm text-white/40 hover:text-white transition-colors">Service Descriptions</Link></li>
-            <li><span className="text-sm text-white/40 cursor-default" title="Coming soon">Cookie Policy</span></li>
+            <li><Link to="/privacy" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/terms-of-service" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Terms of Service</Link></li>
+            <li><Link to="/data-processing-addendum" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Data Processing Addendum</Link></li>
+            <li><Link to="/plans" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Service Descriptions</Link></li>
+            <li><span className="text-sm text-[#636363]/80 cursor-default" title="Coming soon">Cookie Policy</span></li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6 md:px-16 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-          <span className="text-xs text-white/20">© 2026 Procept Technologies Corp.</span>
-          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/20">
+          <span className="text-xs text-[#636363]/60">© 2026 Procept Technologies Corp.</span>
+          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#636363]/60">
             SYS v2.0 // PROCEPT.ENGINEERING // WILMINGTON, DE
           </span>
         </div>

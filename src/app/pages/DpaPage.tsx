@@ -219,7 +219,7 @@ export function DpaPage() {
         <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-4">In this document</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {navItems.map(item => (
-            <span key={item.num} className="font-mono text-[13px] text-white/50 hover:text-white/80 transition-colors cursor-pointer">
+            <span key={item.num} className="font-mono text-[13px] text-[#636363] hover:text-white/80 transition-colors cursor-pointer">
               <span className="text-term-400">{item.num}</span> {item.heading}
             </span>
           ))}
@@ -240,7 +240,7 @@ export function DpaPage() {
           {DEFINITIONS.map(def => (
             <div key={def.term}>
               <h3 className="font-mono text-xs text-white/80 tracking-wider mb-2">{def.term}</h3>
-              <p className="text-sm text-white/50 leading-relaxed">{def.text}</p>
+              <p className="text-sm text-[#636363] leading-relaxed">{def.text}</p>
             </div>
           ))}
         </div>
@@ -248,7 +248,7 @@ export function DpaPage() {
 
       {/* Link to privacy */}
       <div className="mt-12 text-center">
-        <Link to="/privacy" className="font-mono text-xs tracking-[0.2em] uppercase text-white/40 hover:text-term-300 transition-colors">
+        <Link to="/privacy" className="font-mono text-xs tracking-[0.2em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors">
           View the Privacy Policy →
         </Link>
       </div>
