@@ -130,37 +130,20 @@ function SolutionSlide() {
   );
 }
 
-/** Swiss-style stat cell: hairline rules, oversized light numeral, mono index. */
-function SwissStatCell({ n, value, label }: { n: string; value: string; label: string }) {
+/** A fact inside the problem statement: green, bold, slightly oversized. */
+function Fact({ children }: { children: ReactNode }) {
   return (
-    <div className="relative group h-full border-b border-r border-white/10 bg-ink-950/40 p-5 md:p-6 transition-colors hover:bg-ink-950/70">
-      {/* Green rule across the top */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-term-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-      <div className="flex items-center justify-between mb-5">
-        <span className="font-mono text-[10px] tracking-[0.25em] text-white/30">{n}</span>
-        <span className="w-1.5 h-1.5 bg-term-400/70" />
-      </div>
-      <div className="text-4xl xl:text-5xl font-light text-white tracking-tight tabular-nums leading-none mb-4">
-        {value}
-      </div>
-      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40 leading-relaxed">{label}</p>
-    </div>
+    <span className="font-display font-bold text-term-300 tabular-nums text-[1.15em] leading-none">
+      {children}
+    </span>
   );
 }
 
 /**
- * Top-of-page problem slide: enterprise AI infrastructure is broken,
- * set as a swiss stat table (hairline rules, oversized numerals).
- * Static and problem-only, no solution phase.
+ * Top-of-page problem slide: enterprise AI infrastructure is broken.
+ * One directed sentence, with the facts made to stand out.
  */
 function ProblemSlideTop() {
-  const problemStats = [
-    { n: '01', value: '40%', label: 'cost reduction forfeited today by enterprises that fail to deploy multi-agent AI.' },
-    { n: '02', value: '75%', label: 'faster executions, forfeited for the same reason.' },
-    { n: '03', value: '18%', label: 'of enterprises have tried deploying multi-agent AI.' },
-    { n: '04', value: '87%', label: 'of those that tried, fail.' },
-  ];
-
   return (
     <div className="relative border border-white/[0.08] bg-ink-950/80">
       <CornerBrackets />
@@ -174,21 +157,21 @@ function ProblemSlideTop() {
         <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
       </div>
 
-      {/* Headline left, swiss stat table right */}
+      {/* Headline left, the sentence right */}
       <div className="relative p-8 md:p-12 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-center">
         <p className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight">
           Enterprise AI infrastructure is <Em>broken</Em>, talent is scarce, and security risks halt deployments.
         </p>
 
         <div>
-          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4">
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-6">
             Enterprise AI, currently
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-l border-white/10">
-            {problemStats.map((s) => (
-              <SwissStatCell key={s.n} {...s} />
-            ))}
-          </div>
+          <p className="text-xl md:text-2xl font-light text-white/75 leading-relaxed">
+            Today, enterprises that fail to deploy multi-agent AI actively forfeit a <Fact>40%</Fact> cost reduction
+            and <Fact>75%</Fact> faster executions. Yet, only <Fact>18%</Fact> of enterprises have tried, and out of
+            those <Fact>87%</Fact> fail.
+          </p>
         </div>
       </div>
     </div>
