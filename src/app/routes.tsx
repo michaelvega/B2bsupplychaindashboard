@@ -8,6 +8,7 @@ import { PlansPage } from './pages/PlansPage';
 import { BlogPage } from './pages/BlogPage';
 import { BlogPostPage } from './pages/BlogPostPage';
 import { CigPostPage } from './pages/CigPostPage';
+import { RsiMaterialsPostPage } from './pages/RsiMaterialsPostPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { TermsPage } from './pages/TermsPage';
 import { AgentSuite } from './pages/AgentSuite';
@@ -126,6 +127,10 @@ export const router = createBrowserRouter([
   {
     path: '/blog/ccg',
     element: <CigPostPage />,
+  },
+  {
+    path: '/blog/rsi_materials_sci',
+    element: <RsiMaterialsPostPage />,
   },
   {
     path: '/blog/:slug',

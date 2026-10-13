@@ -56,7 +56,7 @@ export function BlogPage() {
             </p>
 
             <p className="mt-10 font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">
-              {String(POSTS.length).padStart(3, '0')} {POSTS.length === 1 ? 'ENTRY' : 'ENTRIES'} // UPDATED SEP 22 2026
+              {String(POSTS.length).padStart(3, '0')} {POSTS.length === 1 ? 'ENTRY' : 'ENTRIES'} // UPDATED OCT 13 2026
             </p>
           </Reveal>
         </div>

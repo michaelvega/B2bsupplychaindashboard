@@ -13,6 +13,18 @@ export interface BlogPost {
 
 export const POSTS: BlogPost[] = [
   {
+    slug: 'rsi_materials_sci',
+    num: '003',
+    title: 'Physics-Guided Recursive Self-Improvement for LLM-Generated Atomistic Models',
+    accent: 'a research proposal by Sam Carozzi and Michael Vega',
+    date: 'OCT 13 2026',
+    author: 'SAM CAROZZI + MICHAEL VEGA',
+    readTime: '9 MIN',
+    tags: ['MATERIALS SCIENCE', 'RSI', 'RESEARCH'],
+    excerpt:
+      'Can physics-guided recursive self-improvement teach an LLM to generate 2D hybrid perovskite structures that are physically coherent and simulation-ready? A preregistered proposal.',
+  },
+  {
     slug: 'cognitive-induction-graphs',
     num: '002',
     title: 'Cognitive Induction Graphs',
