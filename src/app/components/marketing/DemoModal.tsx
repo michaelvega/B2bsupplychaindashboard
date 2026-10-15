@@ -17,13 +17,33 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
     if (!name.trim() || !email.trim()) return;
     setSending(true);
 
-    // Store lead via Azure API
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      business: business.trim(),
+      timestamp: new Date().toISOString(),
+    };
+
+    // 1. Waitlist: push the submission to the Google Sheet via the Pages function
+    let sentToSheet = false;
     try {
-      const res = await fetch('/api/azure/demo-leads.json');
-      const existing = res.ok ? await res.json().catch(() => []) : [];
-      existing.push({ name: name.trim(), email: email.trim(), business: business.trim(), timestamp: new Date().toISOString() });
-      await fetch('/api/azure/demo-leads.json', { method: 'PUT', body: JSON.stringify(existing, null, 2) });
-    } catch (_) { /* silently continue */ }
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      sentToSheet = res.ok;
+    } catch (_) { /* network error, fall back below */ }
+
+    // 2. Fallback: store the lead via the Azure file share so nothing is lost
+    if (!sentToSheet) {
+      try {
+        const res = await fetch('/api/azure/demo-leads.json');
+        const existing = res.ok ? await res.json().catch(() => []) : [];
+        existing.push(payload);
+        await fetch('/api/azure/demo-leads.json', { method: 'PUT', body: JSON.stringify(existing, null, 2) });
+      } catch (_) { /* silently continue */ }
+    }
 
     // Open email client as reliable delivery
     const subject = encodeURIComponent('Aegis Demo Request');
@@ -44,8 +64,8 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
       <div className="bg-ink-800 border border-white/[0.08] rounded-sm w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="p-6 border-b border-white/[0.06] flex items-center justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-1.5">REQ // DEMO-ACCESS</p>
-            <h3 className="text-lg font-medium text-white">Request Demo Access</h3>
+            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-1.5">WAITLIST // DEMO-ACCESS</p>
+            <h3 className="text-lg font-medium text-white">Join the Demo Waitlist</h3>
             <p className="text-xs text-[#636363]/70 mt-0.5">We'll get back to you within 24 hours.</p>
           </div>
           <button onClick={onClose} className="p-2 text-[#636363]/70 hover:text-[#636363] transition-colors"><X className="w-4 h-4" /></button>
