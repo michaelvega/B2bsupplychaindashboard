@@ -128,7 +128,6 @@ addEventListener('touchcancel',()=>{touchStart=null},{passive:true});
 addEventListener('resize',render);
 nav.addEventListener('click',e=>{const button=e.target.closest('[data-slide]');if(button)go(Number(button.dataset.slide))});
 document.querySelector('#previous').onclick=()=>go(current-1);document.querySelector('#next').onclick=()=>go(current+1);
-document.querySelector('header a').onclick=e=>{e.preventDefault();go(0)};
 addEventListener('keydown',e=>{if(e.target.closest('input,textarea')||(e.key===' '&&e.target.closest('button,a')))return;let target;if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key))target=current+1;if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key))target=current-1;if(e.key==='Home')target=0;if(e.key==='End')target=slides.length-1;if(target!==undefined){e.preventDefault();if(!e.repeat)go(target)}});
 document.querySelector('#fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{document.querySelector('#fullscreen').title='Use your browser’s fullscreen command'}};
 

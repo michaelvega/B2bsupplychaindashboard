@@ -24,3 +24,22 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
  .code-block .line-number{width:18px}
  .system-row{grid-template-columns:100px 1fr}
 }
+
+/* Procept marketing toolbar in the System 5 header */
+.header-right{display:flex;align-items:center;gap:18px}
+.topnav{display:flex;align-items:center;gap:22px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.topnav a{color:#636363;transition:color .15s}
+.topnav a:hover{color:var(--ink)}
+.topnav a.topnav-cta{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:var(--ink);padding:8px 14px;display:flex;align-items:center;gap:6px}
+.topnav a.topnav-cta:hover{border-color:#7B896F;color:#93A18A}
+@media(max-width:760px){.topnav{display:none}.header-right{gap:0}}
+
+/* Landing toolbar, exact: logo image + wordmark, nav links, request CTA */
+.procept-brand{gap:10px}
+.procept-brand img{width:24px;height:24px;border-radius:2px;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.brand-name{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.8);font-weight:500}
+.sys5-label{color:#9a9a96}
+.topnav a:hover{color:#fff}
+.topnav-cta{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;padding:8px 16px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
+.topnav-cta:hover{border-color:rgba(123,137,111,.6);color:#93A18A}
+@media(max-width:760px){.topnav,.topnav-cta{display:none}}

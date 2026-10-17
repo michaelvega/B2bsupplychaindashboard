@@ -11,6 +11,7 @@ import { CursorGfx } from '../components/marketing/CursorGfx';
 import { CodeBackdrop } from '../components/marketing/CodeBackdrop';
 import { Stat } from '../components/marketing/Stat';
 import { Reveal } from '../components/marketing/Reveal';
+import { System5Tab } from '../components/marketing/System5Tab';
 import { cn } from '../components/ui/utils';
 
 const HERO_VIDEO = '/cityscape-rotated.mp4';
@@ -255,6 +256,7 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-grid-pattern-dark opacity-60" />
 
         <div className="relative z-50 flex-1 flex flex-col justify-center px-6 md:px-16 py-16">
+          <System5Tab anchored />
           <CornerBrackets />
           <div className="max-w-6xl mx-auto w-full">
             <div>
@@ -264,7 +266,7 @@ export function LandingPage() {
                 Driving the world's transition to <Em>AGI</Em><span className="text-term-400">.</span>
               </h1>
 
-              <p className="text-[#636363] text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
+              <p id="s5-anchor" className="text-[#636363] text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
                 We make frontier intelligence effortless to deploy and transform breakthrough research into industry
                 value.
               </p>
