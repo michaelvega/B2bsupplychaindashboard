@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { System5Tab } from './System5Tab';
 
 export function scrollToSection(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -15,6 +16,7 @@ export function MarketingNav({
 }) {
   return (
     <div className="sticky top-0 z-[60]">
+      <System5Tab />
       <div className="h-14 flex items-center justify-between px-6 md:px-10">
         {logoTo ? (
           <Link to={logoTo} className="flex items-center gap-2.5 shrink-0">
@@ -50,6 +52,12 @@ export function MarketingNav({
             >
               Blog
             </Link>
+            <a
+              href="/system5/system5-scroll.html"
+              className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 hover:text-term-300 transition-colors"
+            >
+              System 5
+            </a>
           </nav>
 
           <button
