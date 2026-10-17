@@ -38,7 +38,19 @@ export function System5Tab() {
           sweeping ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex flex-col items-center gap-4">
+        {/* Black gradient emanating from the tab on the right edge */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_50%,#000000_0%,rgba(13,15,13,0.75)_40%,rgba(13,15,13,0.25)_75%,transparent_100%)]" />
+
+        {/* Rotating light beam sweeping the corners */}
+        <div className="absolute inset-0 animate-[spin_1.8s_linear_infinite] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(123,137,111,0.16)_22deg,transparent_60deg,transparent_180deg,rgba(123,137,111,0.16)_202deg,transparent_240deg)]" />
+
+        {/* Corner lights */}
+        <span className="absolute top-6 left-6 w-8 h-8 border-t border-l border-term-400/80 animate-pulse" />
+        <span className="absolute top-6 right-6 w-8 h-8 border-t border-r border-term-400/80 animate-pulse [animation-delay:0.45s]" />
+        <span className="absolute bottom-6 left-6 w-8 h-8 border-b border-l border-term-400/80 animate-pulse [animation-delay:0.9s]" />
+        <span className="absolute bottom-6 right-6 w-8 h-8 border-b border-r border-term-400/80 animate-pulse [animation-delay:1.35s]" />
+
+        <div className="relative flex flex-col items-center gap-4">
           <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400">Procept</p>
           <p className="font-display font-semibold uppercase tracking-tight text-white text-2xl md:text-4xl">
             Entering System <span className="text-term-400">5</span>
