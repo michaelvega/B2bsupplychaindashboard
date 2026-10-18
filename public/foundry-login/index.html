@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Procept Foundry demo</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    :root { --bg: #0D0F0D; --fg: #fff; --mute: #636363; --accent: #7B896F; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+      font-family: 'Instrument Sans', 'Inter', system-ui, sans-serif; }
+    main { width: 100%; max-width: 440px; padding: 0 24px; }
+    .eyebrow { font: 11px/1 ui-monospace, 'IBM Plex Mono', monospace; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+    h1 { margin: 24px 0 0; font-size: 34px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; text-transform: uppercase; }
+    p { margin: 18px 0 0; color: var(--mute); line-height: 1.6; font-size: 15px; }
+    button { margin-top: 32px; display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; background: #fff; color: #0D0F0D;
+      border: 0; cursor: pointer; font: 500 11px/1 ui-monospace, 'IBM Plex Mono', monospace; letter-spacing: .15em; text-transform: uppercase; }
+    button:disabled { opacity: .5; cursor: default; }
+    #err { color: #e0735c; min-height: 1.4em; font-size: 13px; }
+    a { color: var(--mute); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Procept Foundry</p>
+    <h1>Sign in to open the demo</h1>
+    <p>Dataset Learning runs entirely in your browser with your own OpenRouter key. Sign in with Google to continue.</p>
+    <button id="go" type="button">Sign in with Google</button>
+    <p id="err" role="alert"></p>
+    <p><a href="/">Back to procept.tech</a></p>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    const app = initializeApp({
+      apiKey: 'AIzaSyCRT9uT3xE4JXtavnWipP_UwsYrjDedYkM',
+      authDomain: 'project-6fd6b5b1-7691-4eea-a70.firebaseapp.com',
+      projectId: 'project-6fd6b5b1-7691-4eea-a70',
+      appId: '1:70801217979:web:218fb6dbbfd3f2a8134c9e',
+    });
+    const auth = getAuth(app);
+    const btn = document.getElementById('go');
+    const err = document.getElementById('err');
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      err.textContent = '';
+      try {
+        const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+        const res = await fetch('/api/foundry-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: await user.getIdToken() }),
+        });
+        if (!res.ok) throw new Error((await res.json()).error || 'Sign-in failed');
+        window.location.replace('/foundry/');
+      } catch (e) {
+        err.textContent = e.code === 'auth/popup-closed-by-user' ? '' : (e.message || 'Sign-in failed');
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

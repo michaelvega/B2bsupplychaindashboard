@@ -1,0 +1,5 @@
+domain,prompt,rubrics
+biology,"Explain how a cell membrane controls what enters and leaves a cell.","[{""criterion"":""Membrane structure"",""weight"":1,""axis"":""accuracy""},{""criterion"":""Transport mechanisms"",""weight"":1,""axis"":""accuracy""}]"
+history,"Describe two long-term consequences of the printing press in early modern Europe.","[{""criterion"":""Consequence one"",""weight"":1,""axis"":""analysis""},{""criterion"":""Consequence two"",""weight"":1,""axis"":""analysis""},{""criterion"":""Historical specificity"",""weight"":1,""axis"":""evidence""}]"
+chemistry,"Explain why water is a polar molecule.","[{""criterion"":""Electronegativity"",""weight"":1,""axis"":""accuracy""},{""criterion"":""Molecular geometry"",""weight"":1,""axis"":""accuracy""}]"
+economics,"Describe one way a price ceiling can create a shortage.","[{""criterion"":""Mechanism"",""weight"":1,""axis"":""analysis""},{""criterion"":""Outcome"",""weight"":1,""axis"":""analysis""}]"
