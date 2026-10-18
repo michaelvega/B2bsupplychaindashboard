@@ -6,6 +6,7 @@ const P = {
   key: <><circle cx="8" cy="15" r="4" /><path d="M11 12l9-9M16 7l3 3" /></>,
   play: <path d="M7 4l13 8-13 8z" />,
   pause: <path d="M8 5v14M16 5v14" />,
+  stop: <path d="M6 6h12v12H6z" />,
   copy: <><rect x="9" y="9" width="11" height="11" /><path d="M5 15V5h10" /></>,
   download: <path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" />,
   upload: <path d="M12 15V3m0 0L7 8m5-5l5 5M4 21h16" />,

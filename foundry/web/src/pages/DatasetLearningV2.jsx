@@ -7,6 +7,10 @@ import {
   configureDatasetV2Project,
   startDatasetLearningV2,
   isRunning as apiIsRunning,
+  pauseRun,
+  resumeRun,
+  stopRun,
+  getRunControl,
   initDb,
   flushDb,
   getApiKey,
@@ -49,6 +53,7 @@ export default function DatasetLearningV2() {
   const [ready, setReady] = useState(false);
   const [running, setRunning] = useState(false);
   const [anyRunning, setAnyRunning] = useState(false);
+  const [runControl, setRunControl] = useState({ state: 'running', inFlight: 0 });
   const [runTargets, setRunTargets] = useState({}); // projectId -> target epoch
   const [view, setView] = useState('setup'); // 'setup' | 'run'
   const [step, setStep] = useState('start'); // wizard step
@@ -126,7 +131,7 @@ export default function DatasetLearningV2() {
 
   // Track runs across ALL projects: a run keeps going after you switch away.
   useEffect(() => {
-    const tick = () => setAnyRunning(projectsRef.current.some((p) => apiIsRunning(p.id)) || (!!projectIdRef.current && apiIsRunning(projectIdRef.current)));
+    const tick = () => { setRunControl(getRunControl()); setAnyRunning(projectsRef.current.some((p) => apiIsRunning(p.id)) || (!!projectIdRef.current && apiIsRunning(projectIdRef.current))); };
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
@@ -302,6 +307,22 @@ export default function DatasetLearningV2() {
     }
   }
 
+  function pauseCurrentRun() {
+    pauseRun();
+    setRunControl(getRunControl());
+  }
+
+  function unpauseCurrentRun() {
+    resumeRun();
+    setRunControl(getRunControl());
+  }
+
+  function stopCurrentRun() {
+    if (!window.confirm('Stop the run? The unfinished epoch is discarded. Finished epochs and accepted rules are kept.')) return;
+    stopRun();
+    setRunControl(getRunControl());
+  }
+
   function saveKey(k) {
     setApiKey(k);
     setKeyReady(hasApiKey());
@@ -417,6 +438,11 @@ export default function DatasetLearningV2() {
               onNewProject={newProject}
               epochCounts={epochCounts}
               runTarget={running ? runTargets[projectId] : undefined}
+              paused={running && runControl.state === 'paused'}
+              pausing={runControl.inFlight > 0}
+              onPause={pauseCurrentRun}
+              onUnpause={unpauseCurrentRun}
+              onStop={stopCurrentRun}
             />
             <div id="pf-snippet">
               <Deliverable status={status} isRunning={running} openEnded={openEnded} onJumpToRun={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />

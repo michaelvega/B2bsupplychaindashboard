@@ -13,9 +13,9 @@ import '../styles/run.css';
  * RunDashboard props (see RunDashboard.PROPS.md):
  *  status, isRunning, numEpochs, onNumEpochs, onStart, onResume, keyReady,
  *  onOpenKeyGate, projects, projectId, onSelectProject, onNewProject,
- *  epochCounts?, runTarget?, prevRuleIds?
+ *  epochCounts?, runTarget?, prevRuleIds?, paused?, pausing?, onPause?, onUnpause?, onStop?
  */
-export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStart, onResume, keyReady, onOpenKeyGate, projects, projectId, onSelectProject, onNewProject, epochCounts, runTarget, prevRuleIds }) {
+export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStart, onResume, keyReady, onOpenKeyGate, projects, projectId, onSelectProject, onNewProject, epochCounts, runTarget, prevRuleIds, paused, pausing, onPause, onUnpause, onStop }) {
   const epochs = status?.epochs || [];
   const phase = useMemo(() => deriveRunPhase(status?.log, epochs, isRunning), [status, isRunning]); // eslint-disable-line react-hooks/exhaustive-deps
   const counts = useMemo(() => {
@@ -32,9 +32,9 @@ export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStar
       <div className="pf-run-cols">
         <div className="pf-stack">
           <Panel title="Run">
-            <RunControls isRunning={isRunning} keyReady={keyReady} hasRows={(status?.rows?.length ?? 1) > 0} numEpochs={numEpochs} onNumEpochs={onNumEpochs} epochCount={epochs.length} interrupted={phase.key === 'interrupted'} onStart={() => onStart?.()} onResume={() => onResume?.()} onOpenKeyGate={onOpenKeyGate} />
+            <RunControls isRunning={isRunning} keyReady={keyReady} hasRows={(status?.rows?.length ?? 1) > 0} numEpochs={numEpochs} onNumEpochs={onNumEpochs} epochCount={epochs.length} interrupted={phase.key === 'interrupted'} onStart={() => onStart?.()} onResume={() => onResume?.()} onOpenKeyGate={onOpenKeyGate} paused={paused} pausing={pausing} onPause={onPause} onUnpause={onUnpause} onStop={onStop} />
           </Panel>
-          <ProgressPanel status={status} isRunning={isRunning} runTarget={runTarget} onFixKey={onOpenKeyGate} />
+          <ProgressPanel status={status} isRunning={isRunning} runTarget={runTarget} onFixKey={onOpenKeyGate} paused={paused} />
         </div>
         <div className="pf-stack">
           <TaxonomyPanel key={projectId || 'none'} taxonomy={status?.taxonomy} taxonomyEpoch={status?.taxonomyEpoch} prevRuleIds={prevRuleIds} />

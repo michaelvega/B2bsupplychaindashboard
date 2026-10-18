@@ -31,6 +31,7 @@
 .pf-run-log { max-height: 320px; overflow: auto; margin: 0; padding: 12px 16px; font-family: var(--font-mono), monospace; font-size: 12px; line-height: 1.6; color: var(--text-2); }
 .pf-run-log div { overflow-wrap: anywhere; }
 .pf-run-log .is-err { color: #ff8a8a; background: var(--err-bg); }
+.pf-run-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .pf-run-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
 @media (prefers-reduced-motion: reduce) { .pf-run-rule { transition: none; } }
 

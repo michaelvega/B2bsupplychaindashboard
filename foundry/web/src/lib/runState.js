@@ -60,6 +60,7 @@ export function deriveRunPhase(log, epochs, isRunning) {
   const msg = String(last?.message ?? '');
   const epoch = last?.epoch ?? 0;
   if (msg.startsWith('run error:')) return { key: 'error', label: 'Stopped with an error', epoch };
+  if (msg.startsWith('run stopped')) return { key: 'stopped', label: 'Stopped by you', epoch };
   let key = 'idle'; let label = 'Not started';
   if (!last || /^upload:/.test(msg)) { key = 'idle'; label = 'Ready'; }
   else if (/RESTART/.test(msg)) { key = 'restart'; label = 'Restarting after repeated rejections'; }

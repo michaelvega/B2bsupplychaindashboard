@@ -11,7 +11,7 @@ import '../../styles/run.css';
  *  - runTarget?: number  absolute last epoch of the current run (for "epoch X of N")
  *  - onFixKey?(): called by the "Fix key" action on auth errors
  */
-export function ProgressPanel({ status, isRunning, runTarget, onFixKey }) {
+export function ProgressPanel({ status, isRunning, runTarget, onFixKey, paused = false }) {
   const epochs = status?.epochs || [];
   const log = status?.log || [];
   const project = status?.project;
@@ -23,7 +23,7 @@ export function ProgressPanel({ status, isRunning, runTarget, onFixKey }) {
   const rejected = epochs.filter((e) => e.status === 'rejected').length;
   const best = bestMetric(epochs, openEnded);
   const current = Math.max(phase.epoch || 0, epochs.length ? epochs[epochs.length - 1].epoch : 0);
-  const tone = isRunning ? 'live' : phase.key === 'error' ? 'error' : phase.key === 'interrupted' ? 'warn' : 'idle';
+  const tone = isRunning ? (paused ? 'warn' : 'live') : phase.key === 'error' ? 'error' : phase.key === 'interrupted' ? 'warn' : 'idle';
 
   // repairs / regressions: from latest epoch metrics when the engine reports them
   const lm = epochs.length ? epochs[epochs.length - 1].metrics || {} : {};
@@ -33,7 +33,7 @@ export function ProgressPanel({ status, isRunning, runTarget, onFixKey }) {
     <Panel title="Progress">
       <div className="pf-stack">
         <div className="pf-run-phase" aria-live="polite">
-          <StatusChip tone={tone}>{isRunning ? 'Running' : phase.key === 'error' ? 'Error' : phase.key === 'interrupted' ? 'Interrupted' : 'Idle'}</StatusChip>
+          <StatusChip tone={tone}>{isRunning ? (paused ? 'Paused' : 'Running') : phase.key === 'stopped' ? 'Stopped' : phase.key === 'error' ? 'Error' : phase.key === 'interrupted' ? 'Interrupted' : 'Idle'}</StatusChip>
           <span className="pf-run-phase-label">
             {current > 0 && <span className="pf-mono">Epoch {current}{runTarget ? ` of ${runTarget}` : ''} · </span>}
             {phase.label}

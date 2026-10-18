@@ -100,6 +100,73 @@ function resolveAuthHeaders() {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Run control (pause / stop). One run per tab, so a single module-level state.
+// Pause lets in-flight calls finish and holds back the next ones; stop aborts
+// in-flight calls and makes every further call throw RunStoppedError.
+// ---------------------------------------------------------------------------
+
+export class RunStoppedError extends Error {
+  constructor() {
+    super('Run stopped by user')
+    this.name = 'RunStoppedError'
+  }
+}
+
+const control = { state: 'running', inFlight: 0, waiters: [], controller: new AbortController() }
+
+function wakeWaiters() {
+  const waiters = control.waiters
+  control.waiters = []
+  for (const wake of waiters) wake()
+}
+
+/** -> { state: 'running'|'paused'|'stopped', inFlight: number } */
+export function getRunControl() {
+  return { state: control.state, inFlight: control.inFlight }
+}
+
+export function pauseRun() {
+  if (control.state === 'running') control.state = 'paused'
+}
+
+export function resumeRun() {
+  if (control.state !== 'paused') return
+  control.state = 'running'
+  wakeWaiters()
+}
+
+export function stopRun() {
+  control.state = 'stopped'
+  control.controller.abort()
+  wakeWaiters()
+}
+
+/** Call at the start of every run so a previous stop or pause does not leak in. */
+export function resetRunControl() {
+  control.state = 'running'
+  control.controller = new AbortController()
+  wakeWaiters()
+}
+
+function throwIfStopped() {
+  if (control.state === 'stopped') throw new RunStoppedError()
+}
+
+/** Blocks while paused; throws once stopped. */
+async function runGate() {
+  for (;;) {
+    throwIfStopped()
+    if (control.state === 'running') return
+    await new Promise((resolve) => control.waiters.push(resolve))
+  }
+}
+
+function requestSignal(timeoutMs) {
+  const timeout = AbortSignal.timeout(timeoutMs)
+  return typeof AbortSignal.any === 'function' ? AbortSignal.any([timeout, control.controller.signal]) : timeout
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -127,7 +194,7 @@ async function httpPostJson(url, payload, headers, timeoutMs) {
     method: 'POST',
     headers,
     body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(timeoutMs),
+    signal: requestSignal(timeoutMs),
   })
   const body = await res.text()
   return { status: res.status, body }
@@ -155,6 +222,7 @@ export async function chatCompletion(messages, config) {
   let lastErr
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    throwIfStopped()
     if (attempt > 0) {
       await sleep(RETRY_BASE_DELAY_MS * 2 ** (attempt - 1))
     }
@@ -239,14 +307,25 @@ export async function guardedChatCompletion(messages, config = {}) {
   const backoffMs = RETRY_BASE_DELAY_MS * (2 ** maxRetries - 1)
   const guardMs = timeoutMs * (maxRetries + 1) + backoffMs + 15_000
 
+  // The gate sits outside the timeout budget so time spent paused is not counted.
+  await runGate()
   const startMs = Date.now()
   const startedAt = new Date(startMs).toISOString()
-
-  const response = await withTimeout(
-    chatCompletion(messages, config),
-    guardMs,
-    `LLM call exceeded ${guardMs}ms and was aborted`,
-  )
+  control.inFlight++
+  let response
+  try {
+    response = await withTimeout(
+      chatCompletion(messages, config),
+      guardMs,
+      `LLM call exceeded ${guardMs}ms and was aborted`,
+    )
+  } catch (err) {
+    // An abort caused by Stop surfaces as a network error; report it as the stop it is.
+    throwIfStopped()
+    throw err
+  } finally {
+    control.inFlight--
+  }
 
   return { response, durationMs: Date.now() - startMs, startedAt }
 }

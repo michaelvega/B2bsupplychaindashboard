@@ -8,9 +8,10 @@ import '../../styles/run.css';
  *  - epochCount: epochs already completed (status.epochs.length)
  *  - interrupted: bool (phase.key === 'interrupted')
  *  - onStart(), onResume(), onOpenKeyGate()
+ *  - paused, pausing (paused but calls still finishing), onPause(), onUnpause(), onStop()
  *  numEpochs = additional epochs to run now (engine runAll semantics).
  */
-export function RunControls({ isRunning, keyReady, hasRows = true, numEpochs = 2, onNumEpochs, epochCount = 0, interrupted = false, onStart, onResume, onOpenKeyGate }) {
+export function RunControls({ isRunning, keyReady, hasRows = true, numEpochs = 2, onNumEpochs, epochCount = 0, interrupted = false, onStart, onResume, onOpenKeyGate, paused = false, pausing = false, onPause, onUnpause, onStop }) {
   const resume = epochCount > 0;
   let reason = '';
   if (isRunning) reason = 'A run is in progress in this tab.';
@@ -35,13 +36,28 @@ export function RunControls({ isRunning, keyReady, hasRows = true, numEpochs = 2
           </div>
         </div>
         {isRunning ? (
-          <Button variant="primary" size="lg" loading disabled>Running</Button>
+          <div className="pf-run-actions">
+            {paused ? (
+              <Button variant="primary" filled size="lg" icon="play" onClick={onUnpause}>Resume</Button>
+            ) : (
+              <Button variant="primary" size="lg" icon="pause" onClick={onPause}>Pause</Button>
+            )}
+            <Button size="lg" icon="stop" onClick={onStop}>Stop</Button>
+          </div>
         ) : (
           <Button variant="primary" filled size="lg" icon="play" disabled={disabled} onClick={resume ? onResume : onStart}>
             {resume ? `Continue from epoch ${epochCount + 1}` : 'Start'}
           </Button>
         )}
       </div>
+      {isRunning && paused && (
+        <p className="pf-help" style={{ margin: 0 }} role="status">
+          {pausing ? 'Pausing: finishing the calls already in flight, no new ones will start.' : 'Paused. Nothing is being sent to OpenRouter. Resume to continue, or Stop to end the run.'}
+        </p>
+      )}
+      {isRunning && !paused && (
+        <p className="pf-help" style={{ margin: 0 }}>Pause holds the run between model calls. Stop ends it and discards the unfinished epoch; finished epochs and accepted rules are kept.</p>
+      )}
       {!resume && !isRunning && <p className="pf-help" style={{ margin: 0 }}>2 epochs is a quick try. Use 3 to 5 for real use.</p>}
       {reason && !isRunning && (
         <p className="pf-help" style={{ margin: 0 }} role="status">

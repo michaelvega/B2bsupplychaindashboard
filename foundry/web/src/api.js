@@ -13,6 +13,7 @@
 import * as db from './engine/db.browser.js';
 import * as engine from '../../src/dataset-learning-v2/engine.js';
 import { initDb, flushDb } from './engine/db.browser.js';
+import { RunStoppedError, resetRunControl } from './engine/llm.browser.js';
 
 export { initDb, flushDb };
 export {
@@ -23,6 +24,10 @@ export {
   setModel,
   getBaseUrl,
   setBaseUrl,
+  pauseRun,
+  resumeRun,
+  stopRun,
+  getRunControl,
 } from './engine/llm.browser.js';
 
 // One in-flight epoch loop per project. The engine's runAll is long-lived, so
@@ -99,17 +104,22 @@ export function startDatasetLearningV2(projectId, numEpochs, opts = {}) {
       runOpts.consecutiveRejections = opts.consecutiveRejections;
     }
 
+    resetRunControl();
     running.add(projectId);
     void engine.runAll(projectId, epochs, runOpts)
       .catch((err) => {
+        const stopped = err instanceof RunStoppedError;
         const message = err instanceof Error ? err.message : String(err);
         try {
-          db.appendLog(projectId, 0, `run error: ${message}`);
+          db.appendLog(projectId, 0, stopped ? 'run stopped by user (the unfinished epoch is discarded)' : `run error: ${message}`);
         } catch {
           console.error('dataset-learning run failed:', message);
         }
       })
-      .finally(() => running.delete(projectId));
+      .finally(() => {
+        running.delete(projectId);
+        resetRunControl();
+      });
 
     return { ok: true, numEpochs: epochs };
   });
