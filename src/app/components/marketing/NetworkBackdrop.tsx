@@ -55,7 +55,7 @@ export function NetworkBackdrop({ className }: { className?: string }) {
           cx={n.x}
           cy={n.y}
           r={n.id % 7 === 0 ? 3 : 2}
-          fill={n.id % 7 === 0 ? 'rgba(51,255,153,0.25)' : 'rgba(255,255,255,0.12)'}
+          fill={n.id % 7 === 0 ? 'rgba(123,137,111,0.25)' : 'rgba(255,255,255,0.12)'}
         />
       ))}
     </svg>

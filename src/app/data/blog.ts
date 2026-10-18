@@ -16,7 +16,7 @@ export interface BlogPost {
 export const POSTS: BlogPost[] = [
   {
     slug: 'system5',
-    num: '003',
+    num: '004',
     title: 'System 5: Operations, Physical Reality, and User Behavior',
     accent: 'all in one self-improving system',
     date: 'OCT 14 2026',
@@ -26,6 +26,18 @@ export const POSTS: BlogPost[] = [
     excerpt:
       'The operating system for 24/7 Operational Harnesses, one self-improving system that unifies operations, physical reality, and user behavior, from bare metal to the end user.',
     href: '/system5',
+  },
+  {
+    slug: 'rsi_materials_sci',
+    num: '003',
+    title: 'Physics-Guided Recursive Self-Improvement for LLM-Generated Atomistic Models',
+    accent: 'a research proposal by Sam Carozzi and Michael Vega',
+    date: 'OCT 13 2026',
+    author: 'SAM CAROZZI + MICHAEL VEGA',
+    readTime: '9 MIN',
+    tags: ['MATERIALS SCIENCE', 'RSI', 'RESEARCH'],
+    excerpt:
+      'Can physics-guided recursive self-improvement teach an LLM to generate 2D hybrid perovskite structures that are physically coherent and simulation-ready? A preregistered proposal.',
   },
   {
     slug: 'cognitive-induction-graphs',

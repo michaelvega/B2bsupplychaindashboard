@@ -21,7 +21,7 @@ export function TelemetryHud({ items }: { items: TelemetryItem[] }) {
       <div className="max-w-6xl mx-auto px-6 md:px-16 py-3 flex items-center gap-6 md:gap-10 overflow-x-auto whitespace-nowrap">
         {items.map((item) => (
           <div key={item.label} className="flex items-center gap-2 font-mono text-[11px] tracking-wider">
-            <span className="text-white/30">{item.label}:</span>
+            <span className="text-[#636363]/70">{item.label}:</span>
             <span className="text-white/80 tabular-nums">
               {item.live
                 ? `${(item.live.base + tick * item.live.step).toLocaleString()}${item.live.suffix ?? ''}`
@@ -30,7 +30,7 @@ export function TelemetryHud({ items }: { items: TelemetryItem[] }) {
           </div>
         ))}
         <div className="flex items-center gap-2 font-mono text-[11px] tracking-wider ml-auto">
-          <span className="w-1.5 h-1.5 rounded-full bg-term-400 animate-pulse shadow-[0_0_12px_rgba(51,255,153,0.6)]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-term-400 animate-pulse shadow-[0_0_12px_rgba(123,137,111,0.6)]" />
           <span className="text-term-300">ONLINE</span>
         </div>
       </div>

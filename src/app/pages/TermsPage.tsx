@@ -369,7 +369,7 @@ export function TermsPage() {
         <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-term-400 mb-4">In this document</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {NAV_ITEMS.map(item => (
-            <span key={item.num} className="font-mono text-[13px] text-white/50 hover:text-white/80 transition-colors cursor-pointer">
+            <span key={item.num} className="font-mono text-[13px] text-[#636363] hover:text-white/80 transition-colors cursor-pointer">
               <span className="text-term-400">{item.num}</span> {item.heading}
             </span>
           ))}
@@ -385,10 +385,10 @@ export function TermsPage() {
 
       {/* Link to DPA */}
       <div className="mt-12 text-center space-y-2">
-        <Link to="/data-processing-addendum" className="block font-mono text-xs tracking-[0.2em] uppercase text-white/40 hover:text-term-300 transition-colors">
+        <Link to="/data-processing-addendum" className="block font-mono text-xs tracking-[0.2em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors">
           View the Data Processing Addendum →
         </Link>
-        <Link to="/privacy" className="block font-mono text-xs tracking-[0.2em] uppercase text-white/40 hover:text-term-300 transition-colors">
+        <Link to="/privacy" className="block font-mono text-xs tracking-[0.2em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors">
           View the Privacy Policy →
         </Link>
       </div>

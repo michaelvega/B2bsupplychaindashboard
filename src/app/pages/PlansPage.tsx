@@ -84,7 +84,7 @@ export function PlansPage() {
   const [demoOpen, setDemoOpen] = useState(false);
 
   return (
-    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-ink-950" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
+    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-[#0D0F0D]" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
       <CodeBackdrop />
       <CursorGfx />
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
@@ -92,14 +92,14 @@ export function PlansPage() {
       <MarketingNav onRequestAccess={() => setDemoOpen(true)} />
 
       {/* ═══════════════ SERVICES ═══════════════ */}
-      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+      <section className="relative bg-[#0D0F0D] py-24 md:py-32 px-6 md:px-16 border-t border-[#FFF8F3]/10 overflow-hidden">
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-5">Plans // Services</p>
-            <h1 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 max-w-3xl">
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#7B896F] mb-5">Plans // Services</p>
+            <h1 className="text-4xl md:text-6xl font-light text-[#FFF8F3] tracking-tight leading-[1.1] mb-6 max-w-3xl">
               Six services. One <Em>stack</Em>.
             </h1>
-            <p className="text-white/50 text-base md:text-lg leading-relaxed mb-20 max-w-2xl">
+            <p className="text-[#636363] text-base md:text-lg leading-relaxed mb-20 max-w-2xl">
               Everything you need to run frontier intelligence on your infrastructure: implemented, brokered, and
               maintained by Procept.
             </p>
@@ -117,8 +117,8 @@ export function PlansPage() {
                     draggable={false}
                   />
                   <div className="max-w-xs">
-                    <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400 mb-2">{service.num} // {service.title}</p>
-                    <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
+                    <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#7B896F] mb-2">{service.num} // {service.title}</p>
+                    <p className="text-sm text-[#636363] leading-relaxed">{service.desc}</p>
                   </div>
                 </div>
               </Reveal>
@@ -151,8 +151,8 @@ export function PlansPage() {
                       )}
                       style={{ top: `${ROCK_TOPS[i]}%` }}
                     >
-                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-term-400 mb-2">{service.num} // {service.title}</p>
-                      <p className="text-sm text-white/50 leading-relaxed">{service.desc}</p>
+                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#7B896F] mb-2">{service.num} // {service.title}</p>
+                      <p className="text-sm text-[#636363] leading-relaxed">{service.desc}</p>
                     </div>
                   </div>
                 );
@@ -161,7 +161,7 @@ export function PlansPage() {
           </div>
 
           <Reveal>
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 text-center mt-16">
+            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#636363] text-center mt-16">
               FLAT LINEAR RATE · SELF-HOSTED · FULLY MAINTAINED BY PROCEPT
             </p>
           </Reveal>
@@ -169,23 +169,23 @@ export function PlansPage() {
       </section>
 
       {/* ═══════════════ SERVICE DESCRIPTIONS ═══════════════ */}
-      <section className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06]">
+      <section className="relative bg-[#0D0F0D] py-24 md:py-32 px-6 md:px-16 border-t border-[#FFF8F3]/10">
         <div className="relative z-50 max-w-5xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-12">DOC // SERVICE DESCRIPTIONS</p>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#7B896F] mb-12">DOC // SERVICE DESCRIPTIONS</p>
 
             {/* One plan */}
-            <div className="border border-white/[0.08] bg-white/[0.03] p-8 hover:border-term-400/40 transition-colors">
-              <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-4">PLAN // Procept Pro</p>
+            <div className="border border-[#7B896F]/40 bg-white/[0.03] p-8 hover:border-[#7B896F]/60 transition-colors">
+              <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7B896F] mb-4">PLAN // Procept Pro</p>
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                 <div>
-                  <h3 className="text-xl font-medium text-white mb-2">Service Description: Procept Pro</h3>
-                  <p className="text-sm text-white/50 leading-relaxed max-w-xl">
+                  <h3 className="text-xl font-medium text-[#FFF8F3] mb-2">Service Description: Procept Pro</h3>
+                  <p className="text-sm text-[#636363] leading-relaxed max-w-xl">
                     One plan, one flat linear rate. The fully maintained, self-hosted AI stack: deployed in days,
                     owned forever, no per-token billing.
                   </p>
                 </div>
-                <span className="font-mono text-[11px] text-term-400 shrink-0 md:pt-1">Effective September 20, 2026</span>
+                <span className="font-mono text-[11px] text-[#7B896F] shrink-0 md:pt-1">Effective September 20, 2026</span>
               </div>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {[
@@ -196,8 +196,8 @@ export function PlansPage() {
                   'Custom data generation',
                   'Evaluations and metric tracking',
                 ].map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-white/50">
-                    <span className="w-1.5 h-1.5 bg-term-400/70 mt-2 shrink-0" />
+                  <li key={feature} className="flex items-start gap-3 text-sm text-[#636363]">
+                    <span className="w-1.5 h-1.5 bg-[#7B896F] mt-2 shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}

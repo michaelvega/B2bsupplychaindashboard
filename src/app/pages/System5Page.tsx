@@ -66,7 +66,7 @@ function Quadrant({
           ◈ Procept
         </span>
       )}
-      <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40">{players}</p>
+      <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80">{players}</p>
       <h4 className="mt-2 font-display text-base md:text-lg uppercase tracking-tight text-white leading-[1.15]">
         {name}
       </h4>
@@ -279,14 +279,14 @@ export function System5Page() {
             alt=""
             className="w-full h-full object-contain object-right-bottom opacity-40 grayscale contrast-125"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#050505_0%,transparent_55%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0D0F0D_0%,transparent_55%)]" />
         </div>
 
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-16 md:pt-20 pb-16 md:pb-24">
           <Reveal>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-white/40 hover:text-term-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Procept
@@ -301,14 +301,14 @@ export function System5Page() {
 
             <h1 className="mt-8 font-display font-semibold uppercase tracking-tight leading-[1.08] text-white text-3xl md:text-5xl xl:text-6xl max-w-4xl break-words">
               System 5{' '}
-              <span className="font-serif font-normal normal-case text-white/60">
+              <span className="font-serif font-normal normal-case text-[#636363]">
                 (the operating system for 24/7 Operational Harnesses)
               </span>
             </h1>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-white/40">
+            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80">
               <span>Procept</span>
-              <span className="text-white/20">/</span>
+              <span className="text-[#636363]/60">/</span>
               <span>2026</span>
             </div>
           </Reveal>
@@ -335,7 +335,7 @@ export function System5Page() {
                         </span>
                       </div>
                       <div className="col-span-12 md:col-span-7">
-                        <p className="text-sm text-white/45 leading-relaxed">{item.text}</p>
+                        <p className="text-sm text-[#636363]/80 leading-relaxed">{item.text}</p>
                       </div>
                     </div>
                   </Reveal>
@@ -345,7 +345,7 @@ export function System5Page() {
 
             <div className="col-span-12 md:col-span-6 md:border-l md:border-white/[0.06] md:pl-10">
               <Reveal>
-                <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/40 mb-6">Key terms</p>
+                <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#636363]/80 mb-6">Key terms</p>
               </Reveal>
               <div className="space-y-0">
                 {KEY_TERMS.map((term, i) => (
@@ -354,7 +354,7 @@ export function System5Page() {
                       <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-term-300">
                         {term.label}
                       </span>
-                      <p className="mt-2 text-sm text-white/50 leading-relaxed">{term.text}</p>
+                      <p className="mt-2 text-sm text-[#636363] leading-relaxed">{term.text}</p>
                     </div>
                   </Reveal>
                 ))}
@@ -417,10 +417,10 @@ export function System5Page() {
                   }`}
                 >
                   <div className="col-span-12 md:col-span-4">
-                    <span className="font-display text-2xl md:text-3xl text-white/45">{row.label}</span>
+                    <span className="font-display text-2xl md:text-3xl text-[#636363]/80">{row.label}</span>
                   </div>
                   <div className="col-span-12 md:col-span-8">
-                    <p className="font-display text-xl md:text-3xl leading-snug text-white/45">{row.value}</p>
+                    <p className="font-display text-xl md:text-3xl leading-snug text-[#636363]/80">{row.value}</p>
                   </div>
                 </div>
               </Reveal>
@@ -513,7 +513,7 @@ export function System5Page() {
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </div>
-                  <p className="col-span-12 md:col-span-10 text-white/60 leading-relaxed">{b}</p>
+                  <p className="col-span-12 md:col-span-10 text-[#636363] leading-relaxed">{b}</p>
                 </div>
               </Reveal>
             ))}
@@ -584,7 +584,7 @@ export function System5Page() {
 
             <Reveal>
               <div className="border-l-2 border-white/20 pl-6">
-                <p className="text-white/60 leading-relaxed">
+                <p className="text-[#636363] leading-relaxed">
                   Small language models solve the cost problem, but large language models are what actually deliver
                   quality. What if an engine achieved the intelligence of large models at the cost of small ones,
                   self-healing and self-learning from user interactions to automatically deliver better user trajectories
@@ -710,20 +710,20 @@ export function System5Page() {
 
             {/* Benchmark table */}
             <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/40 mb-6">
+              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#636363]/80 mb-6">
                 Benchmark // Procept CIG vs. Google RRSI, frozen Qwen 3 Bonsai-2 27B
               </p>
               <div className="overflow-x-auto border border-white/[0.08]">
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-white/[0.08]">
-                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                         Benchmark
                       </th>
-                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                         Baseline (No Opt)
                       </th>
-                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 px-5 py-4">
+                      <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 px-5 py-4">
                         Google RRSI
                       </th>
                       <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 px-5 py-4">
@@ -735,8 +735,8 @@ export function System5Page() {
                     {RESULTS.map((row) => (
                       <tr key={row.benchmark} className="border-b border-white/[0.06] last:border-b-0">
                         <td className="px-5 py-4 text-white/70">{row.benchmark}</td>
-                        <td className="px-5 py-4 font-mono text-white/40 tabular-nums">{row.baseline}</td>
-                        <td className="px-5 py-4 font-mono text-white/40 tabular-nums">{row.rssi}</td>
+                        <td className="px-5 py-4 font-mono text-[#636363]/80 tabular-nums">{row.baseline}</td>
+                        <td className="px-5 py-4 font-mono text-[#636363]/80 tabular-nums">{row.rssi}</td>
                         <td className="px-5 py-4 font-mono text-term-300 tabular-nums">{row.cig}</td>
                       </tr>
                     ))}
@@ -799,7 +799,7 @@ export function System5Page() {
                         {String(i + 1).padStart(2, '0')}
                       </span>
                     </div>
-                    <p className="col-span-12 md:col-span-10 text-white/60 leading-relaxed">{b}</p>
+                    <p className="col-span-12 md:col-span-10 text-[#636363] leading-relaxed">{b}</p>
                   </div>
                 ))}
               </div>
@@ -936,7 +936,7 @@ export function System5Page() {
               <p className="font-serif text-2xl md:text-3xl text-white leading-tight max-w-3xl">
                 {MOAT_QUOTE}
               </p>
-              <p className="mt-5 font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">
+              <p className="mt-5 font-mono text-[10px] tracking-[0.25em] uppercase text-[#636363]/80">
                 Jim Balsillie
               </p>
             </div>
@@ -951,7 +951,7 @@ export function System5Page() {
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </div>
-                  <p className="col-span-12 md:col-span-10 text-white/60 leading-relaxed">{m}</p>
+                  <p className="col-span-12 md:col-span-10 text-[#636363] leading-relaxed">{m}</p>
                 </div>
               </Reveal>
             ))}
@@ -1162,7 +1162,7 @@ export function System5Page() {
               Turn your user actions into <span className="font-serif font-normal normal-case">company IP</span>
               <span className="text-term-400">.</span>
             </h2>
-            <p className="mt-7 text-white/60 max-w-2xl leading-relaxed">
+            <p className="mt-7 text-[#636363] max-w-2xl leading-relaxed">
               Your agents stop being lego pieces. They become a foundry, learning from every conversation and
               compounding into IP your competitors can’t copy.
             </p>

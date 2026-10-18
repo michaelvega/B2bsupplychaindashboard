@@ -45,8 +45,8 @@ export function ChatbotHero({ className }: { className?: string }) {
     <div className={`max-w-2xl mx-auto text-left ${className ?? ''}`}>
       <div className="bg-ink-800 border border-white/[0.08] rounded-sm overflow-hidden shadow-2xl shadow-black/50">
         <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-term-400 animate-pulse shadow-[0_0_12px_rgba(51,255,153,0.6)]" />
-          <span className="font-mono text-[11px] tracking-[0.2em] text-white/60 font-medium">AEGIS</span>
+          <span className="w-2 h-2 rounded-full bg-term-400 animate-pulse shadow-[0_0_12px_rgba(123,137,111,0.6)]" />
+          <span className="font-mono text-[11px] tracking-[0.2em] text-[#636363] font-medium">AEGIS</span>
           <span className="font-mono text-[10px] text-white/25">· OPERATIONAL ASSISTANT</span>
           <span className="ml-auto font-mono text-[10px] text-term-400">online</span>
         </div>
@@ -54,7 +54,7 @@ export function ChatbotHero({ className }: { className?: string }) {
         <div className="max-h-96 overflow-y-auto p-6 space-y-4">
           {messages.map((m, i) => (
             <div key={i} className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
-              <div className={`max-w-[85%] rounded-sm px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${m.role === 'user' ? 'bg-term-400 text-ink-950' : 'bg-white/[0.06] text-white/80'}`}>
+              <div className={`max-w-[85%] rounded-sm px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${m.role === 'user' ? 'bg-white text-ink-950' : 'bg-white/[0.06] text-white/80'}`}>
                 {m.content}
               </div>
             </div>
@@ -78,7 +78,7 @@ export function ChatbotHero({ className }: { className?: string }) {
             placeholder="Ask Aegis about your business…"
             className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-term-400/50 transition-colors"
           />
-          <button type="submit" disabled={!input.trim() || thinking} className="px-5 py-2.5 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium rounded-sm hover:bg-term-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+          <button type="submit" disabled={!input.trim() || thinking} className="px-5 py-2.5 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium rounded-sm hover:text-term-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
             Send
           </button>
         </form>

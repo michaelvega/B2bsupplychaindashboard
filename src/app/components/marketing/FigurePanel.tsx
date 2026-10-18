@@ -41,7 +41,7 @@ export function FigurePanel({
       {header && (
         <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-2.5">
           <span className="font-mono text-[10px] tracking-[0.2em] text-term-400">FIG.{fig}</span>
-          <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">{caption}</span>
+          <span className="font-mono text-[10px] tracking-[0.2em] text-[#636363]/70">{caption}</span>
         </div>
       )}
       {image && (

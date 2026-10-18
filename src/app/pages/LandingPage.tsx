@@ -11,6 +11,7 @@ import { CursorGfx } from '../components/marketing/CursorGfx';
 import { CodeBackdrop } from '../components/marketing/CodeBackdrop';
 import { Stat } from '../components/marketing/Stat';
 import { Reveal } from '../components/marketing/Reveal';
+import { System5Tab } from '../components/marketing/System5Tab';
 import { cn } from '../components/ui/utils';
 
 const HERO_VIDEO = '/cityscape-rotated.mp4';
@@ -91,8 +92,8 @@ const STACK_STAGES: StackStage[] = [
 ];
 
 /** Serif-italic accent word inside display headlines. */
-function Em({ children }: { children: ReactNode }) {
-  return <em className="font-serif italic font-normal">{children}</em>;
+function Em({ children, className }: { children: ReactNode; className?: string }) {
+  return <em className={cn('font-serif italic font-normal', className)}>{children}</em>;
 }
 
 /**
@@ -107,7 +108,7 @@ function SolutionSlide() {
           <span className="w-1 h-1 bg-term-400" />
           THE SOLUTION
         </span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-[#636363]/70">MULTI-AGENT ECONOMICS</span>
       </div>
 
       <div className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -130,39 +131,57 @@ function SolutionSlide() {
   );
 }
 
-/** Swiss-style stat cell: hairline rules, oversized light numeral, mono index. */
-function SwissStatCell({ n, value, label }: { n: string; value: string; label: string }) {
+/** A fact inside the problem statement: green, bold, slightly oversized. */
+function Fact({ children }: { children: ReactNode }) {
   return (
-    <div className="relative group h-full border-b border-r border-white/10 bg-ink-950/40 p-5 md:p-6 transition-colors hover:bg-ink-950/70">
-      {/* Green rule across the top */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-term-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-      <div className="flex items-center justify-between mb-5">
-        <span className="font-mono text-[10px] tracking-[0.25em] text-white/30">{n}</span>
-        <span className="w-1.5 h-1.5 bg-term-400/70" />
-      </div>
-      <div className="text-4xl xl:text-5xl font-light text-white tracking-tight tabular-nums leading-none mb-4">
-        {value}
-      </div>
-      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40 leading-relaxed">{label}</p>
-    </div>
+    <span className="font-display font-bold text-term-300 tabular-nums text-[1.15em] leading-none">
+      {children}
+    </span>
+  );
+}
+
+/** The three reasons why enterprise multi-agent AI fails. */
+const WHY_POINTS = [
+  {
+    num: '01',
+    title: 'Costs explode',
+    body: 'Multi-agent systems explode costs to **150x** single agent costs due to per token APIs, exceeding **96%** of enterprises\' budgets.',
+  },
+  {
+    num: '02',
+    title: 'Infrastructure never ends',
+    body: 'Building this infrastructure requires **months** of rigid pipeline chaining, offers **zero** failure visibility, and forces engineers to constantly fix connections, defeating the point of automation.',
+  },
+  {
+    num: '03',
+    title: 'Security is impossible',
+    body: 'Security is impossible because companies lack the ability to rent hardware, host and train models within their servers and surrender their data to **untrustworthy** remote systems and AI models.',
+  },
+];
+
+/** Renders **bold** spans inside a why-point body as green emphasis. */
+function WhyBody({ text }: { text: string }) {
+  const parts = text.split('**');
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <strong key={i} className="font-semibold text-term-300">
+            {part}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
   );
 }
 
 /**
- * Top-of-page problem slide: enterprise AI infrastructure is broken,
- * set as a swiss stat table (hairline rules, oversized numerals).
- * Static and problem-only, no solution phase.
+ * Top-of-page problem slide: enterprise AI infrastructure is broken.
+ * One directed sentence, with the facts made to stand out.
  */
 function ProblemSlideTop() {
-  const problemStats = [
-    { n: '01', value: '15-150x', label: 'the cost. More expensive to run while consistently underperforming.' },
-    { n: '02', value: '4-220x', label: 'the tokens consumed compared to single-agent systems.' },
-    { n: '03', value: '67%', label: 'of the total cost of ownership is operating it. Less than a third is the initial build.' },
-    { n: '04', value: '46%', label: 'of enterprises cite "system integration" (building the plumbing) as their #1 barrier to adoption.' },
-    { n: '05', value: '42%', label: 'point to data access and data quality.' },
-    { n: '06', value: '40%', label: 'identify security and compliance concerns.' },
-  ];
-
   return (
     <div className="relative border border-white/[0.08] bg-ink-950/80">
       <CornerBrackets />
@@ -173,24 +192,24 @@ function ProblemSlideTop() {
           <span className="w-1 h-1 bg-term-400" />
           THE PROBLEM
         </span>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-white/30">MULTI-AGENT ECONOMICS</span>
+        <span className="font-mono text-[10px] tracking-[0.2em] text-[#636363]/70">MULTI-AGENT ECONOMICS</span>
       </div>
 
-      {/* Headline left, swiss stat table right */}
+      {/* Headline left, the sentence right */}
       <div className="relative p-8 md:p-12 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-center">
         <p className="text-2xl md:text-4xl font-light text-white tracking-tight leading-tight">
           Enterprise AI infrastructure is <Em>broken</Em>, talent is scarce, and security risks halt deployments.
         </p>
 
         <div>
-          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mb-4">
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 mb-6">
             Enterprise AI, currently
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-l border-white/10">
-            {problemStats.map((s) => (
-              <SwissStatCell key={s.n} {...s} />
-            ))}
-          </div>
+          <p className="text-xl md:text-2xl font-light text-white/75 leading-relaxed">
+            Today, enterprises that fail to deploy multi-agent AI actively forfeit a <Fact>40%</Fact> cost reduction
+            and <Fact>75%</Fact> faster executions. Yet, only <Fact>18%</Fact> of enterprises have tried, and out of
+            those <Fact>87%</Fact> fail.
+          </p>
         </div>
       </div>
     </div>
@@ -237,16 +256,17 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-grid-pattern-dark opacity-60" />
 
         <div className="relative z-50 flex-1 flex flex-col justify-center px-6 md:px-16 py-16">
+          <System5Tab anchored />
           <CornerBrackets />
           <div className="max-w-6xl mx-auto w-full">
             <div>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/50 mb-8">Procept Technologies Corp.</p>
+              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#636363] mb-8">Procept Technologies Corp.</p>
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.05] mb-8 max-w-4xl">
                 Driving the world's transition to <Em>AGI</Em><span className="text-term-400">.</span>
               </h1>
 
-              <p className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
+              <p id="s5-anchor" className="text-[#636363] text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
                 We make frontier intelligence effortless to deploy and transform breakthrough research into industry
                 value.
               </p>
@@ -254,7 +274,7 @@ export function LandingPage() {
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => setDemoOpen(true)}
-                  className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
+                  className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:text-term-400 transition-all"
                 >
                   Request Access
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -271,7 +291,7 @@ export function LandingPage() {
               {/* Backed by */}
               <div className="relative inline-flex items-center px-8 py-3 border border-white/15 mt-10 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
-                <span className="relative font-mono text-xs md:text-sm tracking-[0.25em] uppercase text-white/60">
+                <span className="relative font-mono text-xs md:text-sm tracking-[0.25em] uppercase text-[#636363]">
                   Backed by Georgia Tech <span className="text-white/25">|</span> NVIDIA
                 </span>
               </div>
@@ -288,6 +308,44 @@ export function LandingPage() {
           <Reveal>
             <ProblemSlideTop />
           </Reveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ WHY ═══════════════ */}
+      <section id="why" className="relative bg-ink-950 py-24 md:py-32 px-6 md:px-16 border-t border-white/[0.06] overflow-hidden">
+        {/* Mosaic image behind the section, dark and faint */}
+        <div className="absolute inset-0 z-[45] pointer-events-none">
+          <img
+            src="/designinspo/mosaicimage.jpg"
+            alt=""
+            className="w-full h-full object-cover opacity-[0.12] grayscale"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0D0F0D_0%,rgba(13,15,13,0.7)_60%,rgba(13,15,13,0.35)_100%)]" />
+        </div>
+        <div className="relative z-50 max-w-6xl mx-auto">
+          <Reveal>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-6">Why // The problem</p>
+            <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.05] mb-16">
+              Why<span className="text-term-400">?</span>
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {WHY_POINTS.map((point, i) => (
+              <Reveal key={point.num} delay={i * 80}>
+                <div className="h-full border border-white/[0.08] bg-ink-950/70 p-6 md:p-8 hover:border-term-400/40 transition-colors">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="font-mono text-[11px] tracking-[0.25em] text-term-400">{point.num}</span>
+                    <span className="w-1.5 h-1.5 bg-term-400/70" />
+                  </div>
+                  <h3 className="text-lg font-medium text-white tracking-tight mb-3">{point.title}</h3>
+                  <p className="text-sm leading-relaxed text-[#636363]">
+                    <WhyBody text={point.body} />
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -312,10 +370,10 @@ export function LandingPage() {
                     <span className="font-mono text-2xl font-medium text-term-400 tabular-nums">{stage.num}</span>
                     <h3 className="text-xl font-light text-white tracking-tight">{stage.title}</h3>
                   </div>
-                  <p className="text-sm text-white/50 leading-relaxed mb-5">{stage.desc}</p>
+                  <p className="text-sm text-[#636363] leading-relaxed mb-5">{stage.desc}</p>
                   <ul className="space-y-2 mb-7">
                     {stage.bullets.map((bullet, j) => (
-                      <li key={j} className="font-mono text-[12px] text-white/50 leading-relaxed">
+                      <li key={j} className="font-mono text-[12px] text-[#636363] leading-relaxed">
                         <span className="text-term-500 mr-2">{stage.num.replace(/^0/, '')}.{j + 1}</span>
                         {bullet}
                       </li>
@@ -344,7 +402,7 @@ export function LandingPage() {
             alt=""
             className="w-full h-full object-cover object-center opacity-70 grayscale contrast-110"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0A0A0A_75%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0D0F0D_75%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
@@ -358,7 +416,7 @@ export function LandingPage() {
         {/* Wires image behind the section content, above the code layer; pushed left, fading out on the right */}
         <div className="absolute inset-0 z-[45] pointer-events-none flex items-center justify-start">
           <img src="/inspo/wires.png" alt="" className="max-h-full max-w-full object-contain grayscale opacity-70" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#050505_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,transparent_55%,#0D0F0D_100%)]" />
         </div>
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-28 pb-48 md:pt-36 md:pb-60">
           <div className="relative lg:min-h-[240px] space-y-10 lg:space-y-0">
@@ -368,7 +426,7 @@ export function LandingPage() {
               />
             </Reveal>
             <Reveal delay={150} className="lg:absolute lg:bottom-0 lg:right-0 lg:w-[56%]">
-              <p className="text-base md:text-lg text-white/60 leading-relaxed">
+              <p className="text-base md:text-lg text-[#636363] leading-relaxed">
                 The model trains on your workflows, not a generic benchmark. And it doesn't stop at deployment. It
                 keeps improving inside your stack, owned by you.
               </p>
@@ -397,7 +455,7 @@ export function LandingPage() {
             <h2 className="text-4xl md:text-6xl font-light text-white tracking-tight leading-[1.1] mb-6 max-w-2xl">
               Provision your <Em>journey</Em><span className="text-term-400">.</span>
             </h2>
-            <p className="text-sm text-white/30">
+            <p className="text-sm text-[#636363]/70">
               Flat linear rate. Self-hosted. Fully maintained by Procept.
             </p>
           </Reveal>

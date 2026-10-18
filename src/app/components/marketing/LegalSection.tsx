@@ -28,7 +28,7 @@ export function LegalSection({
       {paras && (
         <div className="space-y-4 mb-5">
           {paras.map((para, j) => (
-            <p key={j} className="text-sm text-white/50 leading-relaxed">{para}</p>
+            <p key={j} className="text-sm text-[#636363] leading-relaxed">{para}</p>
           ))}
         </div>
       )}
@@ -36,7 +36,7 @@ export function LegalSection({
       {list && (
         <ul className="space-y-2.5 mb-5">
           {list.map((item, j) => (
-            <li key={j} className="flex items-start gap-3 text-sm text-white/50 leading-relaxed">
+            <li key={j} className="flex items-start gap-3 text-sm text-[#636363] leading-relaxed">
               <span className="w-1.5 h-1.5 bg-term-400/70 mt-2 shrink-0" />
               <span>{item}</span>
             </li>
@@ -53,13 +53,13 @@ export function LegalSection({
               )}
               <div className="space-y-3">
                 {block.paras.map((para, k) => (
-                  <p key={k} className="text-sm text-white/50 leading-relaxed">{para}</p>
+                  <p key={k} className="text-sm text-[#636363] leading-relaxed">{para}</p>
                 ))}
               </div>
               {block.list && (
                 <ul className="space-y-2.5 mt-4">
                   {block.list.map((item, k) => (
-                    <li key={k} className="flex items-start gap-3 text-sm text-white/50 leading-relaxed">
+                    <li key={k} className="flex items-start gap-3 text-sm text-[#636363] leading-relaxed">
                       <span className="w-1.5 h-1.5 bg-term-400/70 mt-2 shrink-0" />
                       <span>{item}</span>
                     </li>
