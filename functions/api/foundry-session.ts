@@ -31,15 +31,20 @@ export async function onRequest(context: any) {
   }
 
   if (env.FOUNDRY_DB) {
-    const now = new Date().toISOString();
-    await env.FOUNDRY_DB
-      .prepare(
-        `INSERT INTO foundry_signups (email, name, first_seen, last_seen, visits)
-         VALUES (?1, ?2, ?3, ?3, 1)
-         ON CONFLICT(email) DO UPDATE SET name = ?2, last_seen = ?3, visits = visits + 1`,
-      )
-      .bind(user.email, user.name.slice(0, 120), now)
-      .run();
+    // Never block sign-in on a storage hiccup; log it so the email is recoverable from the logs.
+    try {
+      const now = new Date().toISOString();
+      await env.FOUNDRY_DB
+        .prepare(
+          `INSERT INTO foundry_signups (email, name, first_seen, last_seen, visits)
+           VALUES (?1, ?2, ?3, ?3, 1)
+           ON CONFLICT(email) DO UPDATE SET name = ?2, last_seen = ?3, visits = visits + 1`,
+        )
+        .bind(user.email, user.name.slice(0, 120), now)
+        .run();
+    } catch (err: any) {
+      console.error('foundry signup write failed', user.email, err?.message);
+    }
   }
 
   const session = await signSession(user.email, env.SESSION_SECRET);
