@@ -150,7 +150,7 @@ export function CigPostPage() {
                 Cognition Induction Graphs: Escaping Compression via Unsupervised Prompt Optimization in Multi-Agent
                 Topologies
               </h1>
-              <p className="mt-6 font-academic text-lg md:text-xl text-white/85">Procept Research</p>
+              <p className="mt-6 font-academic text-lg md:text-xl text-white/85">Michael Vega, Sam Carozzi</p>
               <p className="mt-2 font-academic text-sm text-white/45">October 10, 2026</p>
               <div className="mt-10 flex items-center gap-4 justify-center">
                 <span className="h-px w-16 bg-white/15" />
@@ -175,16 +175,6 @@ export function CigPostPage() {
                 relative gain on OpenAI Frontier Science, and a score of 95.0 on the ARC-AGI 3 public tests.
               </p>
             </div>
-          </Reveal>
-
-          {/* Figure 1 banner */}
-          <Reveal>
-            <Figure
-              n={1}
-              src="/blog/banner.jpg"
-              fit="object-cover"
-              caption="The Procept console, the interface through which Cognition Induction Graphs are observed and optimized."
-            />
           </Reveal>
 
           {/* 1 Introduction */}
@@ -279,17 +269,17 @@ export function CigPostPage() {
               <p className={BODY}>
                 Similarly, a Cognition Induction Graph compiles agentic operations, including prompts, tool
                 invocations, protocol routing, and user validations. By aggregating these components into a unified
-                topological structure, the system derives semantic gradients across the entire workflow (Figure 2).
+                topological structure, the system derives semantic gradients across the entire workflow (Figure 1).
               </p>
             </div>
             <Figure
-              n={2}
+              n={1}
               src="/blog/toyCIG.jpg"
               fit="object-cover"
               caption="A toy CIG: agentic operations aggregated into one topological structure."
             />
             <Figure
-              n={3}
+              n={2}
               src="/blog/unrolledDAG.jpg"
               fit="object-contain"
               caption="An agent workflow unrolled into a directed acyclic graph. Each prompt, tool call, and branch becomes a node in a single graph, so the whole run is observable end to end and its dependencies are explicit."

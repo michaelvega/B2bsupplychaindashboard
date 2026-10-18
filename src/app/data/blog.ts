@@ -45,7 +45,7 @@ export const POSTS: BlogPost[] = [
     title: 'Cognition Induction Graphs',
     accent: 'escaping compression via unsupervised prompt optimization in multi-agent topologies',
     date: 'OCT 10 2026',
-    author: 'PROCEPT',
+    author: 'MICHAEL VEGA + SAM CAROZZI',
     readTime: '12 MIN',
     tags: ['COGNITION INDUCTION', 'MULTI-AGENT', 'CONTINUAL LEARNING'],
     excerpt:
