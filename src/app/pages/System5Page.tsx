@@ -10,39 +10,6 @@ import { Reveal } from '../components/marketing/Reveal';
 import { SectionHeading } from '../components/marketing/SectionHeading';
 import { FigurePanel } from '../components/marketing/FigurePanel';
 
-/** Display equation: serif-math with subscripts, in a HUD bracket. */
-function Eq({ children, label }: { children: ReactNode; label?: string }) {
-  return (
-    <div className="my-8 border border-white/[0.08] bg-ink-900/70 px-6 py-6 overflow-x-auto">
-      <div className="font-serif text-lg md:text-xl text-white/90 leading-relaxed whitespace-nowrap tabular-nums">
-        {children}
-      </div>
-      {label && (
-        <p className="mt-3 font-mono text-[10px] tracking-[0.2em] uppercase text-white/35">{label}</p>
-      )}
-    </div>
-  );
-}
-
-/** One of the five pillars: number, name, and explanation. */
-function Pillar({ index, name, body }: { index: number; name: string; body: string }) {
-  return (
-    <div className="grid grid-cols-12 gap-x-6 gap-y-4 border-t border-white/[0.08] py-8 md:py-10">
-      <div className="col-span-12 md:col-span-2">
-        <span className="font-mono text-sm text-term-400 tabular-nums">
-          {String(index).padStart(2, '0')}
-        </span>
-      </div>
-      <div className="col-span-12 md:col-span-10">
-        <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white leading-[1.2]">
-          {name}
-        </h3>
-        <p className="mt-3 text-white/55 leading-relaxed">{body}</p>
-      </div>
-    </div>
-  );
-}
-
 /** A single quadrant of the blue-ocean map. */
 function Quadrant({
   name,
@@ -84,7 +51,7 @@ const TOC = [
   { label: '05 Enterprise walkthrough (Mathematics Corp)', text: 'A live deployment of the CIG and its 27% reduction in shipped bugs.' },
   { label: '06 The future: competitive landscape', text: 'How Procept Foundry sits against Claude Code, LangChain, n8n, Dots, and GrokBot.' },
   { label: '07 Our moat', text: 'Why the graph, the telemetry, and the self-improving loop are expensive to copy.' },
-  { label: 'Technical Appendix', text: 'The RSI mechanics, the benchmark tables, and the equations behind every claim.' },
+  { label: '08 Results', text: 'The headline numbers: ARC-AGI 3, the rubric benchmarks, and the shipped-bug reduction.' },
 ];
 
 const KEY_TERMS = [
@@ -209,29 +176,6 @@ const HEADLINE_STATS = [
   { value: '80%', label: 'relative gain on OpenAI Frontier Science (0.21 → 0.38), versus a 5-point supervised baseline.' },
 ];
 
-const PILLARS = [
-  {
-    name: 'End-to-End Trace Logging',
-    body: 'Every operational step, API call, and telemetry metric is recorded per execution, producing a fully observable directed acyclic graph. Nothing the agent does is invisible, and nothing is lost to the chat-scroll.',
-  },
-  {
-    name: 'Full Context Optimization',
-    body: 'Traces carry the holistic contextual state the RSI engine needs to experiment safely at runtime, so a node-level optimization respects every downstream dependency in the graph before it is allowed to touch production.',
-  },
-  {
-    name: 'Curated Preference Generation',
-    body: 'By evaluating which runtime experiments succeed, the graph continuously emits curated preference data, the fuel for the inductive taxonomy that gets refined on a schedule, without a human in the loop.',
-  },
-  {
-    name: 'Feedback-Driven Evaluations',
-    body: 'Holistic trace context unlocks evaluation feedback loops with immediate impact, bypassing the manual intervention pipelines that normally sit between “something went wrong” and “something got fixed.”',
-  },
-  {
-    name: 'Execution Workflow Optimization',
-    body: 'Analyzing the most heavily trafficked and efficient sub-graphs surfaces structural edits, for example swapping a probabilistic LLM formatting call for a deterministic, low-compute microservice.',
-  },
-];
-
 const RESULTS = [
   { benchmark: 'Scale Research Rubric', baseline: '0.41', rssi: '0.47', cig: '0.53' },
   { benchmark: 'OpenAI Frontier Science', baseline: '0.21', rssi: '0.26', cig: '0.38' },
@@ -311,6 +255,14 @@ export function System5Page() {
               <span className="text-[#636363]/60">/</span>
               <span>2026</span>
             </div>
+
+            <a
+              href="/system5/system5-scroll.html"
+              className="mt-8 inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-colors"
+            >
+              Watch the System 5 demo
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
           </Reveal>
         </div>
       </section>
@@ -924,7 +876,7 @@ export function System5Page() {
               label="Our moat"
               title={
                 <>
-                  The category <span className="font-serif ">belongs to us</span>
+                  Our new product category <span className="font-serif ">we are excited to introduce</span>
                 </>
               }
               sub="Not cheaper. Not one more KPI. A different unit of sale."
@@ -959,187 +911,27 @@ export function System5Page() {
         </div>
       </section>
 
-      {/* ═══════════════ TECHNICAL APPENDIX ═══════════════ */}
+      {/* ═══════════════ RESULTS ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
               compact
-              label="Technical Appendix"
+              label="Results"
               title={
                 <>
-                  The mechanics, <span className="font-serif ">for the curious</span>
+                  The numbers <span className="font-serif ">that matter</span>
                 </>
               }
-              sub="Four short notes: the math, the graph, the architecture, and the numbers."
             />
           </Reveal>
 
-          {/* Appendix 01: RSI vs LoRA */}
-          <div className="mt-14 max-w-3xl">
-            <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">
-                01 / Recursive Self-Improvement vs LoRA: the math
-              </p>
-            </Reveal>
-
-            <Reveal>
-              <p className="text-white/55 leading-relaxed">
-                LoRA is compression, not learning: it bakes the right answer into the weights, so the moment the
-                environment shifts, the memory is worthless. Recursive Self-Improvement solves for the rubric itself,
-                it experiments until the objective is met, mapping the problem and solution spaces at once. That is
-                inductive generalization, and it is inherently unsupervised.
-              </p>
-            </Reveal>
-
-            <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                The supervised gradient approximation
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                Google’s RRSI optimizes prompts through a central harness equation that approximates gradients:
-              </p>
-              <Eq label="Google RRSI: supervised gradient approximation">
-                {'ΔH'}
-                <sub>RRSI</sub> = {'{ ∇'}
-                <sub>
-                  {'θ'}
-                  <sub>sem</sub>
-                </sub>
-                {' 𝒮, ∇'}
-                <sub>
-                  {'θ'}
-                  <sub>style</sub>
-                </sub>
-                {' ℱ, ℰ'}
-                <sub>orig</sub>
-                {' }'}
-              </Eq>
-              <p className="text-white/55 leading-relaxed">
-                Here <span className="font-serif text-white/80">𝒮</span> is the gradient of the system-prompt
-                space for semantic alignment, <span className="font-serif text-white/80">ℱ</span> is the
-                formatting space, and <span className="font-serif text-white/80">ℰ</span>
-                <sub>orig</sub> is the static set of original examples. The whole thing is constrained by its reliance on
-                isolated, static examples and supervised targets.
-              </p>
-            </Reveal>
-
-            <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                The taxonomic inductive update
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                Recursive Self-Improvement replaces those static examples with the live telemetry of the Cognitive
-                Induction Graph. Let <span className="font-serif text-white/80">𝒯</span>
-                <sub>t</sub> be the inductive taxonomy of rules at time{' '}
-                <span className="font-serif text-white/80">t</span>. The CIG optimizes via:
-              </p>
-              <Eq label="Procept CIG: Taxonomic Inductive Update (TIU)">
-                {'𝒯'}
-                <sub>t+1</sub> = {'𝒯'}
-                <sub>t</sub> {' ⊕ 𝕀'}
-                <sub>unsup</sub>
-                {' ( ∇'}
-                <sub>G</sub>
-                {' 𝒞, 𝒩'}
-                <sub>expedition</sub>
-                {' )'}
-              </Eq>
-              <div className="space-y-3 text-white/55 leading-relaxed">
-                <p>
-                  <span className="font-serif text-white/80">∇</span>
-                  <sub>G</sub>
-                  <span className="font-serif text-white/80">𝒞</span> is the topological gradient of the dominant
-                  execution workflows, derived by aggregating full-context traces to find which paths yield the highest
-                  downstream success across the network.
-                </p>
-                <p>
-                  <span className="font-serif text-white/80">𝒩</span>
-                  <sub>expedition</sub> is the expeditionary random signal for active runtime experimentation. Supported
-                  by full graph context, it explores the problem space safely.
-                </p>
-                <p>
-                  <span className="font-serif text-white/80">𝕀</span>
-                  <sub>unsup</sub> is the unsupervised inductive abstraction operator that distills experimental graph
-                  successes into generalized semantic rules.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Appendix 02: Cognitive Induction Graphs */}
-          <div className="mt-16 max-w-3xl">
-            <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">
-                02 / Cognitive Induction Graphs
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-white/55 leading-relaxed">
-                A Cognitive Induction Graph compiles agentic operations, prompts, tool invocations, protocol routing,
-                and user validations, into a unified topological structure, then derives semantic gradients across the
-                entire workflow. That lets us optimize over the whole corpus of data operations, tool calls, and agent
-                workflows, and solve for the user’s goals directly.
-              </p>
-            </Reveal>
-          </div>
-
-          {/* Appendix 03: Five pillars */}
-          <div className="mt-16">
-            <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-2">
-                03 / Architecture: the five pillars of a CIG
-              </p>
-              <p className="text-base text-white/55 leading-relaxed max-w-2xl mb-2">
-                To run the kind of experimentation continual learning demands, a system has to analyze the entire
-                execution topology. The CIG does it through five mechanisms.
-              </p>
-            </Reveal>
-            <div className="mt-4">
-              {PILLARS.map((pillar, i) => (
-                <Reveal key={pillar.name} delay={i * 50}>
-                  <Pillar index={i + 1} name={pillar.name} body={pillar.body} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-
-          {/* Appendix 04: Data */}
-          <div className="mt-16">
-            <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">
-                04 / Data: the numbers that matter
-              </p>
-            </Reveal>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
-              {HEADLINE_STATS.map((stat, i) => (
-                <Reveal key={stat.value} delay={i * 60}>
-                  <Stat value={stat.value} label={stat.label} />
-                </Reveal>
-              ))}
-            </div>
-
-            <div className="max-w-2xl space-y-7">
-              <Reveal>
-                <p className="text-base text-white/55 leading-relaxed">
-                  On the Scale Research Rubric, Google RRSI gained a modest 6 points. Recursive Self-Improvement,
-                  enabled by the CIG’s full-context tracing, gained 12 (0.41 → 0.53). The gap is sharper on OpenAI
-                  Frontier Science, where the CIG delivered an 80% relative improvement (0.21 → 0.38), far outpacing the
-                  supervised baseline’s 5-point gain.
-                </p>
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {HEADLINE_STATS.map((stat, i) => (
+              <Reveal key={stat.value} delay={i * 60}>
+                <Stat value={stat.value} label={stat.label} />
               </Reveal>
-              <Reveal>
-                <p className="text-base text-white/55 leading-relaxed">
-                  The most significant validation came on ARC-AGI 3, which measures fluid intelligence and adaptability,
-                  exactly where compressed, parameter-updated models classically fail. Running the frozen Qwen 3 27B
-                  through Procept Foundry returned a score of 95.0. The model dynamically experimented during runtime,
-                  treating problem constraints and solution spaces iteratively. Heavily quantized, frozen,
-                  small-parameter models can reach frontier-level reasoning, when governed by a topological
-                  infrastructure built for continuous generalization.
-                </p>
-              </Reveal>
-            </div>
+            ))}
           </div>
         </div>
       </section>
