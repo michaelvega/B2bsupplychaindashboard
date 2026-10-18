@@ -11,11 +11,11 @@ import { SectionHeading } from '../components/marketing/SectionHeading';
 import { FigurePanel } from '../components/marketing/FigurePanel';
 import { POSTS } from '../data/blog';
 
-/** Display equation: serif-italic math with subscripts, in a HUD bracket. */
+/** Display equation: serif-math with subscripts, in a HUD bracket. */
 function Eq({ children, label }: { children: ReactNode; label?: string }) {
   return (
     <div className="my-8 border border-white/[0.08] bg-ink-900/70 px-6 py-6 overflow-x-auto">
-      <div className="font-serif italic text-lg md:text-xl text-white/90 leading-relaxed whitespace-nowrap tabular-nums">
+      <div className="font-serif text-lg md:text-xl text-white/90 leading-relaxed whitespace-nowrap tabular-nums">
         {children}
       </div>
       {label && (
@@ -46,46 +46,45 @@ function Pillar({ index, name, body }: { index: number; name: string; body: stri
 
 const TLDR = [
   {
-    label: 'The problem',
-    body: 'Multi-agent harnesses do not learn from their mistakes: costs compound exponentially, failures detonate in front of your users, and open-source alternatives are too slow, too dumb, and too painful to self-host to be worth it.',
+    label: 'Abstract',
+    body: 'Supervised fine-tuning such as LoRA is lossy compression of known solutions into a constrained latent space. We propose unsupervised inductive generalization instead, via the Cognition Induction Graph (CIG): a graph that traces end-to-end multi-agent topologies and feeds an Unsupervised Automatic Prompt Optimization (APO) engine.',
   },
   {
-    label: 'The architectural novelty',
-    body: 'A Cognitive Induction Graph compiles every prompt, tool call, protocol route, and agent workflow into a single optimizable compute graph, so we optimize the whole workflow instead of isolated examples.',
+    label: 'Mechanism',
+    body: 'A Recursive Self-Improvement (RSI) loop experiments inside the problem space and distills the results into an inductive taxonomy of rules. The taxonomy acts on frozen weights through prompt-space feature projection, updated by the Taxonomic Inductive Update (TIU).',
   },
   {
-    label: 'The solution',
-    body: 'Procept Foundry builds that graph with Recursive Self-Improvement to score 95% on ARC-AGI 3 for a $35 budget (versus Opus 5’s 30.2% at $20,700), and one enterprise deployment cut shipped bugs by 27%.',
+    label: 'Evaluation',
+    body: 'On a frozen Qwen 3 Bonsai-2 27B: a 12-point gain on the Scale Research Rubric, an 80% relative gain on OpenAI Frontier Science, and a score of 95.0 on the ARC-AGI 3 public tests.',
   },
 ];
 
 const HEADLINE_STATS = [
-  { value: '95%', label: 'ARC-AGI 3 score, running a frozen Qwen 3 Bonsai-2 27B through Procept Foundry.' },
-  { value: '$35', label: 'total inference budget for that result, versus $20,700 for Opus 5’s 30.2%.' },
-  { value: '27%', label: 'reduction in shipped bugs in a live enterprise deployment of the CIG.' },
+  { value: '95.0', label: 'ARC-AGI 3 public tests score, frozen Qwen 3 Bonsai-2 27B under the CIG harness.' },
+  { value: '+12', label: 'points on the Scale Research Rubric (0.41 → 0.53), versus +6 for Google RRSI.' },
   { value: '80%', label: 'relative gain on OpenAI Frontier Science (0.21 → 0.38), versus a 5-point supervised baseline.' },
 ];
 
 const PILLARS = [
   {
     name: 'End-to-End Trace Logging',
-    body: 'Every operational step, API call, and telemetry metric is recorded per execution, producing a fully observable directed acyclic graph. Nothing the agent does is invisible, and nothing is lost to the chat-scroll.',
+    body: 'Every operational step, API call, and telemetry metric is recorded per execution, creating a fully observable directed acyclic graph.',
   },
   {
     name: 'Full Context Optimization',
-    body: 'Traces carry the holistic contextual state the RSI engine needs to experiment safely at runtime, so a node-level optimization respects every downstream dependency in the graph before it is allowed to touch production.',
+    body: 'Traces provide the holistic contextual state the RSI engine needs to experiment safely during runtime, ensuring that node-level optimizations respect downstream graph dependencies.',
   },
   {
     name: 'Curated Preference Generation',
-    body: 'By evaluating which runtime experiments succeed, the graph continuously emits curated preference data, the fuel for the inductive taxonomy that gets refined on a schedule, without a human in the loop.',
+    body: 'By evaluating which runtime experiments succeed, the graph continuously generates curated preference data, fueling the inductive taxonomy for scheduled refinements.',
   },
   {
     name: 'Feedback-Driven Evaluations',
-    body: 'Holistic trace context unlocks evaluation feedback loops with immediate impact, bypassing the manual intervention pipelines that normally sit between “something went wrong” and “something got fixed.”',
+    body: 'Holistic trace context unlocks evaluation feedback loops that yield immediate impact, bypassing traditional manual intervention pipelines.',
   },
   {
-    name: 'Execution Workflow Optimization',
-    body: 'Analyzing the most heavily trafficked and efficient sub-graphs surfaces structural edits, for example swapping a probabilistic LLM formatting call for a deterministic, low-compute microservice.',
+    name: 'Execution Trajectory Optimization',
+    body: 'By analyzing the most heavily trafficked and efficient sub-graphs, the CIG suggests structural architectural edits, including replacing probabilistic LLM formatting calls with deterministic, low-compute microservices.',
   },
 ];
 
@@ -94,6 +93,24 @@ const RESULTS = [
   { benchmark: 'OpenAI Frontier Science', baseline: '0.21', rssi: '0.26', cig: '0.38' },
   { benchmark: 'ARC-AGI 3 (Public Tests)', baseline: 'N/A', rssi: 'Fails in live environments', cig: '95.0' },
 ];
+
+/** Block-level formal statement (lemma / definition). */
+function Formal({ kind, name, children }: { kind: string; name: string; children: ReactNode }) {
+  return (
+    <div className="my-8 border-l-2 border-term-400/60 bg-white/[0.02] pl-6 pr-6 py-5">
+      <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-300">
+        {kind} // {name}
+      </p>
+      <p className="mt-3 font-serif text-lg text-white/85 leading-relaxed">{children}</p>
+    </div>
+  );
+}
+
+const H3 = 'font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white';
+const P = 'mt-4 text-white/55 leading-relaxed';
+const SUBLABEL = 'font-mono text-[11px] tracking-[0.3em] uppercase text-term-400';
+const ital = 'font-serif text-white/80';
+
 
 export function CigPostPage() {
   const [demoOpen, setDemoOpen] = useState(false);
@@ -148,9 +165,9 @@ export function CigPostPage() {
               </p>
             </div>
 
-            <h1 className="mt-8 font-display font-semibold uppercase tracking-tight leading-[1.08] text-white text-3xl md:text-5xl xl:text-6xl max-w-4xl">
+            <h1 className="mt-8 font-display font-semibold uppercase tracking-tight leading-[1.08] text-white text-3xl md:text-5xl xl:text-6xl max-w-4xl break-words">
               {post.title}{' '}
-              <em className="font-serif italic font-normal normal-case text-white/60">({post.accent})</em>
+              <span className="font-serif font-normal normal-case text-white/60">({post.accent})</span>
             </h1>
 
             <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-white/40">
@@ -203,7 +220,7 @@ export function CigPostPage() {
           <Reveal>
             <FigurePanel
               fig="00"
-              caption="Procept Foundry: the full console"
+              caption="Procept console"
               image="/blog/banner.jpg"
               imageClass="object-cover"
               header={false}
@@ -213,227 +230,147 @@ export function CigPostPage() {
         </div>
       </section>
 
-      {/* ═══════════════ PROBLEM ═══════════════ */}
-      <section className="relative border-t border-white/[0.06]">
-        <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
-          <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">Intro</p>
-          </Reveal>
-          <div className="max-w-2xl space-y-7">
-            <Reveal>
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed font-light">
-                Your multi-agent harness does not learn from its mistakes. It exponentiates costs, blows up in your
-                users’ faces, and can’t even remember your own customers’ names.
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                To top it off, the open-source alternatives are slow, dumb, and end up taking so much time to self-host
-                that they defeat their own purpose. For three years we lived this problem. We personally set up
-                self-hosted harnesses for Pinterest, Jefferies IB, and other Fortune 500 companies, and we learned
-                that the goal is never just “cheaper and smarter.”
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                What we actually want is to empower enterprises to turn agents from building blocks of connected tools
-                and models into a flexible system that lives in their servers, learns from every conversation, and
-                becomes company IP that grows in value over time.
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ PULL QUOTE ═══════════════ */}
-      <section className="relative border-t border-white/[0.06] overflow-hidden">
-        <div className="absolute inset-0 z-[45] pointer-events-none opacity-[0.05]" aria-hidden>
-          <img src="/inspo/particles1.png" alt="" className="w-full h-full object-cover grayscale" />
-        </div>
-        <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-20 md:py-26">
-          <Reveal>
-            <div className="border-l-2 border-term-400 pl-8 md:pl-12">
-              <p className="font-serif italic text-3xl md:text-5xl text-white leading-tight max-w-3xl">
-                Programmatic harness tools are legos: brittle, and agents can only see the adjacent agent, never the
-                big picture.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={80}>
-            <div className="mt-16 max-w-2xl space-y-7">
-              <p className="text-base text-white/55 leading-relaxed">
-                Agents can’t be lego pieces operating by themselves if they are really going to work together.
-                They need the coordination of living cells in a body, working together to keep the business alive,
-                learning from its environment, self-healing when necessary, and keeping the lights on
-                no matter what.
-              </p>
-              <p className="text-base text-white/55 leading-relaxed">
-                That is what we built: <span className="text-white">Procept Foundry</span>, a
-                self-healing, self-experimenting, metacognitive harness that rewrites its own ruleset in the face of
-                errors, or by running its own inductive experiments. Procept Foundry achieves{' '}
-                <span className="text-term-300">95% on ARC-AGI 3 with a $35 budget</span>, versus Opus 5 which scores
-                30.2% at $20,700.
-              </p>
-              <p className="text-base text-white/55 leading-relaxed">
-                Under the hood it runs two fundamental algorithms we are excited to present: Recursive Self-Improvement,
-                and cognitive induction graphs.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ═══════════════ LANGCHAIN COMPARISON ═══════════════ */}
+      {/* ═══════════════ INTRODUCTION ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
+              compact
               num="01"
-              label="The Competitive Landscape"
+              label="Introduction"
               title={
                 <>
-                  Where LangChain and <em className="font-serif italic">LoRA</em> stop
+                  Optimizing the <span className="font-serif ">topology</span>, not the parameters
                 </>
               }
-              sub="The two dominant approaches today are static orchestration and static fine-tuning. Neither one learns."
+              sub="Procept Research, October 7, 2026. Escaping compression via unsupervised prompt optimization in multi-agent topologies."
             />
           </Reveal>
 
           <div className="mt-14 max-w-2xl space-y-7">
             <Reveal>
               <p className="text-white/55 leading-relaxed">
-                LangChain is the most popular way to build an agent today, and it solves a real problem: it gives you
-                the lego blocks to wire prompts, tools, and models together. But LangChain orchestrates. It does not
-                learn. Every chain is a snapshot, hand-tuned by an engineer, and it breaks the moment the world
-                changes.
+                As multi-agent infrastructures scale in enterprise environments, reliance on static LLMs executing
+                isolated tasks imposes systemic latency and computational constraints. Traditional methods for
+                optimizing these agents rely on localized parameter updates that require explicit supervised datasets,
+                and so ignore the broader architectural topology of the system. Current paradigms lean heavily on
+                supervised fine-tuning such as Low-Rank Adaptation (LoRA), which acts as a lossy compression mechanism
+                mapping known solutions into a constrained latent space.
               </p>
             </Reveal>
             <Reveal>
               <p className="text-white/55 leading-relaxed">
-                LoRA solves a different slice of the problem: it fine-tunes the model itself. But LoRA compresses the
-                right answers into the weights, and it still cannot see the whole workflow, only the examples you hand
-                it.
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-white/55 leading-relaxed">
-                Procept Foundry replaces both. Where LangChain gives you static chains, Foundry gives you a graph that
-                rewrites itself. Where LoRA bakes in answers, Recursive Self-Improvement solves for the rubric. The
-                model stays frozen, and the system gets smarter with every run.
+                We introduce the <span className="text-white">Cognition Induction Graph (CIG)</span>, an
+                infrastructure layer that logs, analyzes, and optimizes multi-agent execution traces in their entirety.
+                By treating the agentic pipeline as a single optimizable compute graph, the system derives the full
+                contextual gradients required for continual learning, without modifying the underlying model
+                parameters. The CIG aggregates holistic telemetry to power an Unsupervised Automatic Prompt
+                Optimization (APO) engine, a Recursive Self-Improvement (RSI) framework that experiments within the
+                problem space to produce an inductive taxonomy of rules.
               </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ RECURSIVE SELF IMPROVEMENT ═══════════════ */}
+      {/* ═══════════════ EPISTEMICS ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
+              compact
               num="02"
-              label="Recursive Self-Improvement"
+              label="The Epistemics of Continual Learning"
               title={
                 <>
-                  Recursive self-improvement at a <em className="font-serif italic">microscopic scale</em>
+                  Inductive generalization vs. <span className="font-serif ">supervised compression</span>
                 </>
               }
-              sub="To understand why the CIG matters, we have to first see what fine-tuning gets wrong, and why the right unit of learning is not a weight, but a rule."
+              sub="In statistical learning theory, knowledge acquisition bifurcates into two distinct methodologies."
             />
           </Reveal>
 
-          <div className="mt-14 max-w-2xl space-y-7">
+          <div className="mt-14 max-w-2xl space-y-8">
             <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                LoRA is compression, not learning
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                LoRA is the leading way to customize a model today, but it is compression, not learning: it just bakes the right answers into the model’s memory. Once the
-                problem constraints are handed over via supervised labels, LoRA converts semantic targets into the
-                model’s latent feature space, solves for optimal pathways through the feed-forward layers, and
-                outputs condensed weights. It is a lossy, surjective
-                mapping from a semantic space into a feature space, optimized for computational efficiency, not for
-                out-of-distribution generalization.
+              <h3 className={H3}>2.1 Two methodologies</h3>
+              <p className={P}>
+                <span className="text-white/80">Inductive generalization (unsupervised).</span> Robust learning occurs
+                by expediting stochastic signals until objectives are met in a noisy environment. This requires mapping
+                the constraints of the problem space concurrently with the solution space. It is inherently
+                unsupervised and relies on continuous experimentation to build a generalizable inductive taxonomy.
               </p>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                It remembers the answer to the exact question it was shown. It does not learn the rule that produced
-                the answer. So the moment the environment shifts, the memory is worthless.
+              <p className={P}>
+                <span className="text-white/80">Supervised compression.</span> Techniques like LoRA are fundamentally
+                mechanisms of target compression. Once problem constraints are provided via supervised labels, they
+                convert semantic targets into the LLM latent feature space. By solving for optimal pathways via
+                feed-forward layer gradients, they output condensed weights:
+              </p>
+              <Eq label="LoRA weight update">
+                {'W′ = W + BA'}
+              </Eq>
+              <p className="text-white/55 leading-relaxed">
+                This constitutes a lossy, surjective mapping from a semantic space to a feature space, optimized for
+                computational efficiency rather than out-of-distribution generalization.
               </p>
             </Reveal>
 
             <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                We solve for the rubric, not the answer
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                Our recursive self-improvement loop does the opposite: it solves for the rubric itself through
-                experimentation. Instead of baking in one correct output, we expedite stochastic signals in a noisy
-                environment until the objective is met, mapping the constraints of the problem space and the solution
-                space at the same time. That is inductive generalization, and it is inherently unsupervised.
+              <h3 className={H3}>2.2 Surjective semantic projection</h3>
+              <p className={P}>
+                To achieve inductive generalization without the lossy dimensionality reduction of standard
+                fine-tuning, we define the following property governing prompt-based feature modulation.
               </p>
-            </Reveal>
-
-
-            <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                A dynamically generated, unsupervised rubric acts as a highly effective feature-space projection. When
-                we prepend it as a system prompt, it dynamically alters the attention gradients of the frozen model,
-                effectively mimicking a weight update while keeping the high-dimensional representation of natural
-                language that you need to solve variables you have never seen before, replacing the need for GPUs.
-              </p>
-              <p className="mt-4 text-base text-white/55 leading-relaxed">
-                In other words: we train a model to solve for the rubric, not the right answer, and then we convert
-                those learned weights into text in the system prompt. The model stays frozen. The rule travels.
-              </p>
-            </Reveal>
-
-            <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                From game environments to RSI metrics
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                When you point this loop at game environments (closed worlds with a score, a reset button, and an
-                infinite supply of fresh failure), the recursion compounds. That is what yields our recursive
-                self-improving loop harness and the RSI metrics we report below: the agent keeps solving for a better
-                rubric, and the graph keeps scoring which rubric actually worked.
+              <Formal kind="Lemma 1" name="Semantic-to-Latent Surjection">
+                Every semantic construct in natural language possesses a surjectively lossy but approximate
+                representation within the latent feature space of a language model’s attention heads.
+              </Formal>
+              <p className="text-white/55 leading-relaxed">
+                By Lemma 1, a dynamically generated unsupervised rubric acts as a highly effective feature-space
+                projection. When prepended as a system prompt, this inductive taxonomy dynamically alters the attention
+                gradients of the frozen model. This effectively mimics a weight update while maintaining the
+                high-dimensional representation of natural language required to solve unseen variables.
               </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ COGNITIVE INDUCTION GRAPHS ═══════════════ */}
+      {/* ═══════════════ COGNITION INDUCTION GRAPHS ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
+              compact
               num="03"
-              label="Cognitive Induction Graphs"
+              label="Cognition Induction Graphs and Topological Optimization"
               title={
                 <>
-                  Cognitive induction <em className="font-serif italic">graphs</em>
+                  Compute graphs for <span className="font-serif ">cognition</span>
                 </>
               }
-              sub="A single rubric is powerful. But to learn across an entire enterprise, you need the whole graph: every operation, tool call, and workflow in one place."
+              sub="Analogous to CUDA compute graphs, which map and optimize low-level GPU operations, CIGs trace end-to-end multi-agent topologies to identify high-density execution trajectories and systemic bottlenecks."
             />
           </Reveal>
 
           <div className="mt-14 max-w-2xl space-y-7">
             <Reveal>
-              <p className="text-white/55 leading-relaxed">
-                A Cognitive Induction Graph compiles agentic operations (prompts, tool
-                invocations, protocol routing, and user validations) into a unified topological structure, then
-                derives semantic gradients across the entire workflow. That ultimately lets us perform optimization
-                over the whole corpus of data operations, tool calls, and agent workflows, and solve for the
-                user’s goals directly.
+              <h3 className={H3}>3.1 The hardware execution analogy</h3>
+              <p className={P}>
+                In high-performance computing, a CUDA compute graph stores a sequence of bottom-up GPU operations and
+                their memory dependencies prior to execution. By parsing the entire graph simultaneously, the driver
+                traces execution paths, identifies hardware bottlenecks, and optimizes the overarching kernel dispatch.
+              </p>
+              <p className={P}>
+                Similarly, a Cognition Induction Graph compiles agentic operations, including prompts, tool
+                invocations, protocol routing, and user validations. By aggregating these components into a unified
+                topological structure, the system derives semantic gradients across the entire workflow.
               </p>
             </Reveal>
 
             <Reveal>
               <FigurePanel
                 fig="01"
-                caption="A live toy CIG in the middle of the console"
+                caption="A toy CIG: agentic operations aggregated into one topological structure"
                 image="/blog/toyCIG.jpg"
                 imageClass="object-cover"
                 header={false}
@@ -444,30 +381,26 @@ export function CigPostPage() {
             <Reveal>
               <FigurePanel
                 fig="02"
-                caption="An agent workflow, unrolled into a directed acyclic graph"
+                caption="An agent workflow unrolled into a directed acyclic graph"
                 image="/blog/unrolledDAG.jpg"
                 imageClass="object-contain"
                 header={false}
                 overlay={false}
               >
                 <p className="text-white/55 leading-relaxed">
-                  This is what Procept Foundry does for you. Every agent workflow, every prompt, tool call, and
-                  branch, gets unrolled into a single directed acyclic graph, so the whole run is inspectable and
-                  optimizable end to end.
+                  Each prompt, tool call, and branch becomes a node in a single directed acyclic graph, so the whole
+                  run is observable end to end and its dependencies are explicit.
                 </p>
               </FigurePanel>
             </Reveal>
           </div>
 
-          {/* Five pillars */}
           <div className="mt-16">
             <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-2">
-                Architecture // The five pillars of a CIG
-              </p>
+              <p className={`${SUBLABEL} mb-2`}>3.2 Architectural properties of the CIG</p>
               <p className="text-base text-white/55 leading-relaxed max-w-2xl mb-2">
-                To run the kind of experimentation continual learning demands, a system has to analyze the entire
-                execution topology. The CIG does it through five mechanisms.
+                To execute the experimentation required for continual learning, a system must analyze the entire
+                execution topology. The CIG infrastructure achieves this through five foundational mechanisms.
               </p>
             </Reveal>
             <div className="mt-4">
@@ -478,67 +411,33 @@ export function CigPostPage() {
               ))}
             </div>
           </div>
-
-          {/* Enterprise result */}
-          <div className="mt-16">
-            <Reveal>
-              <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">
-                Field // One enterprise deployment
-              </p>
-            </Reveal>
-            <div className="grid grid-cols-12 gap-x-6 gap-y-6 border border-white/[0.08] bg-white/[0.02] p-6 md:p-8">
-              <div className="col-span-12 md:col-span-7 space-y-5">
-                <Reveal>
-                  <p className="font-display text-5xl md:text-6xl text-term-300 tabular-nums leading-none">27%</p>
-                  <p className="mt-2 font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">
-                    reduction in shipped bugs
-                  </p>
-                </Reveal>
-              </div>
-              <div className="col-span-12 md:col-span-5">
-                <Reveal delay={80}>
-                  <p className="text-white/60 leading-relaxed">
-                    In one enterprise implementation we saw a 27% reduction in bugs. But the more interesting result
-                    came from the programs that were <em className="text-white/80">not</em> failing: because the CIG
-                    exposes the full workflow, we were able to extrapolate a rubric for customer success and upsell,
-                    and train our agents to optimize toward those objectives too.
-                  </p>
-                  <p className="mt-4 text-white/50 leading-relaxed text-sm">
-                    The same graph that stops a failure also discovers what a healthy, high-value conversation looks
-                    like. Learning and growth become the same optimization problem.
-                  </p>
-                </Reveal>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ═══════════════ THE MATH ═══════════════ */}
+      {/* ═══════════════ UNSUPERVISED APO ═══════════════ */}
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
             <SectionHeading
+              compact
               num="04"
-              label="The Math"
+              label="Unsupervised APO vs. Supervised Baselines"
               title={
                 <>
-                  Solving for the Right Answer vs. Solving for the <em className="font-serif italic">Rubric</em>
+                  The <span className="font-serif ">Taxonomic Inductive Update</span>
                 </>
               }
-              sub="Google’s Reinforced Recursive Self-Improvement (RRSI) approximates gradients against a fixed answer key. Recursive Self-Improvement solves for the rubric itself."
+              sub="To contextualize the optimization mathematics, we contrast our approach with Google’s Reinforced Recursive Self-Improvement (RRSI) framework."
             />
           </Reveal>
 
           <div className="mt-14 max-w-2xl space-y-8">
             <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                The supervised gradient approximation
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                Google’s RRSI optimizes prompts through a central harness equation that approximates gradients:
+              <h3 className={H3}>4.1 Supervised gradient approximation</h3>
+              <p className={P}>
+                Google’s RRSI optimizes prompts via a central harness equation approximating gradients:
               </p>
-              <Eq label="Google RRSI: supervised gradient approximation">
+              <Eq label="Eq. 1 // Google RRSI: supervised gradient approximation">
                 {'ΔH'}
                 <sub>RRSI</sub> = {'{ ∇'}
                 <sub>
@@ -555,26 +454,23 @@ export function CigPostPage() {
                 {' }'}
               </Eq>
               <p className="text-white/55 leading-relaxed">
-                Here <span className="font-serif italic text-white/80">𝒮</span> is the gradient of the
-                system-prompt space for semantic alignment,{' '}
-                <span className="font-serif italic text-white/80">ℱ</span> is the formatting space, and{' '}
-                <span className="font-serif italic text-white/80">ℰ</span>
-                <sub>orig</sub> is the static set of original examples. The whole thing is constrained by its reliance
+                where <span className={ital}>𝒮</span> represents the gradient of the system prompt space for semantic
+                alignment, <span className={ital}>ℱ</span> is the formatting space, and{' '}
+                <span className={ital}>ℰ</span>
+                <sub>orig</sub> is the static set of original examples. This approach is constrained by its reliance
                 on isolated, static examples and supervised targets.
               </p>
             </Reveal>
 
             <Reveal>
-              <h3 className="font-display text-lg md:text-xl font-medium uppercase tracking-tight text-white">
-                The taxonomic inductive update
-              </h3>
-              <p className="mt-4 text-white/55 leading-relaxed">
-                Recursive Self-Improvement replaces those static examples with the live telemetry of the Cognitive
-                Induction Graph. Let <span className="font-serif italic text-white/80">𝒯</span>
-                <sub>t</sub> be the inductive taxonomy of rules at time{' '}
-                <span className="font-serif italic text-white/80">t</span>. The CIG optimizes via:
+              <h3 className={H3}>4.2 The Taxonomic Inductive Update</h3>
+              <p className={P}>
+                Our Unsupervised APO replaces static examples with the live telemetry of the Cognition Induction
+                Graph. Let <span className={ital}>𝒯</span>
+                <sub>t</sub> be the inductive taxonomy of rules at time <span className={ital}>t</span>. The CIG
+                optimizes via the Taxonomic Inductive Update (TIU):
               </p>
-              <Eq label="Procept CIG: Taxonomic Inductive Update (TIU)">
+              <Eq label="Eq. 2 // Procept CIG: Taxonomic Inductive Update (TIU)">
                 {'𝒯'}
                 <sub>t+1</sub> = {'𝒯'}
                 <sub>t</sub> {' ⊕ 𝕀'}
@@ -587,19 +483,19 @@ export function CigPostPage() {
               </Eq>
               <div className="space-y-3 text-white/55 leading-relaxed">
                 <p>
-                  <span className="font-serif italic text-white/80">∇</span>
+                  <span className={ital}>∇</span>
                   <sub>G</sub>
-                  <span className="font-serif italic text-white/80">𝒞</span> is the topological gradient of
-                  the dominant execution workflows, derived by aggregating full-context traces to find which paths
-                  yield the highest downstream success across the network.
+                  <span className={ital}>𝒞</span> is the topological gradient of the dominant execution trajectories,
+                  derived by aggregating the full-context traces of the CIG to identify which paths yield the highest
+                  downstream success across the network.
                 </p>
                 <p>
-                  <span className="font-serif italic text-white/80">𝒩</span>
-                  <sub>expedition</sub> is the expeditionary random signal for active runtime experimentation.
-                  Supported by full graph context, it explores the problem space safely.
+                  <span className={ital}>𝒩</span>
+                  <sub>expedition</sub> is the expeditionary random signal required for active runtime
+                  experimentation. Supported by full graph context, it safely explores the problem space.
                 </p>
                 <p>
-                  <span className="font-serif italic text-white/80">𝕀</span>
+                  <span className={ital}>𝕀</span>
                   <sub>unsup</sub> is the unsupervised inductive abstraction operator that distills experimental graph
                   successes into generalized semantic rules.
                 </p>
@@ -613,12 +509,20 @@ export function CigPostPage() {
       <section className="relative border-t border-white/[0.06]">
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 py-16 md:py-22">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-8">
-              Data // The numbers that matter
-            </p>
+            <SectionHeading
+              compact
+              num="05"
+              label="Experimental Results"
+              title={
+                <>
+                  Frozen weights, <span className="font-serif ">measured</span>
+                </>
+              }
+              sub="We benchmarked the CIG Unsupervised APO against Google RRSI using a constrained, frozen open-source model, Qwen 3 Bonsai-2 27B, on complex reasoning benchmarks that test generalization to unseen problem spaces."
+            />
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+          <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
             {HEADLINE_STATS.map((stat, i) => (
               <Reveal key={stat.value} delay={i * 60}>
                 <Stat value={stat.value} label={stat.label} />
@@ -628,10 +532,9 @@ export function CigPostPage() {
 
           <Reveal>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-white/40 mb-6">
-              Benchmark // Procept CIG vs. Google RRSI, frozen Qwen 3 Bonsai-2 27B
+              Table 1 // Procept CIG vs. Google RRSI (frozen Qwen 3 27B)
             </p>
           </Reveal>
-
           <Reveal>
             <div className="overflow-x-auto border border-white/[0.08]">
               <table className="w-full text-left">
@@ -647,7 +550,7 @@ export function CigPostPage() {
                       Google RRSI
                     </th>
                     <th className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 px-5 py-4">
-                      Procept RSI
+                      Procept CIG APO
                     </th>
                   </tr>
                 </thead>
@@ -665,23 +568,29 @@ export function CigPostPage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 max-w-2xl space-y-7">
+          <div className="mt-12 max-w-2xl space-y-8">
             <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                On the Scale Research Rubric, Google RRSI gained a modest 6 points. Recursive Self-Improvement, enabled
-                by the CIG’s full-context tracing, gained 12 (0.41 → 0.53). The gap is sharper on OpenAI
-                Frontier Science, where the CIG delivered an 80% relative improvement (0.21 → 0.38), far outpacing
-                the supervised baseline’s 5-point gain.
+              <h3 className={H3}>5.1 Comparative results</h3>
+              <p className={P}>
+                On the Scale Research Rubric, Google RRSI yielded a modest 6-point increase. Enabled by the
+                full-context tracing of the CIG, our Unsupervised APO achieved a 12-point increase (0.41 → 0.53). The
+                delta is more pronounced on OpenAI Frontier Science, where the CIG infrastructure facilitated robust
+                runtime experimentation, yielding an 80% relative performance increase (0.21 → 0.38), far outpacing
+                the 5-point gain of the supervised baseline.
               </p>
             </Reveal>
             <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                The most significant validation came on ARC-AGI 3, which measures fluid intelligence and adaptability,
-                exactly where compressed, parameter-updated models classically fail. Running the frozen Qwen 3 27B
-                through Procept Foundry returned a score of 95.0. The model dynamically experimented during
-                runtime, treating problem constraints and solution spaces iteratively. Heavily quantized, frozen,
-                small-parameter models can reach frontier-level reasoning, when governed by a topological
-                infrastructure built for continuous generalization.
+              <h3 className={H3}>5.2 ARC-AGI 3 evaluation</h3>
+              <p className={P}>
+                The most significant validation of the architecture was observed on the ARC-AGI 3 public tests.
+                ARC-AGI 3 measures fluid intelligence and adaptability, domains where compressed, parameter-updated
+                models classically fail. Running the frozen Qwen 3 27B model through the CIG harness resulted in an
+                evaluation score of 95.0. The model dynamically experimented during runtime, treating the problem
+                constraints and solution spaces iteratively.
+              </p>
+              <p className={P}>
+                This demonstrates that heavily quantized, frozen small-parameter models can achieve frontier-level
+                reasoning when governed by a topological infrastructure designed for continuous generalization.
               </p>
             </Reveal>
           </div>
@@ -702,21 +611,21 @@ export function CigPostPage() {
 
         <div className="relative z-50 max-w-6xl mx-auto px-6 md:px-16 pt-16 md:pt-22 pb-56 md:pb-72">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-6">Conclusion</p>
-            <h2 className="font-display font-semibold uppercase tracking-tight text-3xl md:text-5xl text-white leading-[1.08] max-w-3xl">
-              Turn your user actions into <em className="font-serif italic font-normal normal-case">company IP</em>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-term-400 mb-6">06 // Conclusion</p>
+            <h2 className="font-display font-semibold uppercase tracking-tight text-3xl md:text-5xl text-white leading-[1.08] max-w-3xl break-words">
+              Learning at the <span className="font-serif font-normal normal-case">infrastructure</span> level
               <span className="text-term-400">.</span>
             </h2>
             <p className="mt-7 text-white/60 max-w-2xl leading-relaxed">
-              The Cognitive Induction Graph is a foundational architecture for multi-agent systems. It aggregates end-to-end traces to expose
-              bottlenecks, map the optimal execution workflows, and provide the overarching context required for
-              safe, continuous experimentation.
+              The Cognition Induction Graph is a foundational architecture for multi-agent systems. By mirroring the
+              holistic optimization strategies of hardware compute graphs, CIGs aggregate end-to-end traces to expose
+              bottlenecks, map optimal execution trajectories, and provide the overarching context required for safe,
+              continuous experimentation.
             </p>
             <p className="mt-5 text-white/60 max-w-2xl leading-relaxed">
-              Paired with Recursive Self-Improvement, it bypasses the surjective dimensionality reduction of
-              traditional parameter updates and demonstrates that robust, generalizable learning can happen entirely at
-              the infrastructure level. Your agents stop being lego pieces. They become a foundry, learning from every
-              conversation, and compounding into IP your competitors can’t copy.
+              Paired with Unsupervised APO, the framework bypasses the surjective dimensionality reduction of
+              traditional parameter updates and demonstrates that robust, generalizable learning can be achieved
+              entirely at the infrastructure level.
             </p>
 
             <div className="mt-12 flex flex-wrap items-center gap-4">

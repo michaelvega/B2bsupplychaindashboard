@@ -7,6 +7,7 @@ export function SectionHeading({
   title,
   sub,
   align = 'left',
+  compact = false,
   className,
 }: {
   num?: string;
@@ -14,6 +15,8 @@ export function SectionHeading({
   title: ReactNode;
   sub?: ReactNode;
   align?: 'left' | 'center';
+  /** Smaller subtitle, used by long-form articles. */
+  compact?: boolean;
   className?: string;
 }) {
   const centered = align === 'center';
@@ -28,7 +31,7 @@ export function SectionHeading({
         {title}
       </h2>
       {sub && (
-        <div className={cn('mt-6 text-base md:text-lg text-white/60 leading-relaxed max-w-2xl', centered && 'mx-auto')}>
+        <div className={cn('mt-6 text-white/60 leading-relaxed max-w-2xl', compact ? 'text-sm md:text-base' : 'text-base md:text-lg', centered && 'mx-auto')}>
           {sub}
         </div>
       )}

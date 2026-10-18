@@ -8,6 +8,7 @@ import { PlansPage } from './pages/PlansPage';
 import { BlogPage } from './pages/BlogPage';
 import { BlogPostPage } from './pages/BlogPostPage';
 import { CigPostPage } from './pages/CigPostPage';
+import { System5Page } from './pages/System5Page';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { TermsPage } from './pages/TermsPage';
 import { AgentSuite } from './pages/AgentSuite';
@@ -114,6 +115,10 @@ export const router = createBrowserRouter([
   {
     path: '/plans',
     element: <PlansPage />,
+  },
+  {
+    path: '/system5',
+    element: <System5Page />,
   },
   {
     path: '/blog',

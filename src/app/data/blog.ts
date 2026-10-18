@@ -9,20 +9,35 @@ export interface BlogPost {
   readTime: string;
   tags: string[];
   excerpt: string;
+  /** Optional direct target, e.g. '/system5'. Defaults to `/blog/${slug}`. */
+  href?: string;
 }
 
 export const POSTS: BlogPost[] = [
   {
+    slug: 'system5',
+    num: '003',
+    title: 'System 5: Operations, Physical Reality, and User Behavior',
+    accent: 'all in one self-improving system',
+    date: 'OCT 14 2026',
+    author: 'PROCEPT',
+    readTime: '12 MIN',
+    tags: ['SYSTEM 5', '24/7 OPERATIONS', 'SELF-IMPROVING'],
+    excerpt:
+      'The operating system for 24/7 Operational Harnesses, one self-improving system that unifies operations, physical reality, and user behavior, from bare metal to the end user.',
+    href: '/system5',
+  },
+  {
     slug: 'cognitive-induction-graphs',
     num: '002',
-    title: 'Cognitive Induction Graphs',
-    accent: 'compiles every prompt, tool call, and workflow into one optimizable graph',
+    title: 'Cognition Induction Graphs',
+    accent: 'escaping compression via unsupervised prompt optimization in multi-agent topologies',
     date: 'OCT 10 2026',
     author: 'PROCEPT',
     readTime: '12 MIN',
-    tags: ['COGNITIVE INDUCTION', 'MULTI-AGENT', 'CONTINUAL LEARNING'],
+    tags: ['COGNITION INDUCTION', 'MULTI-AGENT', 'CONTINUAL LEARNING'],
     excerpt:
-      'Agents that cannot learn from their mistakes are just expensive lego. We introduce Cognitive Induction Graphs, an infrastructure layer that compiles every prompt, tool call, and workflow into one optimizable graph.',
+      'We replace supervised compression with unsupervised inductive generalization. The Cognition Induction Graph traces end-to-end multi-agent topologies and drives a prompt-space Recursive Self-Improvement engine over frozen weights, reaching 95.0 on the ARC-AGI 3 public tests.',
   },
   {
     slug: 'enterprise-ai-at-scale-2026',

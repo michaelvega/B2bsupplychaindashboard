@@ -81,6 +81,7 @@ export function BlogPostPage() {
   const post = POSTS.find((p) => p.slug === slug);
 
   if (!post) return <Navigate to="/blog" replace />;
+  if (post.href) return <Navigate to={post.href} replace />;
 
   return (
     <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-ink-950" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>

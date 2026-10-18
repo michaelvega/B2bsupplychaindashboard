@@ -75,7 +75,7 @@ export function BlogPage() {
           {POSTS.map((post, i) => (
             <Reveal key={post.slug} delay={i * 80}>
               <Link
-                to={`/blog/${post.slug}`}
+                to={post.href ?? `/blog/${post.slug}`}
                 className="group grid grid-cols-12 gap-x-4 items-start border-t border-white/[0.08] py-10 md:py-12 px-2 -mx-2 hover:bg-white/[0.02] transition-colors"
               >
                 <span className="col-span-2 md:col-span-1 font-mono text-sm text-term-400 tabular-nums pt-1">
