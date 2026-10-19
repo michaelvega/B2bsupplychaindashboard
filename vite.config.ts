@@ -18,6 +18,15 @@ export default defineConfig({
     },
   },
 
+  server: {
+    // The Foundry demo's sign-in gate is a Cloudflare Pages Function, which Vite
+    // does not run. Forward its routes to `npm run dev:foundry` (wrangler, :8788).
+    proxy: {
+      '^/foundry(/|$)': 'http://localhost:8788',
+      '/api/foundry-session': 'http://localhost:8788',
+    },
+  },
+
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
