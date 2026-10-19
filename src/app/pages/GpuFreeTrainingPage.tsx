@@ -9,6 +9,12 @@ import { Reveal } from '../components/marketing/Reveal';
 import { SectionHeading } from '../components/marketing/SectionHeading';
 import { POSTS } from '../data/blog';
 
+const IDEA_POINTS = [
+  'Most training means changing a model’s weights, and that means GPUs. We train the instructions around the model instead, and the model stays frozen.',
+  'Each epoch, the model answers your rows and a grader scores them. Agents turn the wrong answers into short, numbered rules, and a rule is kept only if it helps on rows it hasn’t seen. Only words are written, so the whole loop runs in your browser with no GPU.',
+  'Procept RSI is inductive, true learning: put its result back into itself and it learns more. LoRA is compression: put it back into itself enough times and model alignment collapses.',
+];
+
 const COMPARISON = [
   { label: 'Hardware', lora: 'Rented GPUs for every training run', procept: 'None. Runs in your browser tab' },
   { label: 'What changes', lora: 'Model weights (an adapter tied to one model version)', procept: 'A short list of plain-English rules in the prompt' },
@@ -126,28 +132,18 @@ export function GpuFreeTrainingPage() {
             />
           </Reveal>
 
-          <div className="mt-10 max-w-2xl space-y-6">
-            <Reveal>
-              <p className="text-lg md:text-xl text-white/70 leading-relaxed font-light">
-                Most training means changing a model’s weights, and that means GPUs. We train the instructions
-                around the model instead, and the model stays frozen.
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                Each epoch, the model answers your rows and a grader scores them. Separate agents read the wrong
-                answers and propose short, numbered rules: “when the question asks for X, check Y first.” A rule
-                is kept only if it still helps on rows the system hasn’t trained on. The rules that survive become
-                your taxonomy, a few lines of plain English you paste into any prompt.
-              </p>
-            </Reveal>
-            <Reveal>
-              <p className="text-base text-white/55 leading-relaxed">
-                Because the only things being written are words, there is nothing to run on a GPU. The whole loop
-                runs in your browser tab.
-              </p>
-            </Reveal>
-          </div>
+          <ul className="mt-10 max-w-2xl space-y-7">
+            {IDEA_POINTS.map((point, i) => (
+              <li key={i}>
+                <Reveal delay={i * 60}>
+                  <div className="flex gap-5">
+                    <span className="mt-[0.7em] h-2 w-2 shrink-0 bg-term-400" aria-hidden />
+                    <p className="text-base md:text-lg text-white/70 leading-relaxed font-light">{point}</p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
