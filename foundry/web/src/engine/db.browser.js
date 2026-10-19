@@ -838,3 +838,12 @@ export function resetProjectData(projectId) {
     }
   })
 }
+
+/**
+ * Permanently remove a project and everything that belongs to it.
+ * (resetProjectData only clears the data and keeps the project row.)
+ */
+export function deleteProject(projectId) {
+  resetProjectData(projectId)
+  run('DELETE FROM project WHERE id = ?', [projectId])
+}

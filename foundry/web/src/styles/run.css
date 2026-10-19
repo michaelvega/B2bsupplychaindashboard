@@ -69,3 +69,5 @@
 .pf-dropdown-item.is-selected { color: var(--term-400); }
 .pf-dropdown-item.is-new { border-top: 1px solid var(--border-soft, var(--border)); margin-top: 4px; padding-top: 11px; border-radius: 0; color: var(--text-2); }
 .pf-dropdown-item.is-new.is-active { color: var(--text); }
+
+.pf-rename-input { flex: 1 1 auto; width: auto; }

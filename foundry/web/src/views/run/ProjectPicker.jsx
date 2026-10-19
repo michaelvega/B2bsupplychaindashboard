@@ -9,6 +9,7 @@ import '../../styles/run.css';
  *  - projectId: current id
  *  - epochCounts?: {[projectId]: number}  optional, shown on each item
  *  - onSelectProject(id), onNewProject()
+ *  - onRenameProject?(id, title) -> Promise, onTrashProject?(id): enable the Rename / Delete buttons
  * Keyboard: Enter/Space/ArrowDown opens, arrows move, Enter picks, Esc or Tab closes.
  */
 const NEW = '__new__';
@@ -17,8 +18,10 @@ function projectLabel(p) {
   return p.title || `Untitled ${String(p.id).slice(0, 6)}`;
 }
 
-export function ProjectPicker({ projects = [], projectId, epochCounts = {}, onSelectProject, onNewProject }) {
+export function ProjectPicker({ projects = [], projectId, epochCounts = {}, onSelectProject, onNewProject, onRenameProject, onTrashProject }) {
   const [open, setOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [draft, setDraft] = useState('');
   const [active, setActive] = useState(0);
   const rootRef = useRef(null);
   const buttonRef = useRef(null);
@@ -32,6 +35,23 @@ export function ProjectPicker({ projects = [], projectId, epochCounts = {}, onSe
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
   }, [open]);
+
+  // Leaving the project (or the project being deleted) cancels an open rename.
+  useEffect(() => { setRenaming(false); }, [projectId]);
+
+  function startRename() {
+    if (!current) return;
+    setOpen(false);
+    setDraft(current.title || '');
+    setRenaming(true);
+  }
+
+  async function commitRename() {
+    const title = draft.trim();
+    if (!current || !title) return;
+    setRenaming(false);
+    if (title !== current.title) await onRenameProject?.(current.id, title);
+  }
 
   function openMenu() {
     const i = items.findIndex((it) => it.id === projectId);
@@ -64,6 +84,20 @@ export function ProjectPicker({ projects = [], projectId, epochCounts = {}, onSe
     <div className="pf-run-picker" ref={rootRef}>
       <span className="pf-label" id="pf-run-project-label">Project</span>
       <div className="pf-row">
+        {renaming ? (
+          <input
+            className="pf-input pf-rename-input"
+            value={draft}
+            maxLength={120}
+            autoFocus
+            aria-label="Project name"
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { e.preventDefault(); void commitRename(); }
+              else if (e.key === 'Escape') { e.preventDefault(); setRenaming(false); }
+            }}
+          />
+        ) : (
         <div className="pf-dropdown">
           <button
             ref={buttonRef}
@@ -111,7 +145,19 @@ export function ProjectPicker({ projects = [], projectId, epochCounts = {}, onSe
             </ul>
           )}
         </div>
-        <Button size="sm" onClick={() => onNewProject?.()}>New</Button>
+        )}
+        {renaming ? (
+          <>
+            <Button size="sm" variant="primary" disabled={!draft.trim()} onClick={() => { void commitRename(); }}>Save</Button>
+            <Button size="sm" variant="ghost" onClick={() => setRenaming(false)}>Cancel</Button>
+          </>
+        ) : (
+          <>
+            <Button size="sm" onClick={() => onNewProject?.()}>New</Button>
+            {onRenameProject && <Button size="sm" variant="ghost" icon="pencil" disabled={!current} onClick={startRename} aria-label="Rename project" title="Rename project" />}
+            {onTrashProject && <Button size="sm" variant="ghost" icon="trash" disabled={!current} onClick={() => current && onTrashProject(current.id)} aria-label="Delete project" title="Delete project" />}
+          </>
+        )}
       </div>
     </div>
   );

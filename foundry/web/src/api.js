@@ -134,6 +134,18 @@ export function deleteDatasetLearningV2Project(projectId) {
   });
 }
 
+/** Permanently delete a project and all of its data. Refuses while a run is in flight. */
+export function trashDatasetLearningV2Project(projectId) {
+  return withDb(async () => {
+    const project = db.getProject(projectId);
+    if (!project) return { ok: false, error: 'project not found' };
+    if (running.has(projectId)) return { ok: false, error: 'Stop the run before deleting this project.' };
+    db.deleteProject(projectId);
+    await flushDb();
+    return { ok: true };
+  });
+}
+
 /** True while an epoch loop started by this tab is in flight for the project. */
 export function isRunning(projectId) {
   return running.has(projectId);

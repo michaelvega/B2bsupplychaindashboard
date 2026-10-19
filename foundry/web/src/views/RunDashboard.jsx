@@ -15,7 +15,7 @@ import '../styles/run.css';
  *  onOpenKeyGate, projects, projectId, onSelectProject, onNewProject,
  *  epochCounts?, runTarget?, prevRuleIds?, paused?, pausing?, onPause?, onUnpause?, onStop?
  */
-export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStart, onResume, keyReady, onOpenKeyGate, projects, projectId, onSelectProject, onNewProject, epochCounts, runTarget, prevRuleIds, paused, pausing, onPause, onUnpause, onStop }) {
+export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStart, onResume, keyReady, onOpenKeyGate, projects, projectId, onSelectProject, onNewProject, epochCounts, runTarget, prevRuleIds, paused, pausing, onPause, onUnpause, onStop, onRenameProject, onTrashProject }) {
   const epochs = status?.epochs || [];
   const phase = useMemo(() => deriveRunPhase(status?.log, epochs, isRunning), [status, isRunning]); // eslint-disable-line react-hooks/exhaustive-deps
   const counts = useMemo(() => {
@@ -27,7 +27,7 @@ export function RunDashboard({ status, isRunning, numEpochs, onNumEpochs, onStar
     <div>
       <SectionHeading num="03" label="Run" title={<>Watch it <em>learn</em></>} sub="Each epoch finds mistakes, proposes rules, and keeps them only if they hold up on a holdout." small />
       <div className="pf-run-top">
-        <ProjectPicker projects={projects} projectId={projectId} epochCounts={counts} onSelectProject={onSelectProject} onNewProject={onNewProject} />
+        <ProjectPicker projects={projects} projectId={projectId} epochCounts={counts} onSelectProject={onSelectProject} onNewProject={onNewProject} onRenameProject={onRenameProject} onTrashProject={onTrashProject} />
       </div>
       <div className="pf-run-cols">
         <div className="pf-stack">

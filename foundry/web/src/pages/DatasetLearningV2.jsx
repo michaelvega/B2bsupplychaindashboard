@@ -3,6 +3,7 @@ import {
   fetchDatasetLearningV2Projects,
   createDatasetLearningV2Project,
   fetchDatasetLearningV2Project,
+  trashDatasetLearningV2Project,
   uploadDatasetV2Csv,
   configureDatasetV2Project,
   startDatasetLearningV2,
@@ -174,6 +175,31 @@ export default function DatasetLearningV2() {
     setView(hasData ? 'run' : 'setup');
     setStep(hasData ? 'review' : 'data');
     void restoring;
+  }
+
+  async function renameProject(id, title) {
+    const res = await configureDatasetV2Project(id, { title });
+    if (!res.ok) { setError(res.error || 'rename failed'); return; }
+    setError('');
+    await refreshProjects();
+    if (id === projectIdRef.current) {
+      const loaded = await loadProject(id);
+      // Keep any unsaved edits in the setup form; otherwise show the new title there too.
+      if (loaded && !dirty) hydrateFromStatus(loaded);
+    }
+  }
+
+  async function trashProject(id) {
+    const title = projectsRef.current.find((p) => p.id === id)?.title || 'this project';
+    if (apiIsRunning(id)) { setError('Stop the run before deleting this project.'); return; }
+    if (!window.confirm(`Delete "${title}" and all of its runs and rules? This cannot be undone.`)) return;
+    const res = await trashDatasetLearningV2Project(id);
+    if (!res.ok) { setError(res.error || 'delete failed'); return; }
+    setError('');
+    const list = await refreshProjects();
+    if (id !== projectIdRef.current) return;
+    if (list.length > 0) await selectProject(list[list.length - 1].id);
+    else { setJSON(KEYS.lastProject, ''); newProject(); }
   }
 
   function newProject() {
@@ -404,7 +430,7 @@ export default function DatasetLearningV2() {
     <>
       <AppHeader banner={runBanner} runActive={!!runningId} current={current} done={done} reachable={reachable} onStep={onStep} hasKey={keyReady} onOpenKey={() => setKeyOpen(true)} onOpenGuide={() => setGuideOpen(true)}>
         {projects.length > 0 && view === 'setup' ? (
-          <ProjectPicker projects={projects} projectId={projectId || undefined} epochCounts={epochCounts} onSelectProject={(id) => selectProject(id)} onNewProject={newProject} />
+          <ProjectPicker projects={projects} projectId={projectId || undefined} epochCounts={epochCounts} onSelectProject={(id) => selectProject(id)} onNewProject={newProject} onRenameProject={renameProject} onTrashProject={trashProject} />
         ) : null}
       </AppHeader>
 
@@ -465,6 +491,8 @@ export default function DatasetLearningV2() {
               projectId={projectId}
               onSelectProject={(id) => selectProject(id)}
               onNewProject={newProject}
+              onRenameProject={renameProject}
+              onTrashProject={trashProject}
               epochCounts={epochCounts}
               runTarget={running ? runTargets[projectId] : undefined}
               paused={running && runControl.state === 'paused'}

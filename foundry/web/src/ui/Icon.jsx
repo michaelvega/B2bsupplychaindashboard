@@ -6,6 +6,8 @@ const P = {
   key: <><circle cx="8" cy="15" r="4" /><path d="M11 12l9-9M16 7l3 3" /></>,
   play: <path d="M7 4l13 8-13 8z" />,
   pause: <path d="M8 5v14M16 5v14" />,
+  trash: <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6" />,
+  pencil: <path d="M4 20l1-5L16 4l4 4L9 19zM14 6l4 4" />,
   stop: <path d="M6 6h12v12H6z" />,
   copy: <><rect x="9" y="9" width="11" height="11" /><path d="M5 15V5h10" /></>,
   download: <path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" />,
