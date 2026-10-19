@@ -103,6 +103,12 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
             <button type="submit" disabled={sending || !name.trim() || !email.trim()} className="w-full bg-white text-ink-950 font-mono text-xs tracking-[0.2em] uppercase font-medium py-3.5 rounded-sm hover:text-term-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
               {sending ? 'Sending...' : 'Send →'}
             </button>
+            <p className="text-center text-xs text-[#636363]/70">
+              or email{' '}
+              <a href="mailto:michael@procept.tech" className="text-[#636363] hover:text-term-300 transition-colors">michael@procept.tech</a>
+              {' '}or{' '}
+              <a href="mailto:sam@procept.tech" className="text-[#636363] hover:text-term-300 transition-colors">sam@procept.tech</a>
+            </p>
           </form>
         )}
       </div>
