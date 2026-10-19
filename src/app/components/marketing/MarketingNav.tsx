@@ -54,11 +54,11 @@ export function MarketingNav({
               href="/system5/system5-scroll.html"
               className="font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 hover:text-term-300 transition-colors"
             >
-              System 5
+              System 5 Demo
             </a>
             <Link
               to="/blog/gpu-free-training"
-              className="hidden sm:inline font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 hover:text-term-300 transition-colors"
+              className="hidden sm:inline-block px-3 py-1.5 border border-term-400/60 font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 hover:border-term-300 hover:text-term-300 transition-colors"
             >
               GPU Free Training
             </Link>

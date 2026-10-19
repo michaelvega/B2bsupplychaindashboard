@@ -32,10 +32,10 @@ export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasK
     <header className="pfo-header">
       <div className="pf-container">
         <div className="pfo-header-top">
-          <div className="pfo-brand">
+          <a className="pfo-brand" href="/" aria-label="Back to Procept" style={{ color: 'inherit', textDecoration: 'none' }}>
             <img className="pfo-logo" src="./procept-logo.jpeg" alt="" width="24" height="24" />
             <span className="pfo-brand-name">Procept <em>RSI</em></span>
-          </div>
+          </a>
           <div className="pfo-header-actions">
             <button type="button" className="pfo-key-chip pf-chip" onClick={onOpenKey}
               style={undefined} aria-label={hasKey ? 'OpenRouter key saved. Change key' : 'No OpenRouter key. Add key'}>
