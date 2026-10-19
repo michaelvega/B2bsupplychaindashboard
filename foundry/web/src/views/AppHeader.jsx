@@ -13,6 +13,16 @@ import '../styles/onboarding.css';
  *  - onOpenGuide(): opens TutorialModal
  *  - children: project picker slot, rendered in a row under the brand line
  */
+/** Clear the gate cookie, then return to the sign-in page. */
+async function signOut() {
+  try {
+    await fetch('/api/foundry-session', { method: 'DELETE' });
+  } catch {
+    // Offline or no gate in front (local dev): still leave the page.
+  }
+  window.location.replace('/foundry-login/');
+}
+
 const STEPS = [{ n: 1, label: 'Data' }, { n: 2, label: 'Task' }, { n: 3, label: 'Run' }, { n: 4, label: 'Snippet' }];
 
 export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasKey = false, onOpenKey, onOpenGuide, children }) {
@@ -31,6 +41,7 @@ export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasK
               {hasKey ? 'Key saved' : 'Add key'}
             </button>
             <Button size="sm" icon="book" onClick={onOpenGuide}>Guide</Button>
+            <Button size="sm" variant="ghost" onClick={signOut}>Sign out</Button>
           </div>
         </div>
         <nav className="pfo-header-steps" aria-label="Progress">
