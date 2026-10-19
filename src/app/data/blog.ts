@@ -15,6 +15,18 @@ export interface BlogPost {
 
 export const POSTS: BlogPost[] = [
   {
+    slug: 'gpu-free-training',
+    num: '005',
+    title: 'Training Without GPUs',
+    accent: 'free, in your browser',
+    date: 'OCT 18 2026',
+    author: 'PROCEPT',
+    readTime: '3 MIN',
+    tags: ['GPU FREE', 'LORA', 'FREE DEMO'],
+    excerpt:
+      'Learn rules instead of weights. A frozen model, a short list of plain-English rules, and no GPU: how it compares to LoRA at about a tenth of the price, and how to try it free.',
+  },
+  {
     slug: 'system5',
     num: '004',
     title: 'System 5: Operations, Physical Reality, and User Behavior',

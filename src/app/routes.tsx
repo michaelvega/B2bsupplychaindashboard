@@ -9,6 +9,7 @@ import { BlogPage } from './pages/BlogPage';
 import { BlogPostPage } from './pages/BlogPostPage';
 import { CigPostPage } from './pages/CigPostPage';
 import { System5Page } from './pages/System5Page';
+import { GpuFreeTrainingPage } from './pages/GpuFreeTrainingPage';
 import { RsiMaterialsPostPage } from './pages/RsiMaterialsPostPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { TermsPage } from './pages/TermsPage';
@@ -132,6 +133,10 @@ export const router = createBrowserRouter([
   {
     path: '/blog/ccg',
     element: <CigPostPage />,
+  },
+  {
+    path: '/blog/gpu-free-training',
+    element: <GpuFreeTrainingPage />,
   },
   {
     path: '/blog/rsi_materials_sci',

@@ -56,12 +56,12 @@ export function MarketingNav({
             >
               System 5
             </a>
-            <a
-              href="/foundry/"
+            <Link
+              to="/blog/gpu-free-training"
               className="hidden sm:inline font-mono text-[10px] tracking-[0.2em] uppercase text-term-400 hover:text-term-300 transition-colors"
             >
               GPU Free Training
-            </a>
+            </Link>
           </nav>
 
           <button
