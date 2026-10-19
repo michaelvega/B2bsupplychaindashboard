@@ -10,3 +10,6 @@ package-lock.json
 ./.DS_Store
 # oversize video source (exceeds Cloudflare Pages 25MB asset limit)
 public/cityscape.mp4
+
+foundry/web/node_modules
+foundry/web/dist

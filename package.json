@@ -5,8 +5,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite"
+    "build": "vite build && node scripts/build-foundry.mjs",
+    "dev": "vite",
+    "dev:foundry": "npm run build && wrangler pages dev dist --port 8788 --d1 FOUNDRY_DB=593c15b4-a36e-4124-924d-ae40bd46e452"
   },
   "dependencies": {
     "@azure/storage-file-share": "^12.30.0",

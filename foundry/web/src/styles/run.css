@@ -1,0 +1,73 @@
+/* Run dashboard (prefix pf-run-) */
+.pf-run-top { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
+.pf-run-picker { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1 1 260px; max-width: 420px; }
+.pf-run-cols { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1024px) { .pf-run-cols { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); } }
+.pf-run-stats { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 768px) { .pf-run-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.pf-run-phase { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.pf-run-phase-label { font-size: 14px; color: var(--text); }
+.pf-run-epochs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.pf-run-epoch-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-2); background: none; cursor: help; }
+.pf-run-epoch-chip.is-ok { border-color: rgba(51,255,153,.4); color: var(--term-300); }
+.pf-run-epoch-chip.is-bad { border-color: rgba(255,255,255,.12); color: var(--text-3-aa); }
+.pf-run-chart { width: 100%; height: auto; display: block; }
+.pf-run-chart text { font-family: var(--font-mono), monospace; font-size: 10px; fill: var(--text-3-aa); }
+.pf-run-chart .grid { stroke: rgba(255,255,255,.06); stroke-width: 1; }
+.pf-run-chart .axis { stroke: rgba(255,255,255,.16); stroke-width: 1; }
+.pf-run-chart .line { fill: none; stroke: var(--term-400); stroke-width: 2; }
+.pf-run-chart .pt-ok { fill: var(--term-400); }
+.pf-run-chart .pt-bad { fill: var(--ink-900); stroke: var(--text-2); stroke-width: 1.5; }
+.pf-run-chart .endlab { fill: var(--text); }
+.pf-run-legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--text-2); margin-top: 8px; }
+.pf-run-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; }
+.pf-run-rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.pf-run-rule { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-soft); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; transition: background var(--dur); }
+.pf-run-rule:last-child { border-bottom: 0; }
+.pf-run-rule-num { flex: none; min-width: 28px; font-family: var(--font-mono), monospace; font-size: 12px; color: var(--text-3-aa); padding-top: 2px; }
+.pf-run-rule.is-new { background: rgba(51,255,153,.06); box-shadow: inset 2px 0 0 var(--term-400); padding-left: 10px; }
+.pf-run-rule.is-new .pf-run-rule-num { color: var(--term-400); }
+.pf-run-new-tag { font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: .15em; color: var(--term-400); margin-left: 8px; }
+.pf-run-log { max-height: 320px; overflow: auto; margin: 0; padding: 12px 16px; font-family: var(--font-mono), monospace; font-size: 12px; line-height: 1.6; color: var(--text-2); }
+.pf-run-log div { overflow-wrap: anywhere; }
+.pf-run-log .is-err { color: #ff8a8a; background: var(--err-bg); }
+.pf-run-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.pf-run-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+@media (prefers-reduced-motion: reduce) { .pf-run-rule { transition: none; } }
+
+.pf-run-chart-scroll { overflow-x: auto; }
+.pf-run-chart-scroll .pf-run-chart { min-width: 480px; }
+
+.pf-run-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 0 14px; }
+.pf-run-banner-label { flex: 1 1 240px; min-width: 0; color: var(--text-dim, inherit); font-size: 13px; }
+.pf-run-banner-actions { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+
+/* Project dropdown (custom listbox) */
+.pf-dropdown { position: relative; flex: 1 1 auto; min-width: 0; }
+.pf-dropdown-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 40px;
+  padding: 8px 12px; background: var(--ink-950); color: var(--text); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 14px; text-align: left; cursor: pointer; transition: border-color var(--dur);
+}
+.pf-dropdown-btn:hover { border-color: rgba(255,255,255,.2); }
+.pf-dropdown-btn:focus-visible, .pf-dropdown-btn[aria-expanded="true"] { border-color: var(--term-400); outline-offset: 0; }
+.pf-dropdown-value { display: flex; align-items: baseline; gap: 10px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-dropdown-meta { font-family: var(--font-mono), monospace; font-size: 11px; color: var(--text-2); white-space: nowrap; }
+.pf-dropdown-caret { flex: none; color: rgba(255,255,255,.6); transition: transform var(--dur); }
+.pf-dropdown-caret.is-open { transform: rotate(180deg); }
+.pf-dropdown-menu {
+  position: absolute; z-index: 50; top: calc(100% + 4px); left: 0; right: 0; max-height: 280px; overflow-y: auto;
+  margin: 0; padding: 4px; list-style: none; background: var(--ink-950); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: 0 12px 32px rgba(0,0,0,.55);
+}
+.pf-dropdown-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px; font-size: 14px; color: var(--text); cursor: pointer;
+  border-radius: calc(var(--radius) - 1px);
+}
+.pf-dropdown-item-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-dropdown-item.is-active { background: rgba(255,255,255,.07); }
+.pf-dropdown-item.is-selected { color: var(--term-400); }
+.pf-dropdown-item.is-new { border-top: 1px solid var(--border-soft, var(--border)); margin-top: 4px; padding-top: 11px; border-radius: 0; color: var(--text-2); }
+.pf-dropdown-item.is-new.is-active { color: var(--text); }
+
+.pf-rename-input { flex: 1 1 auto; width: auto; }

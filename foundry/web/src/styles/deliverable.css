@@ -1,0 +1,9 @@
+.dv-code { max-height:360px; overflow-y:auto; }
+.dv-toggle { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2); cursor:pointer; }
+.dv-toggle input { accent-color: var(--term-400); }
+.dv-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; }
+.dv-steps { margin:0; padding:0; list-style:none; display:grid; gap:12px; counter-reset:dv; }
+.dv-steps li { counter-increment:dv; display:grid; grid-template-columns:auto 1fr; gap:12px; font-size:14px; color:var(--text-2); }
+.dv-steps li::before { content:"0" counter(dv); font-family:var(--font-mono),monospace; font-size:10px; letter-spacing:.2em; color:var(--term-400); padding-top:3px; }
+.dv-steps b { color:var(--text); font-weight:500; }
+.dv-empty { text-align:center; padding:24px 0; color:var(--text-2); font-size:14px; }

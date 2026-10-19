@@ -1,0 +1,53 @@
+/* Onboarding + shell. Class prefix: pfo- */
+.pfo-header { position: static; z-index: 40; background: var(--ink-950); border-bottom: 1px solid var(--border-soft); }
+.pfo-header-top { display: flex; align-items: center; gap: 12px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+.pfo-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.pfo-logo { width: 24px; height: 24px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border); flex: none; }
+.pfo-brand-name { font-family: var(--font-display, inherit); font-weight: 300; font-size: 18px; letter-spacing: -0.01em; color: var(--text); white-space: nowrap; }
+.pfo-brand-name em { color: var(--term-400); }
+.pfo-header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
+.pfo-key-chip { background: none; cursor: pointer; font: inherit; }
+.pfo-key-chip:hover { border-color: rgba(51,255,153,.6); }
+.pfo-header-slot { padding-bottom: 12px; }
+.pfo-header-steps { padding-bottom: 12px; }
+
+/* Tutorial */
+.pfo-tut-diagram { display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-soft); background: var(--ink-950); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; min-height: 120px; }
+.pfo-tut-diagram svg { width: 100%; max-width: 360px; height: auto; display: block; }
+.pfo-tut-title { font-weight: 300; font-size: 22px; line-height: 1.15; letter-spacing: -0.01em; margin: 6px 0 8px; }
+.pfo-tut-text { color: var(--text-2); font-size: 14px; line-height: 1.6; margin: 0; }
+.pfo-dots { display: flex; gap: 6px; align-items: center; }
+.pfo-dot-btn { width: 24px; height: 24px; padding: 0; background: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.pfo-dot-btn span { width: 6px; height: 6px; border: 1px solid var(--text-3-aa); border-radius: 50%; transition: all var(--dur, 200ms); }
+.pfo-dot-btn[aria-current="step"] span { background: var(--term-400); border-color: var(--term-400); width: 14px; border-radius: 2px; }
+.pfo-tut-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
+.pfo-check { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); cursor: pointer; }
+.pfo-svg-stroke { stroke: rgba(255,255,255,.35); fill: none; stroke-width: 1.2; }
+.pfo-svg-acc { stroke: var(--term-400); fill: none; stroke-width: 1.4; }
+.pfo-svg-fill { fill: rgba(255,255,255,.08); }
+.pfo-svg-text { fill: rgba(255,255,255,.6); font: 9px var(--font-mono), monospace; }
+.pfo-svg-text-acc { fill: var(--term-400); font: 9px var(--font-mono), monospace; }
+
+/* Key gate */
+.pfo-key-row { display: flex; gap: 8px; }
+.pfo-key-row .pf-input { flex: 1 1 auto; min-width: 0; font-family: var(--font-mono), monospace; }
+.pfo-key-result { margin-top: 8px; }
+.pfo-key-list { margin: 0; padding-left: 18px; color: var(--text-2); font-size: 13px; line-height: 1.6; }
+
+/* Hero */
+.pfo-hero { padding-top: 48px; padding-bottom: 32px; }
+.pfo-hero h1 { font-weight: 300; letter-spacing: -0.02em; line-height: 1.15; font-size: clamp(32px, 6vw, 56px); margin: 12px 0 16px; max-width: 18ch; }
+.pfo-hero-sub { color: var(--text-2); font-size: 16px; line-height: 1.6; max-width: 42rem; margin: 0 0 24px; }
+.pfo-bullets { list-style: none; margin: 0 0 28px; padding: 0; display: grid; gap: 1px; background: var(--border-soft); border: 1px solid var(--border-soft); border-radius: var(--radius); }
+@media (min-width: 768px) { .pfo-bullets { grid-template-columns: repeat(3, 1fr); } }
+.pfo-bullets li { background: var(--ink-900); padding: 16px; font-size: 14px; line-height: 1.5; color: var(--text-2); }
+.pfo-bullets strong { display: block; color: var(--text); font-weight: 400; margin-bottom: 4px; }
+.pfo-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+.pfo-need { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pfo-need li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); }
+.pfo-need .is-ok { color: var(--term-400); }
+.pfo-need .is-no { color: var(--text-3-aa); }
+.pfo-need button { background: none; border: 0; padding: 0; color: var(--term-400); text-decoration: underline; cursor: pointer; font: inherit; }
+@media (prefers-reduced-motion: reduce) { .pfo-dot-btn span { transition: none; } }
+
+@media (min-width: 768px) { .pfo-header { position: sticky; top: 0; } }
