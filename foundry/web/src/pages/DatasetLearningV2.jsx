@@ -384,7 +384,7 @@ export default function DatasetLearningV2() {
     const phase = here ? deriveRunPhase(status?.log, done, true) : null;
     const lastDone = done.length ? done[done.length - 1].epoch : 0;
     const target = runTargets[runningId];
-    const name = projects.find((p) => p.id === runningId)?.name;
+    const name = projects.find((p) => p.id === runningId)?.title;
     const label = here
       ? `${name ? `${name}: ` : ''}Epoch ${Math.max(phase.epoch || 0, lastDone)}${target ? ` of ${target}` : ''}, ${phase.label.toLowerCase()}`
       : `${name || 'Another project'} is running in this tab`;
