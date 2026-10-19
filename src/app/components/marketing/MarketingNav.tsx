@@ -39,10 +39,10 @@ export function MarketingNav({
               Docs
             </a>
             <Link
-              to="/plans"
+              to="/pricing"
               className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363] hover:text-white transition-colors"
             >
-              Plans
+              Pricing
             </Link>
             <Link
               to="/blog"
@@ -68,7 +68,7 @@ export function MarketingNav({
             onClick={onRequestAccess}
             className="shrink-0 flex items-center gap-1.5 px-4 py-2 border border-white/25 bg-white/[0.06] text-white font-mono text-[10px] tracking-[0.15em] uppercase hover:border-term-400/60 hover:text-term-300 transition-all"
           >
-            Request Access <span>→</span>
+            Contact Us Now <span>→</span>
           </button>
         </div>
       </div>

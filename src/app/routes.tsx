@@ -115,6 +115,10 @@ export const router = createBrowserRouter([
     element: <DpaPage />,
   },
   {
+    path: '/pricing',
+    element: <PlansPage />,
+  },
+  {
     path: '/plans',
     element: <PlansPage />,
   },

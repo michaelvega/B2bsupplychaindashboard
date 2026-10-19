@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { Link } from 'react-router';
 import { DemoModal } from '../components/marketing/DemoModal';
 import { MarketingNav } from '../components/marketing/MarketingNav';
 import { MarketingFooter } from '../components/marketing/MarketingFooter';
@@ -95,7 +96,7 @@ export function PlansPage() {
       <section className="relative bg-[#0D0F0D] py-24 md:py-32 px-6 md:px-16 border-t border-[#FFF8F3]/10 overflow-hidden">
         <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#7B896F] mb-5">Plans // Services</p>
+            <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#7B896F] mb-5">Pricing // Services</p>
             <h1 className="text-4xl md:text-6xl font-light text-[#FFF8F3] tracking-tight leading-[1.1] mb-6 max-w-3xl">
               Six services. One <Em>stack</Em>.
             </h1>
@@ -170,38 +171,80 @@ export function PlansPage() {
 
       {/* ═══════════════ SERVICE DESCRIPTIONS ═══════════════ */}
       <section className="relative bg-[#0D0F0D] py-24 md:py-32 px-6 md:px-16 border-t border-[#FFF8F3]/10">
-        <div className="relative z-50 max-w-5xl mx-auto">
+        <div className="relative z-50 max-w-6xl mx-auto">
           <Reveal>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#7B896F] mb-12">DOC // SERVICE DESCRIPTIONS</p>
 
-            {/* One plan */}
-            <div className="border border-[#7B896F]/40 bg-white/[0.03] p-8 hover:border-[#7B896F]/60 transition-colors">
-              <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7B896F] mb-4">PLAN // Procept Pro</p>
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                <div>
-                  <h3 className="text-xl font-medium text-[#FFF8F3] mb-2">Service Description: Procept Pro</h3>
-                  <p className="text-sm text-[#636363] leading-relaxed max-w-xl">
-                    One plan, one flat linear rate. The fully maintained, self-hosted AI stack: deployed in days,
-                    owned forever, no per-token billing.
-                  </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Free tier */}
+              <div className="flex flex-col border border-[#7B896F]/40 bg-white/[0.03] p-8 hover:border-[#7B896F]/60 transition-colors">
+                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7B896F] mb-4">PLAN // Free</p>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-xl font-medium text-[#FFF8F3] mb-2">Service Description: GPU-Free Training</h3>
+                    <p className="text-sm text-[#636363] leading-relaxed max-w-xl">
+                      Train without renting a GPU. A frozen model learns plain-English rules from its mistakes,
+                      entirely in your browser. Bring your own model key; Procept charges nothing.
+                    </p>
+                  </div>
+                  <span className="font-mono text-2xl text-[#FFF8F3] shrink-0 tabular-nums">$0</span>
                 </div>
-                <span className="font-mono text-[11px] text-[#7B896F] shrink-0 md:pt-1">Effective September 20, 2026</span>
+                <ul className="grid grid-cols-1 gap-2.5 mb-8">
+                  {[
+                    'GPU-free training, run in your browser',
+                    'Bring your own OpenRouter key',
+                    'Readable rules you can edit and reuse',
+                    'Sign in with Google, no credit card',
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-sm text-[#636363]">
+                      <span className="w-1.5 h-1.5 bg-[#7B896F] mt-2 shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/blog/gpu-free-training"
+                  className="mt-auto self-start inline-flex items-center gap-2 px-5 py-3 bg-[#FFF8F3] text-[#0D0F0D] font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-[#7B896F] transition-colors"
+                >
+                  Try GPU Free Training →
+                </Link>
               </div>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {[
-                  'Open-source model implementation',
-                  'SLM compression',
-                  'Inference and GPU brokering',
-                  'Recursive self-improvement models',
-                  'Custom data generation',
-                  'Evaluations and metric tracking',
-                ].map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-[#636363]">
-                    <span className="w-1.5 h-1.5 bg-[#7B896F] mt-2 shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+
+              {/* Pro */}
+              <div className="flex flex-col border border-[#7B896F]/40 bg-white/[0.03] p-8 hover:border-[#7B896F]/60 transition-colors">
+                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7B896F] mb-4">PLAN // Procept Pro</p>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="text-xl font-medium text-[#FFF8F3] mb-2">Service Description: Procept Pro</h3>
+                    <p className="text-sm text-[#636363] leading-relaxed max-w-xl">
+                      One plan, one flat linear rate. The fully maintained, self-hosted AI stack: deployed in days,
+                      owned forever, no per-token billing.
+                    </p>
+                  </div>
+                  <span className="font-mono text-[11px] text-[#7B896F] shrink-0 sm:pt-1">Effective September 20, 2026</span>
+                </div>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8">
+                  {[
+                    'Open-source model implementation',
+                    'SLM compression',
+                    'Inference and GPU brokering',
+                    'Recursive self-improvement models',
+                    'Custom data generation',
+                    'Evaluations and metric tracking',
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-sm text-[#636363]">
+                      <span className="w-1.5 h-1.5 bg-[#7B896F] mt-2 shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => setDemoOpen(true)}
+                  className="mt-auto self-start inline-flex items-center gap-2 px-5 py-3 bg-[#FFF8F3] text-[#0D0F0D] font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-[#7B896F] transition-colors"
+                >
+                  Contact Us Now →
+                </button>
+              </div>
             </div>
           </Reveal>
         </div>

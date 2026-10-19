@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { DemoModal } from '../components/marketing/DemoModal';
@@ -236,6 +236,11 @@ function CornerBrackets() {
 export function LandingPage() {
   const [demoOpen, setDemoOpen] = useState(false);
 
+  // Deep link used by the System 5 deck's Contact Us Now buttons.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('contact')) setDemoOpen(true);
+  }, []);
+
   return (
     <div className="h-screen w-screen overflow-y-auto overflow-x-hidden bg-ink-950" style={{ fontFamily: "'Instrument Sans', 'Inter', sans-serif" }}>
 
@@ -276,7 +281,7 @@ export function LandingPage() {
                   onClick={() => setDemoOpen(true)}
                   className="group flex items-center gap-3 px-8 py-4 bg-white text-ink-950 font-mono text-xs tracking-[0.15em] uppercase font-medium hover:text-term-400 transition-all"
                 >
-                  Request Access
+                  Contact Us Now
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button

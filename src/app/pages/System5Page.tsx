@@ -971,7 +971,7 @@ export function System5Page() {
                 onClick={() => setDemoOpen(true)}
                 className="inline-flex items-center gap-2 px-5 py-3 bg-white text-ink-950 font-mono text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-term-300 transition-all"
               >
-                Request Access
+                Contact Us Now
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

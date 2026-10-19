@@ -1,57 +1,47 @@
 import { useState, useEffect } from 'react';
-import { Check, X, Mail, User, Building2 } from 'lucide-react';
+import { Check, X, Mail, User } from 'lucide-react';
 
+/** "Contact Us Now": name, email, optional message. Emails the founders via /api/contact. */
 export function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [business, setBusiness] = useState('');
+  const [message, setMessage] = useState('');
+  const [website, setWebsite] = useState(''); // honeypot, left empty by real people
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!open) { setName(''); setEmail(''); setBusiness(''); setSubmitted(false); }
+    if (!open) { setName(''); setEmail(''); setMessage(''); setWebsite(''); setSubmitted(false); setError(''); }
   }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
     setSending(true);
-
-    const payload = {
-      name: name.trim(),
-      email: email.trim(),
-      business: business.trim(),
-      timestamp: new Date().toISOString(),
-    };
-
-    // 1. Waitlist: push the submission to the Google Sheet via the Pages function
-    let sentToSheet = false;
+    setError('');
     try {
-      const res = await fetch('/api/waitlist', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          website,
+          source: window.location.pathname,
+        }),
       });
-      sentToSheet = res.ok;
-    } catch (_) { /* network error, fall back below */ }
-
-    // 2. Fallback: store the lead via the Azure file share so nothing is lost
-    if (!sentToSheet) {
-      try {
-        const res = await fetch('/api/azure/demo-leads.json');
-        const existing = res.ok ? await res.json().catch(() => []) : [];
-        existing.push(payload);
-        await fetch('/api/azure/demo-leads.json', { method: 'PUT', body: JSON.stringify(existing, null, 2) });
-      } catch (_) { /* silently continue */ }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Something went wrong.');
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please email michael@procept.tech directly.');
+    } finally {
+      setSending(false);
     }
-
-    // Open email client as reliable delivery
-    const subject = encodeURIComponent('Aegis Demo Request');
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nBusiness: ${business || 'N/A'}\n\nRequested demo access.`);
-    window.open(`mailto:sscarozzi@gmail.com?subject=${subject}&body=${body}`, '_blank');
-
-    setSending(false);
-    setSubmitted(true);
   };
 
   if (!open) return null;
@@ -64,11 +54,11 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
       <div className="bg-ink-800 border border-white/[0.08] rounded-sm w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="p-6 border-b border-white/[0.06] flex items-center justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-1.5">WAITLIST // DEMO-ACCESS</p>
-            <h3 className="text-lg font-medium text-white">Join the Demo Waitlist</h3>
-            <p className="text-xs text-[#636363]/70 mt-0.5">We'll get back to you within 24 hours.</p>
+            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-term-400 mb-1.5">CONTACT // FOUNDERS</p>
+            <h3 className="text-lg font-medium text-white">Contact Us Now</h3>
+            <p className="text-xs text-[#636363]/70 mt-0.5">Just your name and email. We'll write back within a day.</p>
           </div>
-          <button onClick={onClose} className="p-2 text-[#636363]/70 hover:text-[#636363] transition-colors"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} aria-label="Close" className="p-2 text-[#636363]/70 hover:text-[#636363] transition-colors"><X className="w-4 h-4" /></button>
         </div>
 
         {submitted ? (
@@ -76,8 +66,8 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
             <div className="w-14 h-14 border border-term-400/40 bg-term-950 flex items-center justify-center mx-auto mb-5">
               <Check className="w-6 h-6 text-term-400" />
             </div>
-            <h3 className="text-lg font-medium text-white mb-2">Thank you.</h3>
-            <p className="text-sm text-[#636363]/70 leading-relaxed">Your demo request has been sent. Check your email for a confirmation. We'll be in touch shortly.</p>
+            <h3 className="text-lg font-medium text-white mb-2">Sent.</h3>
+            <p className="text-sm text-[#636363]/70 leading-relaxed">Michael and Sam got your note and will email you back soon.</p>
             <button onClick={onClose} className="mt-6 font-mono text-[11px] tracking-[0.2em] uppercase text-[#636363]/80 hover:text-term-300 transition-colors">Close</button>
           </div>
         ) : (
@@ -97,14 +87,21 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
               </div>
             </div>
             <div>
-              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 mb-1.5">Business //</label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#636363]/60" />
-                <input type="text" value={business} onChange={e => setBusiness(e.target.value)} placeholder="Your company" className={inputClass} />
-              </div>
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-[#636363]/80 mb-1.5">Message // optional</label>
+              <textarea
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                placeholder="Anything you'd like us to know"
+                rows={3}
+                maxLength={2000}
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-[#636363]/60 focus:outline-none focus:border-term-400/50 transition-colors resize-y"
+              />
             </div>
+            {/* Honeypot: hidden from people, tempting to bots */}
+            <input type="text" name="website" value={website} onChange={e => setWebsite(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+            {error && <p role="alert" className="text-sm text-[#e0735c]">{error}</p>}
             <button type="submit" disabled={sending || !name.trim() || !email.trim()} className="w-full bg-white text-ink-950 font-mono text-xs tracking-[0.2em] uppercase font-medium py-3.5 rounded-sm hover:text-term-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-              {sending ? 'Sending...' : 'Send Request →'}
+              {sending ? 'Sending...' : 'Send →'}
             </button>
           </form>
         )}

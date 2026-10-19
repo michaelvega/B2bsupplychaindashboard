@@ -76,7 +76,7 @@ export function MarketingFooter({ onNavigate }: { onNavigate?: (sectionId: strin
             <li><Link to="/privacy" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Privacy Policy</Link></li>
             <li><Link to="/terms-of-service" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Terms of Service</Link></li>
             <li><Link to="/data-processing-addendum" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Data Processing Addendum</Link></li>
-            <li><Link to="/plans" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Service Descriptions</Link></li>
+            <li><Link to="/pricing" className="text-sm text-[#636363]/80 hover:text-white transition-colors">Service Descriptions</Link></li>
             <li><span className="text-sm text-[#636363]/80 cursor-default" title="Coming soon">Cookie Policy</span></li>
           </ul>
         </div>
