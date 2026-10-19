@@ -1,46 +1,27 @@
 /**
  * "Contact Us Now": name + email + optional message.
- * Every message is saved to D1 first (so nothing is lost), then emailed to the
- * founders through Cloudflare Email Service when CF_EMAIL_TOKEN is configured.
+ * Every message is saved to D1 first (so nothing is lost), then handed to the
+ * Apps Script web app (scripts/contact-notify.gs) which emails both founders.
  *
- * Env: FOUNDRY_DB (D1), CF_EMAIL_TOKEN (secret), CF_ACCOUNT_ID, CONTACT_FROM (optional).
+ * Env: FOUNDRY_DB (D1), CONTACT_WEBAPP_URL (secret, the Apps Script /exec URL).
  */
-const FOUNDERS = ['michael@procept.tech', 'sam@procept.tech'];
-const DEFAULT_FROM = 'contact@procept.tech';
-const ACCOUNT_ID = 'ebb00e8cdc5ed232cb0410d7ff2618af';
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
 function reply(body: object, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
 }
 
-function escapeHtml(s: string) {
-  return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
-}
-
-async function sendToFounder(env: any, to: string, payload: { name: string; email: string; message: string; source: string }) {
-  const accountId = env.CF_ACCOUNT_ID || ACCOUNT_ID;
-  const text = `${payload.name} <${payload.email}> says:\n\n${payload.message || '(no message)'}\n\nSent from: ${payload.source || 'procept.tech'}\nReply to this email to answer them directly.`;
-  const html = `<p><strong>${escapeHtml(payload.name)}</strong> &lt;${escapeHtml(payload.email)}&gt; says:</p><p style="white-space:pre-wrap">${escapeHtml(payload.message || '(no message)')}</p><p style="color:#666">Sent from: ${escapeHtml(payload.source || 'procept.tech')}. Reply to this email to answer them directly.</p>`;
-  const base = {
-    to,
-    from: env.CONTACT_FROM || DEFAULT_FROM,
-    subject: `Contact Us Now: ${payload.name}`,
-    text,
-    html,
-  };
-
-  const send = (body: object) =>
-    fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`, {
-      method: 'POST',
-      headers: { ...JSON_HEADERS, Authorization: `Bearer ${env.CF_EMAIL_TOKEN}` },
-      body: JSON.stringify(body),
-    });
-
-  // Prefer a Reply-To so the founders can answer in one click; retry without it if the API rejects the field.
-  let res = await send({ ...base, reply_to: payload.email });
-  if (res.status === 400) res = await send(base);
-  return res.ok;
+/** Ask the Apps Script to email the founders. Resolves true only if it confirms. */
+async function notifyFounders(env: any, payload: { name: string; email: string; message: string; source: string }) {
+  const res = await fetch(env.CONTACT_WEBAPP_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+    redirect: 'follow',
+  });
+  if (!res.ok) return false;
+  const data: any = await res.json().catch(() => ({}));
+  return data.ok === true;
 }
 
 export async function onRequest(context: any) {
@@ -81,12 +62,11 @@ export async function onRequest(context: any) {
   }
 
   let emailed = false;
-  if (env.CF_EMAIL_TOKEN) {
+  if (env.CONTACT_WEBAPP_URL) {
     try {
-      const results = await Promise.all(FOUNDERS.map((to) => sendToFounder(env, to, payload)));
-      emailed = results.some(Boolean);
+      emailed = await notifyFounders(env, payload);
     } catch (err: any) {
-      console.error('contact email failed', err?.message);
+      console.error('contact notify failed', err?.message);
     }
   }
 
