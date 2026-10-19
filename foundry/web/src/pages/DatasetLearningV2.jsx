@@ -33,6 +33,8 @@ import RunDashboard from '../views/RunDashboard.jsx';
 import Deliverable from '../views/Deliverable.jsx';
 import Explorer from '../views/Explorer.jsx';
 import ProjectPicker from '../views/run/ProjectPicker.jsx';
+import RunBanner from '../views/run/RunBanner.jsx';
+import { deriveRunPhase } from '../lib/runState.js';
 import { Callout } from '../ui/index.js';
 
 const POLL_MS = 3000;
@@ -99,6 +101,8 @@ export default function DatasetLearningV2() {
   // Boot DB, flush on hide/close, restore last project.
   useEffect(() => {
     let alive = true;
+    // Ask the browser not to evict saved projects under storage pressure.
+    try { void navigator.storage?.persist?.(); } catch { /* ignore */ }
     initDb()
       .then(async () => {
         const list = await refreshProjects();
@@ -371,9 +375,34 @@ export default function DatasetLearningV2() {
   const showHero = ready && view === 'setup' && step === 'start' && projects.length === 0 && !projectId;
   const err = error ? friendlyError(error) : null;
 
+  // A run keeps going while you browse other steps, so surface it everywhere but the Run view.
+  const runningId = (projectId && apiIsRunning(projectId)) ? projectId : (projects.find((p) => apiIsRunning(p.id))?.id || null);
+  let runBanner = null;
+  if (runningId && view !== 'run') {
+    const here = runningId === projectId;
+    const done = status?.epochs || [];
+    const phase = here ? deriveRunPhase(status?.log, done, true) : null;
+    const lastDone = done.length ? done[done.length - 1].epoch : 0;
+    const target = runTargets[runningId];
+    const name = projects.find((p) => p.id === runningId)?.name;
+    const label = here
+      ? `${name ? `${name}: ` : ''}Epoch ${Math.max(phase.epoch || 0, lastDone)}${target ? ` of ${target}` : ''}, ${phase.label.toLowerCase()}`
+      : `${name || 'Another project'} is running in this tab`;
+    runBanner = (
+      <RunBanner
+        label={label}
+        paused={runControl.state === 'paused'}
+        onView={() => { if (!here) selectProject(runningId); setView('run'); }}
+        onPause={pauseCurrentRun}
+        onUnpause={unpauseCurrentRun}
+        onStop={stopCurrentRun}
+      />
+    );
+  }
+
   return (
     <>
-      <AppHeader current={current} done={done} reachable={reachable} onStep={onStep} hasKey={keyReady} onOpenKey={() => setKeyOpen(true)} onOpenGuide={() => setGuideOpen(true)}>
+      <AppHeader banner={runBanner} runActive={!!runningId} current={current} done={done} reachable={reachable} onStep={onStep} hasKey={keyReady} onOpenKey={() => setKeyOpen(true)} onOpenGuide={() => setGuideOpen(true)}>
         {projects.length > 0 && view === 'setup' ? (
           <ProjectPicker projects={projects} projectId={projectId || undefined} epochCounts={epochCounts} onSelectProject={(id) => selectProject(id)} onNewProject={newProject} />
         ) : null}

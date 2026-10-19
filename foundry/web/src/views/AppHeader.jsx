@@ -11,10 +11,12 @@ import '../styles/onboarding.css';
  *  - onStep(n): step clicked
  *  - hasKey: boolean; keyBlocked?: boolean (unused styling hook); onOpenKey(): opens KeyGate
  *  - onOpenGuide(): opens TutorialModal
+ *  - banner?: node shown under the steps (run-in-progress strip); runActive?: bool, confirms before sign out
  *  - children: project picker slot, rendered in a row under the brand line
  */
 /** Clear the gate cookie, then return to the sign-in page. */
-async function signOut() {
+async function signOut(runActive) {
+  if (runActive && !window.confirm('A run is in progress. Signing out ends it and discards the unfinished epoch. Sign out anyway?')) return;
   try {
     await fetch('/api/foundry-session', { method: 'DELETE' });
   } catch {
@@ -25,7 +27,7 @@ async function signOut() {
 
 const STEPS = [{ n: 1, label: 'Data' }, { n: 2, label: 'Task' }, { n: 3, label: 'Run' }, { n: 4, label: 'Snippet' }];
 
-export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasKey = false, onOpenKey, onOpenGuide, children }) {
+export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasKey = false, onOpenKey, onOpenGuide, banner, runActive = false, children }) {
   return (
     <header className="pfo-header">
       <div className="pf-container">
@@ -41,7 +43,7 @@ export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasK
               {hasKey ? 'Key saved' : 'Add key'}
             </button>
             <Button size="sm" icon="book" onClick={onOpenGuide}>Guide</Button>
-            <Button size="sm" variant="ghost" onClick={signOut}>Sign out</Button>
+            <Button size="sm" variant="ghost" onClick={() => signOut(runActive)}>Sign out</Button>
           </div>
         </div>
         <nav className="pfo-header-steps" aria-label="Progress">
@@ -63,6 +65,7 @@ export function AppHeader({ current = 1, done = [], reachable = [], onStep, hasK
             })}
           </ol>
         </nav>
+        {banner || null}
         {children ? <div className="pfo-header-slot">{children}</div> : null}
       </div>
     </header>
