@@ -13,3 +13,4 @@ public/cityscape.mp4
 
 foundry/web/node_modules
 foundry/web/dist
+.wrangler
