@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Procept investor access</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    :root { --bg: #0D0F0D; --fg: #fff; --mute: #636363; --accent: #7B896F; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+      font-family: 'Instrument Sans', 'Inter', system-ui, sans-serif; }
+    main { width: 100%; max-width: 440px; padding: 0 24px; }
+    .eyebrow { font: 11px/1 ui-monospace, 'IBM Plex Mono', monospace; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+    h1 { margin: 24px 0 0; font-size: 34px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; text-transform: uppercase; }
+    p { margin: 18px 0 0; color: var(--mute); line-height: 1.6; font-size: 15px; }
+    input { margin-top: 28px; width: 100%; padding: 14px 16px; background: transparent; color: var(--fg); border: 1px solid #2a2e2a; font: 16px ui-monospace, monospace; }
+    input:focus { outline: none; border-color: var(--accent); }
+    button { margin-top: 16px; padding: 14px 20px; background: #fff; color: #0D0F0D; border: 0; cursor: pointer;
+      font: 500 11px/1 ui-monospace, 'IBM Plex Mono', monospace; letter-spacing: .15em; text-transform: uppercase; }
+    button:disabled { opacity: .5; cursor: default; }
+    #err { color: #e0735c; min-height: 1.4em; font-size: 13px; }
+    a { color: var(--mute); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Procept Seed</p>
+    <h1>Investor access</h1>
+    <p>Enter the password you were given to view our deck and demo.</p>
+    <form id="f">
+      <input id="pw" type="password" placeholder="Password" autocomplete="current-password" autofocus required />
+      <button id="go" type="submit">Continue</button>
+    </form>
+    <p id="err" role="alert"></p>
+    <p><a href="/">Back to procept.tech</a></p>
+  </main>
+  <script>
+    const f = document.getElementById('f'), btn = document.getElementById('go'), err = document.getElementById('err');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true; err.textContent = '';
+      try {
+        const res = await fetch('/api/seed-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: document.getElementById('pw').value }),
+        });
+        if (!res.ok) throw new Error((await res.json()).error || 'Something went wrong');
+        window.location.replace('/seed/');
+      } catch (e) {
+        err.textContent = e.message;
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

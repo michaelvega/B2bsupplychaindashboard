@@ -24,6 +24,8 @@ export default defineConfig({
     proxy: {
       '^/foundry(-login)?(/|$)': 'http://localhost:8788',
       '/api/foundry-session': 'http://localhost:8788',
+      '^/seed(-login)?(/|$)': 'http://localhost:8788',
+      '/api/seed-session': 'http://localhost:8788',
       '/api/contact': 'http://localhost:8788',
     },
   },
