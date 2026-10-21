@@ -1,0 +1,42 @@
+:root{--bg:#0e0e0d;--panel:#161615;--line:#2a2a28;--strong:#8a8a86;--ink:#e8e8e4;--soft:#b0b0ac;--muted:#9a9a96;--green:#00b368;--bad:#ff5b52;font-family:"Instrument Sans",sans-serif;font-weight:300;color:var(--ink);background:var(--bg);font-synthesis:none;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box;font-family:inherit;font-weight:300}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg)}
+button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--strong);cursor:pointer;border-radius:0}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+header,footer{position:fixed;left:4vw;right:4vw;z-index:20;display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.14em}
+header{top:14px;height:30px;justify-content:flex-end;pointer-events:none}header>*{pointer-events:auto}
+.brand-name{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+header .mid{position:absolute;left:50%;transform:translateX(-50%);color:var(--muted);text-transform:uppercase;font-size:10px;letter-spacing:.3em}
+header button{width:30px;height:30px;font-size:20px}
+footer{bottom:0;height:44px;border-top:1px solid var(--line)}
+#counter{color:var(--muted);font-size:10px}
+.arrows{display:flex;gap:8px}.arrows button{width:34px;height:30px;font-size:18px}
+#nav{display:flex;gap:9px}#nav button{width:15px;height:22px;border:0;position:relative}
+#nav button:after{content:'';position:absolute;left:0;right:0;top:10px;height:2px;background:var(--strong)}
+#nav button[aria-current=true]:after{background:var(--green);height:4px;top:9px}
+#progress{position:fixed;left:0;bottom:0;height:2px;background:var(--green);z-index:30;width:0;transition:width .4s}
+#stage{position:fixed;inset:48px 0 44px;overflow:hidden;cursor:pointer}
+.slide{position:absolute;inset:0;padding:4vh 8vw;display:none;flex-direction:column;justify-content:center}
+.slide.active{display:flex}
+.slide h1,.slide h2,.slide p{margin:0}
+.slide h1{font-size:clamp(42px,7.5vw,116px);line-height:1.09;letter-spacing:-.065em}
+.slide h2{font-size:clamp(28px,4vw,64px);line-height:1.15;letter-spacing:-.05em}
+.lede{font-size:clamp(20px,2.4vw,36px);line-height:1.35;letter-spacing:-.035em;color:var(--soft);max-width:1100px}
+.green{color:var(--green)}
+.rule{height:1px;background:var(--green);width:64%;margin-top:35px}
+.bar5{width:44px;height:5px;background:var(--green);margin-bottom:34px}
+/* reveal: hidden until its step; only a click changes this */
+.st{opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s;pointer-events:none}
+.st.on{opacity:1;transform:none;pointer-events:auto}
+.statement{color:var(--green);border-left:3px solid var(--green);padding:10px 0 10px 24px;font-size:clamp(18px,2.2vw,32px);line-height:1.4;max-width:1120px}
+.note{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+@media(max-width:760px){header,footer{left:5vw;right:5vw}header{height:30px}footer{height:40px}#stage{inset:48px 0 40px}#nav{gap:3px}#nav button{width:9px}.slide{padding:4vw 5vw;overflow:auto}header .mid{display:none}}
+
+#cue{position:fixed;right:5vw;bottom:54px;z-index:15;pointer-events:none;width:30px;height:30px}
+#cue .ptr{position:absolute;left:0;top:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));animation:cueclick 2s ease-in-out infinite}
+#cue .ring{position:absolute;left:-8px;top:-8px;width:28px;height:28px;border-radius:50%;border:2px solid var(--green);opacity:0;animation:cuering 2s ease-out infinite}
+#cue span{position:absolute;right:38px;top:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+@keyframes cueclick{0%,55%,100%{transform:translate(0,0) scale(1)}65%{transform:translate(1px,2px) scale(.88)}80%{transform:translate(0,0) scale(1)}}
+@keyframes cuering{0%,60%{opacity:0;transform:scale(.4)}65%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(2.4)}}
+@media(prefers-reduced-motion:reduce){#cue .ptr,#cue .ring{animation:none}}
+body.busy #cue{opacity:.25}#cue{transition:opacity .3s}
