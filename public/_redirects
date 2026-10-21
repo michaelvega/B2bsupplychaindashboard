@@ -1,1 +1,5 @@
+/seed /r1/ 302
+/seed/* /r1/ 302
+/seed-login /r1-login/ 302
+/seed-login/* /r1-login/ 302
 /* /index.html 200

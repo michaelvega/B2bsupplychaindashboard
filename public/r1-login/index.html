@@ -26,7 +26,7 @@
 </head>
 <body>
   <main>
-    <p class="eyebrow">Procept Seed</p>
+    <p class="eyebrow">Procept R1</p>
     <h1>Investor access</h1>
     <p>Enter the password you were given to view our deck and demo.</p>
     <form id="f">
@@ -42,13 +42,13 @@
       e.preventDefault();
       btn.disabled = true; err.textContent = '';
       try {
-        const res = await fetch('/api/seed-session', {
+        const res = await fetch('/api/r1-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ password: document.getElementById('pw').value }),
         });
         if (!res.ok) throw new Error((await res.json()).error || 'Something went wrong');
-        window.location.replace('/seed/');
+        window.location.replace('/r1/');
       } catch (e) {
         err.textContent = e.message;
         btn.disabled = false;

@@ -1,4 +1,4 @@
-import { SEED_COOKIE, SEED_MAX_AGE, passwordMatches, signSeedSession } from '../_lib/seed-auth';
+import { R1_COOKIE, R1_MAX_AGE, passwordMatches, signR1Session } from '../_lib/r1-auth';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
@@ -12,7 +12,7 @@ export async function onRequest(context: any) {
   const { request, env } = context;
 
   if (request.method === 'DELETE') {
-    return json({ ok: true }, 200, { 'Set-Cookie': `${SEED_COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax` });
+    return json({ ok: true }, 200, { 'Set-Cookie': `${R1_COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax` });
   }
   if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
   if (!env.SEED_PASSWORD || !env.SESSION_SECRET) return json({ error: 'Not configured' }, 503);
@@ -29,8 +29,8 @@ export async function onRequest(context: any) {
     return json({ error: 'Incorrect password' }, 401);
   }
 
-  const session = await signSeedSession(env.SESSION_SECRET);
+  const session = await signR1Session(env.SESSION_SECRET);
   return json({ ok: true }, 200, {
-    'Set-Cookie': `${SEED_COOKIE}=${session}; Path=/; Max-Age=${SEED_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
+    'Set-Cookie': `${R1_COOKIE}=${session}; Path=/; Max-Age=${R1_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
   });
 }
