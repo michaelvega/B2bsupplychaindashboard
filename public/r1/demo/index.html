@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e0e0d">
+<title>Procept demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<header><div class="header-right"><button id="fullscreen" aria-label="Toggle fullscreen" title="Fullscreen">&#9974;</button></div></header>
+<main id="stage" aria-label="Presentation"></main>
+<div id="cue" aria-hidden="true"><i class="ring"></i><svg class="ptr" viewBox="0 0 24 24" width="30" height="30"><path d="M4 2l15 9-6.5 1.6L9.4 19z" fill="#fff" stroke="#0e0e0d" stroke-width="1.4" stroke-linejoin="round"/></svg><span>Click</span></div>
+<footer><span id="counter">01 / 07</span><nav id="nav" aria-label="Slide navigation"></nav><div class="arrows"><button id="previous" aria-label="Previous">&larr;</button><button id="next" aria-label="Next">&rarr;</button></div></footer>
+<div id="progress"></div>
+<script src="demo.js"></script>
+<script src="slides/01-contract.js" onerror=""></script>
+<script src="slides/02-evals.js" onerror=""></script>
+<script src="slides/03-scorecard.js" onerror=""></script>
+<script src="slides/08-inject.js" onerror=""></script>
+<script src="slides/11-swap.js" onerror=""></script>
+<script src="slides/12-improve.js" onerror=""></script>
+<script src="slides/02b-cig.js" onerror=""></script>
+<script>DEMO.start()</script>
+</body>
+</html>

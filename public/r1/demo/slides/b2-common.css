@@ -1,0 +1,16 @@
+.b2{position:absolute;inset:0;padding:3vh 6vw;display:flex;flex-direction:column;justify-content:center;gap:2vh;font-family:"Instrument Sans",system-ui,sans-serif;font-weight:300;color:#e8e8e4;overflow:hidden}
+.b2 *{box-sizing:border-box}
+.b2 h2{font-size:clamp(34px,5.2vw,86px);line-height:.96;letter-spacing:-.04em;font-weight:300;margin:0;max-width:16em}
+.b2 .g{color:#00b368}
+.b2 .eyebrow{font-size:clamp(12px,1vw,15px);letter-spacing:.24em;text-transform:uppercase;color:#00b368;display:flex;align-items:center;gap:.8em}
+.b2 .eyebrow:before{content:"";width:36px;border-top:1px solid #00b368}
+.b2 .cap{font-size:clamp(18px,1.9vw,30px);line-height:1.2;color:#b0b0ac;margin:0;max-width:34em;letter-spacing:-.01em}
+.b2 .cap b{font-weight:300;color:#e8e8e4}
+.b2 .foot{font-size:clamp(11px,.85vw,13px);color:#9a9a96;line-height:1.4;max-width:none;margin:0;border-top:1px solid #2a2a28;padding-top:1vh}
+.b2 .lbl{font-size:clamp(10px,.8vw,12px);letter-spacing:.2em;text-transform:uppercase;color:#9a9a96}
+.b2 svg{display:block;width:100%;height:auto;max-height:46vh;overflow:visible}
+.b2 svg text{font-family:"Instrument Sans",system-ui,sans-serif;font-weight:300}
+.b2 .fade{opacity:0;transition:opacity .7s ease,transform .7s ease}
+.b2 .tr{transition:opacity .7s ease,transform .8s cubic-bezier(.2,.8,.2,1),stroke-dashoffset .9s ease}
+@keyframes b2flow{to{stroke-dashoffset:-24}}
+.b2 .cap.g{color:#00b368}
